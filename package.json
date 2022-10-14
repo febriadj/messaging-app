@@ -1,0 +1,47 @@
+{
+  "name": "spill",
+  "version": "1.0.0",
+  "description": "Spill is a free & open source web-based instant messaging application",
+  "main": "server",
+  "engines": {
+    "vscode": "^1.22.0",
+    "npm": "8.19.2",
+    "node": "16.17.1"
+  },
+  "scripts": {
+    "client-dev": "webpack serve --config ./webpack.dev.js",
+    "server-dev": "nodemon server",
+    "server-start": "node server",
+    "dev": "concurrenly \"npm run client-dev\" \"npm run server-dev\"",
+    "start": "node server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/febriadj/spill.git"
+  },
+  "keywords": [
+    "spill",
+    "realtime",
+    "chat"
+  ],
+  "author": "Febriadji",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/febriadj/spill/issues"
+  },
+  "homepage": "https://github.com/febriadj/spill#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "concurrently": "^7.4.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^8.5.1",
+    "moment": "^2.29.4",
+    "mongoose": "^6.6.5",
+    "uuid": "^9.0.0"
+  }
+}
