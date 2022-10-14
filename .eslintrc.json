@@ -18,5 +18,7 @@
         "react"
     ],
     "rules": {
+        "brace-style": "off",
+        "no-console": "off"
     }
 }
