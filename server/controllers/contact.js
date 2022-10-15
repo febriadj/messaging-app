@@ -46,3 +46,26 @@ exports.insert = async (req, res) => {
     });
   }
 };
+
+exports.find = async (req, res) => {
+  try {
+    const contacts = await ContactModel.find({
+      userId: req.user._id,
+      $or: [req.query],
+    });
+
+    response({
+      res,
+      message: `${contacts.length} contacts found`,
+      payload: contacts,
+    });
+  }
+  catch (error0) {
+    response({
+      res,
+      statusCode: error0.statusCode || 500,
+      success: false,
+      message: error0.message,
+    });
+  }
+};
