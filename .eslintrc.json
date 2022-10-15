@@ -19,6 +19,7 @@
     ],
     "rules": {
         "brace-style": "off",
-        "no-console": "off"
+        "no-console": "off",
+        "no-underscore-dangle": "off"
     }
 }
