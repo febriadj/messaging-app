@@ -2,10 +2,17 @@ const { hashSync, genSaltSync } = require('bcrypt');
 
 /**
  * Encrypt Secret Data
- * @param {Object} target
- * @returns {Object}
+ * @param {String|Object} target
+ * @returns {String|Object}
  */
 module.exports = (target = null) => {
+  // if target data type is string
+  if (typeof target === 'string') {
+    // encrypt string
+    return hashSync(target, genSaltSync(10));
+  }
+
+  // if target data type is object
   const pass = {};
 
   Object.entries(target).forEach((elem) => {
