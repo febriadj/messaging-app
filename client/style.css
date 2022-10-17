@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Lobster+Two:wght@700&family=Roboto:wght@400;700&display=swap');
+
+* {
+  border: none;
+  outline: none;
+  font-family: 'Roboto', sans-serif;
+}
