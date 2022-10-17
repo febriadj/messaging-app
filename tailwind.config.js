@@ -2,7 +2,11 @@
 module.exports = {
   content: ['./client/**/*.{js,jsx,tsx}'],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        display: 'Lobster Two',
+      },
+    },
   },
   plugins: [],
 };
