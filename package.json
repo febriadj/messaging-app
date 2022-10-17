@@ -12,7 +12,7 @@
     "client-dev": "webpack serve --config ./webpack.dev.js",
     "server-dev": "nodemon server",
     "server-start": "node server",
-    "dev": "concurrenly \"npm run client-dev\" \"npm run server-dev\"",
+    "dev": "concurrently \"npm run client-dev\" \"npm run server-dev\"",
     "start": "node server"
   },
   "repository": {
