@@ -7,7 +7,7 @@ const response = require('../helpers/response');
 const encrypt = require('../helpers/encrypt');
 const decrypt = require('../helpers/decrypt');
 
-exports.preregister = async (req, res) => {
+exports.registerStep1 = async (req, res) => {
   try {
     const { fullname, email, password } = req.body;
     // generate one-time password
@@ -35,7 +35,7 @@ exports.preregister = async (req, res) => {
   }
 };
 
-exports.register = async (req, res) => {
+exports.registerStep2 = async (req, res) => {
   try {
     const { _id: userId, pin } = await new UserModel(req.body).save();
     // save user _id and pin on profile model
