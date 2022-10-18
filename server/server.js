@@ -14,7 +14,8 @@ app.use(express.json());
 // setting cors
 app.use(cors({
   origin: config.isDev ? 'http://localhost:3000' : config.host,
-  allowedHeaders: '*',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  optionsSuccessStatus: 204,
 }));
 
 db();
