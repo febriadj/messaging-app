@@ -5,12 +5,12 @@ import * as bi from 'react-icons/bi';
 import * as fc from 'react-icons/fc';
 
 function Login({ setLogin }) {
-  const sign = JSON.parse(localStorage.getItem('sign'));
+  const cache = JSON.parse(localStorage.getItem('cache'));
 
   // respond API request
   const [respond, setRespond] = useState({ success: true, message: null });
   const [form, setForm] = useState({
-    pin: sign?.remember ? sign.remember : '',
+    pin: cache?.remember || '',
     password: '',
     remember: false,
   });
@@ -45,7 +45,7 @@ function Login({ setLogin }) {
       setForm((prev) => ({ ...prev, pin: '', password: '' }));
 
       // store jwt token on localStorage
-      localStorage.setItem('sign', JSON.stringify({
+      localStorage.setItem('cache', JSON.stringify({
         token: data.payload,
         remember: form.remember ? form.pin : null,
       }));
@@ -140,6 +140,7 @@ function Login({ setLogin }) {
                 name="remember"
                 id="remember"
                 onChange={handleChange}
+                defaultChecked={!!cache?.remember}
               />
               <p>remember me</p>
             </label>
