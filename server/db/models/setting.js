@@ -7,31 +7,25 @@ const SettingSchema = new Schema({
   },
   dark: {
     type: Schema.Types.Boolean,
-    required: true,
     default: false,
   },
   enterToSend: {
     type: Schema.Types.Boolean,
-    required: true,
     default: true,
   },
   ringtone: {
-    enable: {
-      type: Schema.Types.Boolean,
-      required: true,
-      default: true,
-    },
-    src: {
-      type: Schema.Types.String,
-      required: true,
-      default: 'default-ringtone.mp3',
-    },
+    type: Schema.Types.Boolean,
+    default: true,
   },
-  status: {
-    exclude: {
-      type: Schema.Types.Array,
-      default: [],
-    },
+  // archived chat stay in the archive when you receive a new message
+  keepArchived: {
+    type: Schema.Types.Boolean,
+    default: true,
+  },
+  // "lock": make others people unable to add your contacts
+  lock: {
+    type: Schema.Types.Boolean,
+    default: false,
   },
 });
 
