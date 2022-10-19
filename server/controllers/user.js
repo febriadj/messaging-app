@@ -2,6 +2,8 @@ const jwt = require('jsonwebtoken');
 
 const UserModel = require('../db/models/user');
 const ProfileModel = require('../db/models/profile');
+const SettingModel = require('../db/models/setting');
+
 const response = require('../helpers/response');
 
 const encrypt = require('../helpers/encrypt');
@@ -38,6 +40,10 @@ exports.registerStep1 = async (req, res) => {
 exports.registerStep2 = async (req, res) => {
   try {
     const { _id: userId, pin } = await new UserModel(req.body).save();
+
+    // account setting
+    await new SettingModel({ userId }).save();
+
     // save user _id and pin on profile model
     const profile = await new ProfileModel({
       userId,
