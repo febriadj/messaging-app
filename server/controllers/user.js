@@ -103,3 +103,22 @@ exports.login = async (req, res) => {
     });
   }
 };
+
+exports.find = async (req, res) => {
+  try {
+    // find user & exclude password
+    const user = await UserModel.findOne({ _id: req.user._id }, { password: 0 });
+    response({
+      res,
+      payload: user,
+    });
+  }
+  catch (error0) {
+    response({
+      res,
+      statusCode: error0.statusCode || 500,
+      success: false,
+      message: error0.message,
+    });
+  }
+};
