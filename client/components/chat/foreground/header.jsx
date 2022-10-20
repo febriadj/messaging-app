@@ -8,7 +8,7 @@ function Header() {
   const dispatch = useDispatch();
 
   return (
-    <div className="py-3 px-5 grid gap-3 bg-white dark:bg-spill-900 dark:text-white/90">
+    <div className="py-4 px-5 grid gap-4 bg-white dark:bg-spill-900 dark:text-white/90">
       <div className="flex gap-5 justify-between items-center">
         {/* brand name */}
         <h1 className="text-2xl font-bold font-display">{config.brandName}</h1>
@@ -21,6 +21,7 @@ function Header() {
             ].map((elem) => (
               <button
                 type="button"
+                key={elem.target}
                 className="p-1 rounded-full hover:bg-spill-100 dark:hover:bg-spill-800"
                 onClick={() => dispatch(setModal({
                   target: elem.target,
