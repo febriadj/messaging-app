@@ -9,3 +9,11 @@
   outline: none;
   font-family: 'Roboto', sans-serif;
 }
+
+svg {
+  font-size: x-large;
+}
+
+input, textarea {
+  background: transparent;
+}
