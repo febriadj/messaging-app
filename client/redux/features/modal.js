@@ -4,6 +4,7 @@ const ModalSlice = createSlice({
   name: 'modal',
   initialState: {
     minibox: false,
+    setting: false,
   },
   reducers: {
     setModal(state, action) {
