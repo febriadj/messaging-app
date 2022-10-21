@@ -52,7 +52,7 @@ exports.find = async (req, res) => {
     const contacts = await ContactModel.find({
       userId: req.user._id,
       $or: [req.query],
-    });
+    }).sort({ fullname: 1 });
 
     response({
       res,
