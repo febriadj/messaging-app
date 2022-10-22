@@ -22,22 +22,10 @@ const ProfileSchema = new Schema({
     minLength: 3,
     maxLength: 30,
   },
-  photo: {
-    avatar: {
-      type: Schema.Types.String,
-      required: true,
-      default() {
-        const colors = ['blue', 'red', 'yellow', 'green'];
-        const pick = colors[Math.floor(Math.random() * colors.length)];
-
-        return `default-avatar-${pick}.png`;
-      },
-    },
-    banner: {
-      type: Schema.Types.String,
-      required: true,
-      default: 'default-banner.png',
-    },
+  avatar: {
+    type: Schema.Types.String,
+    required: true,
+    default: 'default-avatar.png',
   },
   bio: {
     type: Schema.Types.String,
@@ -55,6 +43,11 @@ const ProfileSchema = new Schema({
       trim: true,
       default: '',
     },
+  },
+  online: {
+    type: Schema.Types.Boolean,
+    required: true,
+    default: false,
   },
 }, {
   timestamps: true,
