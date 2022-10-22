@@ -26,7 +26,7 @@ exports.insert = async (req, res) => {
     const contact = await new ContactModel({
       userId: req.user._id,
       ...req.body,
-      avatar: friend.photo.avatar,
+      avatar: friend.avatar,
       bio: friend.bio,
     }).save();
 
