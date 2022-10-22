@@ -7,6 +7,7 @@ function ForeGround() {
       <comp.minibox />
       <comp.setting />
       <comp.contact />
+      <comp.profile />
 
       <comp.header />
     </div>

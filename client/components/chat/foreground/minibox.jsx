@@ -5,12 +5,12 @@ import { setModal } from '../../../redux/features/modal';
 
 function Minibox() {
   const dispatch = useDispatch();
-  const { minibox } = useSelector((state) => state.modal);
+  const { user, modal } = useSelector((state) => state);
 
   return (
     <div
       className={`
-        ${minibox ? 'opacity-100 z-10' : 'opacity-0 -z-50 scale-50'}
+        ${modal.minibox ? 'opacity-100 z-10' : 'opacity-0 -z-50 scale-50'}
         transition duration-75 absolute right-0 translate-y-12 -translate-x-6 shadow-xl rounded-md
         bg-white dark:bg-spill-800 dark:text-white/90
       `}
@@ -18,7 +18,12 @@ function Minibox() {
       <div className="py-2 grid">
         {
           [
-            { target: 'profile', html: 'Profile', icon: <bi.BiUserCircle /> },
+            {
+              target: 'profile',
+              data: user.master._id,
+              html: 'Profile',
+              icon: <bi.BiUserCircle />,
+            },
             { target: 'starred', html: 'Starred Message', icon: <bi.BiStar /> },
             { target: 'setting', html: 'Setting', icon: <bi.BiCog /> },
             { target: 'signout', html: 'Sign out', icon: <bi.BiLogOutCircle /> },
@@ -30,6 +35,7 @@ function Minibox() {
               onClick={() => {
                 dispatch(setModal({
                   target: elem.target,
+                  data: elem.data ?? null,
                 }));
               }}
             >
