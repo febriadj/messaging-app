@@ -7,6 +7,7 @@ const ModalSlice = createSlice({
     setting: false,
     contact: false,
     profile: false,
+    signout: false,
   },
   reducers: {
     setModal(state, action) {
