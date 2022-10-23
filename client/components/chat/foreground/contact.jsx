@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import * as bi from 'react-icons/bi';
 import { setModal } from '../../../redux/features/modal';
+import { setSubModal } from '../../../redux/features/submodal';
+import * as comp from './sub';
 
 function Contact() {
   const dispatch = useDispatch();
@@ -43,6 +45,8 @@ function Contact() {
         bg-white dark:bg-spill-900 dark:text-white/90
       `}
     >
+      {/* sub components or modals */}
+      <comp.newContact />
       {/* header */}
       <div className="p-4 grid gap-4">
         <div className="flex gap-6 items-center">
@@ -59,6 +63,28 @@ function Contact() {
       </div>
       {/* content */}
       <div className="overflow-y-auto scrollbar-thin scrollbar-thumb-spill-200 hover:scrollbar-thumb-spill-300 dark:scrollbar-thumb-spill-700 dark:hover:scrollbar-thumb-spill-600">
+        <div className="grid">
+          {
+            [
+              { target: 'newcontact', text: 'New Contact', icon: <bi.BiUserPlus /> },
+            ].map((elem) => (
+              <div
+                key={elem.target}
+                className="grid grid-cols-[auto_1fr_auto] gap-6 p-4 items-center cursor-default border-0 border-b border-solid border-spill-200 dark:border-spill-800 hover:bg-spill-100/60 dark:hover:bg-spill-800/60"
+                aria-hidden
+                onClick={() => {
+                  dispatch(setSubModal({ target: elem.target }));
+                }}
+              >
+                <i>{elem.icon}</i>
+                <p className="font-bold">{elem.text}</p>
+                { elem.target === 'newcontact' && (
+                  <i><bi.BiQr /></i>
+                ) }
+              </div>
+            ))
+          }
+        </div>
         <div className="grid">
           <span className="py-2 px-4 text-sm bg-spill-100/60 dark:bg-black/20">
             <p className="opacity-60">Your contact list</p>
