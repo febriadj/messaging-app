@@ -11,7 +11,7 @@ function Register({ setLogin }) {
   // respond API request
   const [respond, setRespond] = useState({ success: true, message: null });
   const [form, setForm] = useState({
-    fullname: '',
+    username: '',
     email: '',
     password: '',
     otp: '',
@@ -52,7 +52,7 @@ function Register({ setLogin }) {
       setRespond({ success: true, message: data.message });
       // revert form state
       setForm({
-        fullname: '',
+        username: '',
         email: '',
         password: '',
         otp: '',
@@ -66,7 +66,7 @@ function Register({ setLogin }) {
         } else {
           localStorage.removeItem('registerStep2');
           // set email cache
-          localStorage.setItem('cache', JSON.stringify({ remember: step2.email }));
+          localStorage.setItem('cache', JSON.stringify({ remember: step2.username }));
 
           setLogin(true);
         }
@@ -128,16 +128,16 @@ function Register({ setLogin }) {
                 <span className="block w-full h-[1px] bg-gray-300"></span>
               </div>
               <form method="post" className="grid gap-2" onSubmit={handleSubmit}>
-                <label htmlFor="fullname" className="relative flex items-center">
-                  <bi.BiUser className="absolute text-xl translate-x-3" />
+                <label htmlFor="username" className="relative flex items-center">
+                  <bi.BiAt className="absolute text-xl translate-x-3" />
                   <input
                     type="text"
-                    name="fullname"
-                    id="fullname"
-                    placeholder="Full name"
-                    minLength={6}
-                    className={`${form.fullname.length > 0 ? 'peer valid:bg-gray-50' : ''} w-full py-3 pl-12 pr-3 border border-solid border-gray-300 rounded-md focus:border-gray-900`}
-                    value={form.fullname}
+                    name="username"
+                    id="username"
+                    placeholder="Username"
+                    minLength={3}
+                    className={`${form.username.length > 0 ? 'peer valid:bg-gray-50' : ''} w-full py-3 pl-12 pr-3 border border-solid border-gray-300 rounded-md focus:border-gray-900`}
+                    value={form.username}
                     onChange={handleChange}
                     required
                   />
@@ -151,7 +151,6 @@ function Register({ setLogin }) {
                     name="email"
                     id="email"
                     placeholder="Email address"
-                    minLength={8}
                     className={`${form.email.length > 0 ? 'peer valid:bg-gray-50' : ''} w-full py-3 pl-12 pr-3 border border-solid border-gray-300 rounded-md focus:border-gray-900`}
                     value={form.email}
                     onChange={handleChange}

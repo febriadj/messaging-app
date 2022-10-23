@@ -5,10 +5,13 @@ const ProfileSchema = new Schema({
     type: Schema.Types.String,
     required: true,
   },
-  pin: {
+  username: {
     type: Schema.Types.String,
     unique: true,
+    trim: true,
     required: true,
+    minLength: 3,
+    maxLength: 12,
   },
   email: {
     type: Schema.Types.String,
@@ -20,7 +23,7 @@ const ProfileSchema = new Schema({
     trim: true,
     required: true,
     minLength: 3,
-    maxLength: 30,
+    maxLength: 32,
   },
   avatar: {
     type: Schema.Types.String,

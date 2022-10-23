@@ -5,16 +5,20 @@ const ContactSchema = new Schema({
     type: Schema.Types.String,
     required: true,
   },
-  pin: {
+  username: {
     type: Schema.Types.String,
+    unique: true,
+    trim: true,
     required: true,
+    minLength: 3,
+    maxLength: 12,
   },
   fullname: {
     type: Schema.Types.String,
     trim: true,
     required: true,
     minLength: 3,
-    maxLength: 30,
+    maxLength: 32,
   },
   avatar: {
     type: Schema.Types.String,

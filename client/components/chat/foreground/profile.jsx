@@ -72,7 +72,7 @@ function Profile() {
             <div className="grid">
               {
                 [
-                  { label: 'Pin', data: profile.pin, icon: <bi.BiKey /> },
+                  { label: 'Username', data: profile.username, icon: <bi.BiAt /> },
                   { label: 'Bio', data: profile.bio, icon: <bi.BiInfoCircle /> },
                   { label: 'Phone', data: profile.phone.number, icon: <bi.BiPhone /> },
                   { label: 'Email', data: profile.email, icon: <bi.BiEnvelope /> },
@@ -84,7 +84,7 @@ function Profile() {
                         <p className="text-sm opacity-60 mb-0.5">{elem.label}</p>
                         <p>{elem.data}</p>
                       </span>
-                      { elem.label === 'Pin' && (
+                      { elem.label === 'Username' && (
                         <button type="button" className="p-1 rounded-md bg-spill-100 hover:bg-spill-200 dark:bg-spill-800 dark:hover:bg-spill-700">
                           <bi.BiQr />
                         </button>

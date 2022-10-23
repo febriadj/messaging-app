@@ -1,20 +1,13 @@
 const { Schema, model } = require('mongoose');
 
 const UserSchema = new Schema({
-  pin: {
+  username: {
     type: Schema.Types.String,
     unique: true,
+    trim: true,
     required: true,
-    default() {
-      const src = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-      let pin = '';
-
-      for (let i = 0; i < 8; i += 1) {
-        pin += src.charAt(Math.floor(Math.random() * src.length));
-      }
-
-      return pin;
-    },
+    minLength: 3,
+    maxLength: 12,
   },
   email: {
     type: Schema.Types.String,

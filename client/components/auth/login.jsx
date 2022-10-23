@@ -10,7 +10,7 @@ function Login({ setLogin }) {
   // respond API request
   const [respond, setRespond] = useState({ success: true, message: null });
   const [form, setForm] = useState({
-    pin: cache?.remember || '',
+    username: cache?.remember || '',
     password: '',
     remember: false,
   });
@@ -42,12 +42,12 @@ function Login({ setLogin }) {
       });
 
       // revert form state
-      setForm((prev) => ({ ...prev, pin: '', password: '' }));
+      setForm((prev) => ({ ...prev, username: '', password: '' }));
 
       // store jwt token on localStorage
       localStorage.setItem('cache', JSON.stringify({
         token: data.payload,
-        remember: form.remember ? form.pin : null,
+        remember: form.remember ? form.username : null,
       }));
 
       setRespond((prev) => ({
@@ -101,16 +101,16 @@ function Login({ setLogin }) {
           <span className="block w-full h-[1px] bg-gray-300"></span>
         </div>
         <form method="post" className="grid gap-2" onSubmit={handleSubmit}>
-          <label htmlFor="pin" className="relative flex items-center">
-            <bi.BiEnvelope className="absolute text-xl translate-x-3" />
+          <label htmlFor="username" className="relative flex items-center">
+            <bi.BiUser className="absolute text-xl translate-x-3" />
             <input
               type="text"
-              name="pin"
-              id="pin"
-              placeholder="Pin or email address"
-              minLength={8}
-              className={`${form.pin.length > 0 ? 'peer valid:bg-gray-50' : ''} w-full py-3 pl-12 pr-3 border border-solid border-gray-300 rounded-md focus:border-gray-900`}
-              value={form.pin}
+              name="username"
+              id="username"
+              placeholder="Username or email"
+              minLength={3}
+              className={`${form.username.length > 0 ? 'peer valid:bg-gray-50' : ''} w-full py-3 pl-12 pr-3 border border-solid border-gray-300 rounded-md focus:border-gray-900`}
+              value={form.username}
               onChange={handleChange}
               required
             />

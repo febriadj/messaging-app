@@ -6,10 +6,10 @@ const response = require('../helpers/response');
 exports.insert = async (req, res) => {
   try {
     const errData = {};
-    // find contact by friend pin
+    // find contact by friend username
     const ifContactMatch = await ContactModel.findOne({
       userId: req.user._id,
-      pin: req.body.pin,
+      username: req.body.username,
     });
 
     // if the contact is already saved
@@ -20,8 +20,8 @@ exports.insert = async (req, res) => {
       throw errData;
     }
 
-    // find friend profile by pin
-    const friend = await ProfileModel.findOne({ pin: req.body.pin });
+    // find friend profile by username
+    const friend = await ProfileModel.findOne({ username: req.body.username });
 
     const contact = await new ContactModel({
       userId: req.user._id,

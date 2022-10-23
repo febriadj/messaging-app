@@ -11,7 +11,7 @@ const decrypt = require('../helpers/decrypt');
 
 exports.registerStep1 = async (req, res) => {
   try {
-    const { fullname, email, password } = req.body;
+    const { username, email, password } = req.body;
     // generate one-time password
     const otp = Math.floor(1000 + Math.random() * 9000);
 
@@ -21,7 +21,7 @@ exports.registerStep1 = async (req, res) => {
       message: 'Pre-registration successful',
       payload: {
         otp, // -> send otp code to store in localStorage
-        fullname,
+        username,
         email,
         password: encrypt(password),
       },
@@ -39,15 +39,15 @@ exports.registerStep1 = async (req, res) => {
 
 exports.registerStep2 = async (req, res) => {
   try {
-    const { _id: userId, pin } = await new UserModel(req.body).save();
+    const { _id: userId } = await new UserModel(req.body).save();
 
     // account setting
     await new SettingModel({ userId }).save();
 
-    // save user _id and pin on profile model
+    // save user data (without password) on profile model
     const profile = await new ProfileModel({
       userId,
-      pin,
+      fullname: req.body.username,
       ...req.body,
     }).save();
 
@@ -59,6 +59,7 @@ exports.registerStep2 = async (req, res) => {
     });
   }
   catch (error0) {
+    console.log(error0.message);
     response({
       res,
       statusCode: error0.statusCode || 500,
@@ -71,19 +72,19 @@ exports.registerStep2 = async (req, res) => {
 exports.login = async (req, res) => {
   try {
     const errData = {};
-    const { pin, password } = req.body;
+    const { username, password } = req.body;
 
     const user = await UserModel.findOne({
       $or: [
-        { email: pin }, // -> pin field can be filled with email
-        { pin },
+        { email: username }, // -> username field can be filled with email
+        { username },
       ],
     });
 
     // if user not found or invalid password
     if (!user) {
       errData.statusCode = 401;
-      errData.message = 'PIN or email not registered';
+      errData.message = 'Username or email not registered';
 
       throw errData;
     }
