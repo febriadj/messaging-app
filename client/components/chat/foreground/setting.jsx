@@ -133,7 +133,7 @@ function Setting() {
       `}
     >
       {/* header */}
-      <div className="p-4 flex gap-8 items-center">
+      <div className="p-4 flex gap-6 items-center">
         <button
           type="button"
           onClick={() => {
@@ -151,7 +151,7 @@ function Setting() {
               <h1 className="font-bold ml-4">{struct.section}</h1>
               {
                 struct.child.map((child) => (
-                  <div key={child.target} aria-hidden className="p-4 grid grid-cols-[auto_1fr_auto] items-start gap-8 cursor-default border-0 border-b border-solid border-spill-200 dark:border-spill-800 hover:bg-spill-100/60 dark:hover:bg-spill-800/60">
+                  <div key={child.target} aria-hidden className="p-4 grid grid-cols-[auto_1fr_auto] items-start gap-6 cursor-default border-0 border-b border-solid border-spill-200 dark:border-spill-800 hover:bg-spill-100/60 dark:hover:bg-spill-800/60">
                     <i>{child.icon}</i>
                     <span>
                       <p>{child.title}</p>
