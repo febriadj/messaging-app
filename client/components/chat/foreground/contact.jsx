@@ -8,7 +8,7 @@ function Contact() {
   const dispatch = useDispatch();
   const modal = useSelector((state) => state.modal);
 
-  const [contacts, setContacts] = useState([]);
+  const [contacts, setContacts] = useState(null);
 
   const handleGetContacts = async (signal) => {
     try {
@@ -17,8 +17,8 @@ function Contact() {
         const { data } = await axios.get('/contacts', { signal });
         setContacts(data.payload);
       } else {
-        // revert when modal is closed
-        setContacts([]);
+        // reset when modal is closed
+        setContacts(null);
       }
     }
     catch (error0) {
@@ -59,33 +59,29 @@ function Contact() {
       </div>
       {/* content */}
       <div className="overflow-y-auto scrollbar-thin scrollbar-thumb-spill-200 hover:scrollbar-thumb-spill-300 dark:scrollbar-thumb-spill-700 dark:hover:scrollbar-thumb-spill-600">
-        <div
-          className="grid grid-cols-[auto_1fr_auto] gap-4 p-4 items-center cursor-default border-0 border-b border-solid border-spill-200 dark:border-spill-800 hover:bg-spill-100/60 dark:hover:bg-spill-800/60"
-          aria-hidden
-        >
-          <span className="w-14 h-14 bg-sky-400 text-black rounded-full flex justify-center items-center">
-            <i><bi.BiUserPlus /></i>
+        <div className="grid">
+          <span className="py-2 px-4 text-sm bg-spill-100/60 dark:bg-black/20">
+            <p className="opacity-60">Your contact list</p>
           </span>
-          <h1 className="text-lg font-bold">New Contact</h1>
+          {
+            contacts && contacts.map((elem) => (
+              <div key={elem._id} className="grid grid-cols-[auto_1fr_auto] gap-4 p-4 items-center cursor-default border-0 border-b border-solid border-spill-200 dark:border-spill-800 hover:bg-spill-100/60 dark:hover:bg-spill-800/60">
+                <img
+                  src={`assets/images/${elem.avatar}`}
+                  alt={`assets/images/${elem.avatar}`}
+                  className="w-14 h-14 rounded-full"
+                />
+                <span className="overflow-hidden">
+                  <h1 className="text-lg font-bold">{elem.fullname}</h1>
+                  { elem.bio.length > 0 && (
+                    <p className="truncate opacity-60 mt-0.5">Hey there! I am using Spillgram</p>
+                  ) }
+                </span>
+                <bi.BiDotsVerticalRounded />
+              </div>
+            ))
+          }
         </div>
-        {
-          contacts.length > 0 && contacts.map((elem) => (
-            <div key={elem._id} className="grid grid-cols-[auto_1fr_auto] gap-4 p-4 items-center cursor-default border-0 border-b border-solid border-spill-200 dark:border-spill-800 hover:bg-spill-100/60 dark:hover:bg-spill-800/60">
-              <img
-                src={`assets/images/avatar/${elem.avatar}`}
-                alt=""
-                className="w-14 h-14 rounded-full"
-              />
-              <span className="overflow-hidden">
-                <h1 className="text-lg font-bold">{elem.fullname}</h1>
-                { elem.bio.length > 0 && (
-                  <p className="truncate opacity-60 mt-0.5">{elem.bio}</p>
-                ) }
-              </span>
-              <bi.BiDotsVerticalRounded />
-            </div>
-          ))
-        }
       </div>
     </div>
   );
