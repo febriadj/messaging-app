@@ -1,3 +1,4 @@
+const { v4: uuidv4 } = require('uuid');
 const ProfileModel = require('../db/models/profile');
 const ContactModel = require('../db/models/contact');
 
@@ -6,28 +7,35 @@ const response = require('../helpers/response');
 exports.insert = async (req, res) => {
   try {
     const errData = {};
-    // find contact by friend username
-    const ifContactMatch = await ContactModel.findOne({
-      userId: req.user._id,
-      username: req.body.username,
-    });
+    const { username, fullname } = req.body;
+    // find friend profile by username
+    const friend = await ProfileModel.findOne({ username });
 
-    // if the contact is already saved
-    if (ifContactMatch) {
+    // if the friend profile not found or
+    // if the contact has been saved
+    if (
+      !friend
+      || await ContactModel.findOne({ userId: req.user._id, friendId: friend.userId })
+    ) {
       errData.statusCode = 401;
-      errData.message = 'You have saved this contact';
+      errData.message = !friend ? 'User not found' : 'You have saved this contact';
 
       throw errData;
     }
 
-    // find friend profile by username
-    const friend = await ProfileModel.findOne({ username: req.body.username });
+    // if my contact has been saved by a friend
+    const ifSavedByFriend = await ContactModel.findOne({
+      userId: friend.userId,
+      friendId: req.user._id,
+    });
 
     const contact = await new ContactModel({
       userId: req.user._id,
-      ...req.body,
-      avatar: friend.avatar,
+      roomId: ifSavedByFriend ? ifSavedByFriend.roomId : uuidv4(),
+      friendId: friend.userId,
+      fullname: fullname || friend.fullname,
       bio: friend.bio,
+      avatar: friend.avatar,
     }).save();
 
     response({
