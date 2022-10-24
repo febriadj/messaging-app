@@ -5,13 +5,14 @@ const ContactSchema = new Schema({
     type: Schema.Types.String,
     required: true,
   },
-  username: {
+  roomId: {
+    type: Schema.Types.String,
+    required: true,
+  },
+  friendId: {
     type: Schema.Types.String,
     unique: true,
-    trim: true,
     required: true,
-    minLength: 3,
-    maxLength: 12,
   },
   fullname: {
     type: Schema.Types.String,
