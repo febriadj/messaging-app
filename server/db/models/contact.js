@@ -11,7 +11,6 @@ const ContactSchema = new Schema({
   },
   friendId: {
     type: Schema.Types.String,
-    unique: true,
     required: true,
   },
   fullname: {
