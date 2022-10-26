@@ -13,23 +13,8 @@ const ContactSchema = new Schema({
     type: Schema.Types.String,
     required: true,
   },
-  fullname: {
-    type: Schema.Types.String,
-    trim: true,
-    required: true,
-    minLength: 3,
-    maxLength: 32,
-  },
-  avatar: {
-    type: Schema.Types.String,
-    required: true,
-  },
-  bio: {
-    type: Schema.Types.String,
-    default: '',
-  },
 }, {
-  timestamps: true,
+  versionKey: false,
 });
 
 module.exports = model('contact', ContactSchema);
