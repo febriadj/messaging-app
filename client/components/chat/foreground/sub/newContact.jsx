@@ -4,7 +4,7 @@ import axios from 'axios';
 import * as bi from 'react-icons/bi';
 import { setSubModal } from '../../../../redux/features/submodal';
 
-function NewContact() {
+function NewContact({ handleGetContacts }) {
   const dispatch = useDispatch();
   const submodal = useSelector((state) => state.submodal);
 
@@ -26,6 +26,9 @@ function NewContact() {
       // reset form state
       setForm({ username: '', fullname: '' });
       setRespond({ success: true, message: data.message });
+
+      // local props: update contact list
+      handleGetContacts();
 
       setTimeout(() => {
         dispatch(setSubModal({
