@@ -10,6 +10,7 @@ function ForeGround() {
       <comp.profile />
 
       <comp.header />
+      <comp.inbox />
     </div>
   );
 }
