@@ -32,4 +32,27 @@ module.exports = (socket) => {
       console.log(error0.message);
     }
   });
+
+  // event when a friend join to chat room and reads your message
+  socket.on('chat/read', async (args) => {
+    try {
+      await InboxModel.updateOne(
+        { roomId: args.roomId, ownersId: { $all: args.ownersId } },
+        { $set: { unreadMessage: 0 } },
+      );
+      await ChatModel.updateMany(
+        { roomId: args.roomId, readed: false },
+        { $set: { readed: true } },
+      );
+
+      const inboxs = await Inbox.find({ ownersId: { $all: args.ownersId } });
+      const chats = await ChatModel.find({ roomId: args.roomId }).sort({ createdAt: 1 });
+
+      io.to(args.ownersId).emit('inbox/read', inboxs[0]);
+      io.to(args.roomId).emit('chat/read', chats);
+    }
+    catch (error0) {
+      console.log(error0.message);
+    }
+  });
 };
