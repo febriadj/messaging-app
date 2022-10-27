@@ -1,16 +1,11 @@
 const { Schema, model } = require('mongoose');
 
 const ChatSchema = new Schema({
-  ownersId: {
-    type: Schema.Types.Array,
-    required: true,
-    default: [],
-  },
-  roomId: {
+  userId: {
     type: Schema.Types.String,
     required: true,
   },
-  from: {
+  roomId: {
     type: Schema.Types.String,
     required: true,
   },
@@ -18,18 +13,18 @@ const ChatSchema = new Schema({
     type: Schema.Types.String,
     default: '',
   },
-  reply: {
-    chatId: {
-      type: Schema.Types.String,
-      default: null,
-    },
-    text: {
-      type: Schema.Types.String,
-      default: '',
-    },
+  readed: {
+    type: Schema.Types.Boolean,
+    required: true,
+    default: false,
+  },
+  replyTo: {
+    type: Schema.Types.String, // -> target chat._id
+    default: null,
   },
 }, {
   timestamps: true,
+  versionKey: false,
 });
 
 module.exports = model('chats', ChatSchema);
