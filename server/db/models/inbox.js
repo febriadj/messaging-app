@@ -9,15 +9,6 @@ const InboxSchema = new Schema({
     type: Schema.Types.String,
     required: true,
   },
-  name: {
-    type: Schema.Types.String,
-    required: true,
-  },
-  avatar: {
-    type: Schema.Types.String,
-    required: true,
-    default: 'default-avatar.png',
-  },
   roomType: {
     type: Schema.Types.String,
     enum: ['private', 'group'],
@@ -28,9 +19,13 @@ const InboxSchema = new Schema({
     type: Schema.Types.Array,
     default: [],
   },
+  unreadMessage: {
+    type: Schema.Types.Number,
+    default: 0,
+  },
   content: {
     from: {
-      type: Schema.Types.String,
+      type: Schema.Types.String, // -> the sender's userId
       required: true,
     },
     text: {
@@ -44,7 +39,7 @@ const InboxSchema = new Schema({
     },
   },
 }, {
-  timestamps: true,
+  versionKey: false,
 });
 
 module.exports = model('inboxs', InboxSchema);
