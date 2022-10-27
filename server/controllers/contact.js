@@ -57,14 +57,29 @@ exports.insert = async (req, res) => {
 
 exports.find = async (req, res) => {
   try {
-    const contacts = await ContactModel.find({
-      userId: req.user._id,
-      $or: [req.query],
-    }).sort({ fullname: 1 });
+    const contacts = await ContactModel.aggregate([
+      { $match: { userId: req.user._id } },
+      {
+        $lookup: {
+          from: 'profiles',
+          localField: 'friendId',
+          foreignField: 'userId',
+          as: 'profiles',
+        },
+      },
+      {
+        $project: {
+          'profiles.userId': 0,
+          'profiles.username': 0,
+          'profiles.email': 0,
+          'profiles.phone': 0,
+          'profiles.online': 0,
+        },
+      },
+    ]).sort({ fullname: 1 });
 
     response({
       res,
-      message: `${contacts.length} contacts found`,
       payload: contacts,
     });
   }
