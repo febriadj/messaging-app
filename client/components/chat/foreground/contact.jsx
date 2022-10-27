@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import * as bi from 'react-icons/bi';
+import * as comp from './sub';
+// redux actions
 import { setModal } from '../../../redux/features/modal';
 import { setSubModal } from '../../../redux/features/submodal';
-import * as comp from './sub';
+import { setRoom } from '../../../redux/features/chat';
 
 function Contact() {
   const dispatch = useDispatch();
@@ -46,7 +48,9 @@ function Contact() {
       `}
     >
       {/* sub components or modals */}
-      <comp.newContact />
+      <comp.newContact
+        handleGetContacts={handleGetContacts}
+      />
       {/* header */}
       <div className="p-4 grid gap-4">
         <div className="flex gap-6 items-center">
@@ -91,16 +95,27 @@ function Contact() {
           </span>
           {
             contacts && contacts.map((elem) => (
-              <div key={elem._id} className="grid grid-cols-[auto_1fr_auto] gap-4 p-4 items-center cursor-default border-0 border-b border-solid border-spill-200 dark:border-spill-800 hover:bg-spill-100/60 dark:hover:bg-spill-800/60">
+              <div
+                key={elem._id}
+                aria-hidden
+                className="grid grid-cols-[auto_1fr_auto] gap-4 p-4 items-center cursor-default border-0 border-b border-solid border-spill-200 dark:border-spill-800 hover:bg-spill-100/60 dark:hover:bg-spill-800/60"
+                onClick={() => {
+                  dispatch(setRoom({
+                    ownersId: [elem.userId, elem.friendId],
+                    roomId: elem.roomId,
+                    profile: elem.profiles[0],
+                  }));
+                }}
+              >
                 <img
-                  src={`assets/images/${elem.avatar}`}
-                  alt={`assets/images/${elem.avatar}`}
+                  src={`assets/images/${elem.profiles[0].avatar}`}
+                  alt={`assets/images/${elem.profiles[0].avatar}`}
                   className="w-14 h-14 rounded-full"
                 />
                 <span className="overflow-hidden">
-                  <h1 className="text-lg font-bold">{elem.fullname}</h1>
-                  { elem.bio.length > 0 && (
-                    <p className="truncate opacity-60 mt-0.5">Hey there! I am using Spillgram</p>
+                  <h1 className="text-lg font-bold">{elem.fullname || elem.profiles[0].fullname}</h1>
+                  { elem.profiles[0].bio.length > 0 && (
+                    <p className="truncate opacity-60 mt-0.5">{elem.profiles[0].bio}</p>
                   ) }
                 </span>
                 <bi.BiDotsVerticalRounded />
