@@ -5,6 +5,7 @@ import axios from 'axios';
 import './style.css';
 import * as page from './pages';
 import { setMaster } from './redux/features/user';
+import socket from './helpers/socket';
 
 function App() {
   const dispatch = useDispatch();
@@ -19,6 +20,7 @@ function App() {
       axios.defaults.headers.Authorization = `Bearer ${cache.token}`;
 
       const { data } = await axios.get('/users');
+      socket.emit('user/signin', { userId: data.payload._id });
       // set master
       dispatch(setMaster(data.payload));
     }
