@@ -7,6 +7,7 @@ function Chat() {
     <div className="absolute w-full h-full grid grid-cols-[440px_1fr]">
       <comp.signout />
       <cont.foreground />
+      <cont.room />
     </div>
   );
 }
