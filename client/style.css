@@ -10,10 +10,18 @@
   font-family: 'Roboto', sans-serif;
 }
 
-svg {
-  font-size: x-large;
+input:-webkit-autofill {
+  transition: "color 9999s ease-out, background-color 9999s ease-out";
+  transition-delay: 9999s;
 }
 
-input, textarea {
-  background: transparent;
+svg { font-size: x-large; }
+input, textarea { background: transparent; }
+
+a {
+  text-decoration: underline;
+  color: #0c4a6e;
+}
+.dark a {
+  color: #bae6fd;
 }
