@@ -3,10 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import * as bi from 'react-icons/bi';
 import { setRoom } from '../../../redux/features/chat';
+import { setPage } from '../../../redux/features/page';
 
 function Header() {
   const dispatch = useDispatch();
-  const room = useSelector((state) => state.chat.room);
+  const { chat: { room }, page } = useSelector((state) => state);
   const [subtext, setSubtext] = useState('');
 
   const handleSubtext = () => {
@@ -31,7 +32,15 @@ function Header() {
       >
         <bi.BiArrowBack />
       </button>
-      <div className="flex gap-4 items-center">
+      <div
+        className="flex gap-4 items-center cursor-pointer"
+        aria-hidden
+        onClick={() => {
+          if (!page.friendProfile) {
+            dispatch(setPage({ target: 'friendProfile' }));
+          }
+        }}
+      >
         <img
           src={`assets/images/${room.profile.avatar}`}
           alt={`assets/images/${room.profile.avatar}`}

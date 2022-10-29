@@ -5,7 +5,7 @@ import * as comp from '../../components/chat/room';
 import socket from '../../helpers/socket';
 
 function Room() {
-  const room = useSelector((state) => state.chat.room);
+  const { chat: { room }, page } = useSelector((state) => state);
   const [chats, setChats] = useState(null);
 
   const handleGetChats = async (signal) => {
@@ -63,14 +63,23 @@ function Room() {
   }, [room]);
 
   return (
-    <div className={`${!room && 'translate-x-full md:translate-x-0'} transition absolute md:relative z-10 w-full h-full overflow-hidden flex bg-spill-100 dark:bg-spill-950`}>
+    <div
+      className={`
+        ${!room && 'translate-x-full md:translate-x-0'}
+        transition absolute md:relative flex z-10 w-full h-full overflow-hidden
+        bg-spill-100 dark:bg-spill-950
+      `}
+    >
       {
         room && (
-          <div className="z-10 w-full h-full grid grid-rows-[auto_1fr_auto]">
-            <comp.header />
-            <comp.monitor chats={chats} setChats={setChats} />
-            <comp.send setChats={setChats} />
-          </div>
+          <>
+            <div className={`${page.friendProfile && '-translate-x-full md:translate-x-0 xl:mr-[380px]'} transition-all w-full h-full grid grid-rows-[auto_1fr_auto] overflow-hidden`}>
+              <comp.header />
+              <comp.monitor chats={chats} setChats={setChats} />
+              <comp.send setChats={setChats} />
+            </div>
+            <comp.friendProfile />
+          </>
         )
       }
     </div>
