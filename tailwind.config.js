@@ -4,6 +4,7 @@ const scrollbar = require('tailwind-scrollbar');
 
 module.exports = {
   content: ['./client/**/*.{js,jsx,tsx}'],
+  darkMode: 'class',
   theme: {
     extend: {
       fontFamily: {
@@ -14,15 +15,16 @@ module.exports = {
         spill: {
           DEFAULT: '#151C21',
           50: '#F6F8F9',
-          100: '#EEF0F1',
-          200: '#E1E3E5',
-          300: '#D0D4D7',
-          400: '#ACB3B9',
-          500: '#7D858C',
-          600: '#475057',
-          700: '#31393F',
-          800: '#1F272E',
-          900: '#151C21',
+          100: '#F1F2F3',
+          200: '#E9EBEC',
+          300: '#DBDEE1',
+          400: '#BDC2C7',
+          500: '#4B5B68',
+          600: '#404E59',
+          700: '#36414A',
+          800: '#2A343C',
+          900: '#1F272E',
+          950: '#161C20',
         },
       },
     },
