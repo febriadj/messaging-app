@@ -63,7 +63,7 @@ function Room() {
   }, [room]);
 
   return (
-    <div className="relative overflow-hidden flex bg-spill-100 dark:bg-spill-950">
+    <div className={`${!room && 'translate-x-full md:translate-x-0'} transition absolute md:relative z-10 w-full h-full overflow-hidden flex bg-spill-100 dark:bg-spill-950`}>
       {
         room && (
           <div className="z-10 w-full h-full grid grid-rows-[auto_1fr_auto]">

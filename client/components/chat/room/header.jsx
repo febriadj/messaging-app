@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
+import * as bi from 'react-icons/bi';
+import { setRoom } from '../../../redux/features/chat';
 
 function Header() {
+  const dispatch = useDispatch();
   const room = useSelector((state) => state.chat.room);
   const [subtext, setSubtext] = useState('');
 
@@ -20,7 +23,14 @@ function Header() {
   }, [room]);
 
   return (
-    <div className="h-16 px-4 flex items-center bg-white dark:bg-spill-900">
+    <div className="h-16 px-4 flex gap-4 items-center bg-white dark:bg-spill-900">
+      <button
+        type="button"
+        className="md:hidden"
+        onClick={() => dispatch(setRoom(null))}
+      >
+        <bi.BiArrowBack />
+      </button>
       <div className="flex gap-4 items-center">
         <img
           src={`assets/images/${room.profile.avatar}`}

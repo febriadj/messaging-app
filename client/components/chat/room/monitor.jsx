@@ -70,9 +70,11 @@ function Monitor({ chats, setChats }) {
                   <div className="px-2">
                     <p className="[&>a]:text-sky-200 break-all">
                       <Linkify as="span">{elem.text}</Linkify>
-                      <span className="inline-block w-[74px]"></span>
+                      <span className={`${elem.userId === master._id && 'mr-5'} inline-block invisible text-xs ml-0.5`}>
+                        {moment(elem.createdAt).format('LT')}
+                      </span>
                     </p>
-                    <span className="p-2 absolute bottom-0 right-0 flex gap-1 items-center">
+                    <span className="p-2 absolute bottom-0 right-0 flex gap-0.5 items-center">
                       <p className="text-xs opacity-80">{moment(elem.createdAt).format('LT')}</p>
                       {
                         elem.userId === master._id && (
