@@ -103,19 +103,19 @@ function Contact() {
                   dispatch(setRoom({
                     ownersId: [elem.userId, elem.friendId],
                     roomId: elem.roomId,
-                    profile: elem.profiles[0],
+                    profile: elem.profile,
                   }));
                 }}
               >
                 <img
-                  src={`assets/images/${elem.profiles[0].avatar}`}
-                  alt={`assets/images/${elem.profiles[0].avatar}`}
+                  src={`assets/images/${elem.profile.avatar}`}
+                  alt={`assets/images/${elem.profile.avatar}`}
                   className="w-14 h-14 rounded-full"
                 />
                 <span className="overflow-hidden">
-                  <h1 className="text-lg font-bold">{elem.fullname || elem.profiles[0].fullname}</h1>
-                  { elem.profiles[0].bio.length > 0 && (
-                    <p className="truncate opacity-60 mt-0.5">{elem.profiles[0].bio}</p>
+                  <h1 className="text-lg font-bold">{elem.fullname || elem.profile.fullname}</h1>
+                  { elem.profile.bio.length > 0 && (
+                    <p className="truncate opacity-60 mt-0.5">{elem.profile.bio}</p>
                   ) }
                 </span>
                 <bi.BiDotsVerticalRounded />

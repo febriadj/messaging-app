@@ -64,18 +64,10 @@ exports.find = async (req, res) => {
           from: 'profiles',
           localField: 'friendId',
           foreignField: 'userId',
-          as: 'profiles',
+          as: 'profile',
         },
       },
-      {
-        $project: {
-          'profiles.userId': 0,
-          'profiles.username': 0,
-          'profiles.email': 0,
-          'profiles.phone': 0,
-          'profiles.online': 0,
-        },
-      },
+      { $unwind: '$profile' },
     ]).sort({ fullname: 1 });
 
     response({
