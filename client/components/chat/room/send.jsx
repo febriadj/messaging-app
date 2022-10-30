@@ -2,9 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import * as bi from 'react-icons/bi';
 import socket from '../../../helpers/socket';
+import * as comp from './sub';
 
 function Send({ setChats }) {
   const { user: { master }, chat: { room } } = useSelector((state) => state);
+
+  const [emojiBoard, setEmojiBoard] = useState(false);
   const [form, setForm] = useState({
     text: '',
     file: null,
@@ -30,6 +33,9 @@ function Send({ setChats }) {
 
       // reset form
       setForm({ text: '', file: null });
+      setTimeout(() => {
+        setEmojiBoard(false);
+      }, 150);
     }
     catch (error0) {
       console.error(error0.message);
@@ -63,47 +69,55 @@ function Send({ setChats }) {
   }, []);
 
   return (
-    <div className="px-2 h-16 grid grid-cols-[auto_1fr_auto] gap-2 items-center bg-white dark:bg-spill-900">
-      <span className="flex gap-0.5">
-        {
-          [
-            { target: 'emoticon', icon: <bi.BiSmile /> },
-            { target: 'file', icon: <bi.BiImageAlt /> },
-          ].map((elem) => (
-            <button
-              type="button"
-              key={elem.target}
-              className="p-2 rounded-full hover:bg-spill-100 dark:hover:bg-spill-800"
-            >
-              <i>{elem.icon}</i>
-            </button>
-          ))
-        }
-      </span>
-      <input
-        type="text"
-        name="text"
-        id="text"
-        placeholder="Type message"
-        className="py-4 w-full h-full placeholder:opacity-60"
-        onChange={handleChange}
-        value={form.text}
-      />
-      <button
-        type="submit"
-        className="p-2 rounded-full hover:bg-spill-100 dark:hover:bg-spill-800"
-        onClick={(e) => {
-          if (form.text.length > 0) {
-            handleSubmit(e);
+    <div className="bg-white dark:bg-spill-900">
+      <div className="px-2 h-16 grid grid-cols-[auto_1fr_auto] gap-2 items-center">
+        <span className="flex">
+          {
+            [
+              emojiBoard ? { target: 'x', icon: <bi.BiX /> } : { target: 'emojiBoard', icon: <bi.BiSmile /> },
+              { target: 'file', icon: <bi.BiImageAlt /> },
+            ].map((elem) => (
+              <button
+                type="button"
+                key={elem.target}
+                className="p-2 rounded-full hover:bg-spill-100 dark:hover:bg-spill-800"
+                onClick={() => {
+                  setEmojiBoard((prev) => !prev);
+                }}
+              >
+                <i>{elem.icon}</i>
+              </button>
+            ))
           }
-        }}
-      >
-        {
-          form.text.length > 0
-            ? <i><bi.BiSend /></i>
-            : <i><bi.BiMicrophone /></i>
-        }
-      </button>
+        </span>
+        <input
+          type="text"
+          name="text"
+          id="new-message"
+          placeholder="Type message"
+          className="py-4 w-full h-full placeholder:opacity-60"
+          onChange={handleChange}
+          value={form.text}
+        />
+        <button
+          type="submit"
+          className="p-2 rounded-full hover:bg-spill-100 dark:hover:bg-spill-800"
+          onClick={(e) => {
+            if (form.text.length > 0) {
+              handleSubmit(e);
+            }
+          }}
+        >
+          {
+            form.text.length > 0
+              ? <i><bi.BiSend /></i>
+              : <i><bi.BiMicrophone /></i>
+          }
+        </button>
+      </div>
+      {
+        emojiBoard && <comp.emojiBoard setForm={setForm} />
+      }
     </div>
   );
 }
