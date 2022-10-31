@@ -17,18 +17,26 @@ function FriendProfile() {
       `}
     >
       {/* header */}
-      <div className="h-16 px-2 flex gap-6 items-center">
+      <div className="h-16 px-2 flex gap-6 justify-between items-center">
+        <div className="flex gap-6 items-center">
+          <button
+            type="button"
+            className="p-2 rounded-full hover:bg-spill-100 dark:hover:bg-spill-800"
+            onClick={() => {
+              dispatch(setPage({ target: 'friendProfile' }));
+            }}
+          >
+            <bi.BiArrowBack className="block md:hidden" />
+            <bi.BiX className="hidden md:block" />
+          </button>
+          <h1 className="text-2xl font-bold">Profile</h1>
+        </div>
         <button
           type="button"
           className="p-2 rounded-full hover:bg-spill-100 dark:hover:bg-spill-800"
-          onClick={() => {
-            dispatch(setPage({ target: 'friendProfile' }));
-          }}
         >
-          <bi.BiArrowBack className="block md:hidden" />
-          <bi.BiX className="hidden md:block" />
+          <bi.BiQr />
         </button>
-        <h1 className="text-2xl font-bold">Profile</h1>
       </div>
       {
         profile && (
@@ -45,7 +53,7 @@ function FriendProfile() {
                 [
                   { label: 'Username', data: profile.username, icon: <bi.BiAt /> },
                   { label: 'Bio', data: profile.bio, icon: <bi.BiInfoCircle /> },
-                  { label: 'Phone', data: profile.phone.number, icon: <bi.BiPhone /> },
+                  { label: 'Phone', data: profile.phone, icon: <bi.BiPhone /> },
                   { label: 'Email', data: profile.email, icon: <bi.BiEnvelope /> },
                 ]
                   .map((elem) => (
@@ -55,11 +63,6 @@ function FriendProfile() {
                         <p className="text-sm opacity-60 mb-0.5">{elem.label}</p>
                         <p className="break-all">{elem.data}</p>
                       </span>
-                      {elem.label === 'Username' && (
-                        <button type="button" className="p-1 rounded-md hover:bg-spill-100 dark:hover:bg-spill-800">
-                          <bi.BiQr />
-                        </button>
-                      )}
                     </div>
                   ))
               }
