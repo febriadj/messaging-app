@@ -9,6 +9,13 @@ function Profile() {
   const modal = useSelector((state) => state.modal);
 
   const [profile, setProfile] = useState(null);
+  const [form, setForm] = useState({
+    fullname: '',
+    username: '',
+    bio: '',
+    phone: '',
+    email: '',
+  });
 
   const handleGetProfile = async (signal) => {
     try {
@@ -21,7 +28,7 @@ function Profile() {
 
         setProfile(data.payload);
       } else {
-        // destroy when modal is closed
+        // destroy when modal profile is closed after 150ms
         setTimeout(() => setProfile(null), 150);
       }
     }
@@ -30,12 +37,54 @@ function Profile() {
     }
   };
 
+  const handleEditBtn = async (e, elem) => {
+    const parent = e.target.parentElement;
+    const ctrl = parent.querySelector('#profile-edit-control');
+    const editable = ctrl.hasAttribute('contentEditable');
+
+    if (editable) {
+      // remove contentEditable attr
+      ctrl.removeAttribute('contentEditable');
+
+      if (form[elem.label] !== profile[elem.label]) {
+        try {
+          await axios.put('/profiles', { [elem.label]: form[elem.label] });
+          console.log(form);
+        }
+        catch (error0) {
+          const errRespond = parent.querySelector('#error-respond');
+          errRespond.classList.remove('hidden');
+          errRespond.innerHTML = error0.response.data.message;
+
+          return;
+        }
+      }
+    } else {
+      // set contentEditable attr
+      ctrl.setAttribute('contentEditable', 'true');
+      ctrl.focus();
+      ctrl.selectionStart = ctrl.innerText.length;
+
+      setForm((prev) => ({
+        ...prev,
+        [elem.label]: elem.data,
+      }));
+    }
+
+    // change border color
+    parent.classList[!editable ? 'add' : 'remove']('border-sky-600', 'dark:border-sky-400');
+    // edit-btn icon
+    [...e.target.children].forEach((c) => {
+      c.classList.toggle('hidden');
+    });
+  };
+
   useEffect(() => {
-    const ctrl = new AbortController();
-    handleGetProfile(ctrl.signal);
+    const abortCtrl = new AbortController();
+    handleGetProfile(abortCtrl.signal);
 
     return () => {
-      ctrl.abort();
+      abortCtrl.abort();
     };
   }, [modal.profile]);
 
@@ -48,45 +97,106 @@ function Profile() {
       `}
     >
       {/* header */}
-      <div className="p-4 flex gap-6 items-center">
+      <div className="h-16 px-2 flex gap-6 justify-between items-center">
+        <div className="flex gap-6 items-center">
+          <button
+            type="button"
+            className="p-2 rounded-full hover:bg-spill-100 dark:hover:bg-spill-800"
+            onClick={() => {
+              dispatch(setModal({ target: 'profile' }));
+            }}
+          >
+            <bi.BiArrowBack />
+          </button>
+          <h1 className="text-2xl font-bold">Profile</h1>
+        </div>
         <button
           type="button"
-          onClick={() => {
-            dispatch(setModal({ target: 'profile' }));
-          }}
+          className="p-2 rounded-full hover:bg-spill-100 dark:hover:bg-spill-800"
         >
-          <bi.BiArrowBack />
+          <bi.BiQr />
         </button>
-        <h1 className="text-2xl font-bold">Profile</h1>
       </div>
       {
         profile && (
           <div className="overflow-y-auto scrollbar-thin scrollbar-thumb-spill-200 hover:scrollbar-thumb-spill-300 dark:scrollbar-thumb-spill-700 dark:hover:scrollbar-thumb-spill-600">
             <div className="p-4 flex flex-col items-center">
               <img src={`assets/images/${profile.avatar}`} alt="" className="w-28 h-28 rounded-full" />
-              <div className="w-full text-center mt-4 overflow-hidden">
-                <h1 className="text-2xl font-bold mb-1">{profile.fullname}</h1>
-                <p>{profile.online ? 'online' : 'offline'}</p>
-              </div>
+              <label htmlFor="profile-edit-control" className="relative flex items-start mt-4 px-10 cursor-text">
+                <h1
+                  id="profile-edit-control"
+                  suppressContentEditableWarning
+                  className="break-all text-2xl font-bold text-center"
+                  onInput={(e) => setForm((prev) => ({
+                    ...prev,
+                    fullname: e.target.innerText,
+                  }))}
+                >
+                  {profile.fullname}
+                </h1>
+                <button
+                  type="button"
+                  className="absolute right-0 p-1 rounded-full cursor-pointer hover:bg-spill-100 dark:hover:bg-spill-800"
+                  onClick={(e) => handleEditBtn(e, {
+                    label: 'fullname',
+                    data: profile.fullname,
+                  })}
+                >
+                  <bi.BiPencil size={20} className="pointer-events-none" />
+                  <bi.BiCheck size={20} className="hidden pointer-events-none text-sky-600 dark:text-sky-400" />
+                </button>
+              </label>
             </div>
             <div className="grid">
               {
                 [
-                  { label: 'Username', data: profile.username, icon: <bi.BiAt /> },
-                  { label: 'Bio', data: profile.bio, icon: <bi.BiInfoCircle /> },
-                  { label: 'Phone', data: profile.phone.number, icon: <bi.BiPhone /> },
-                  { label: 'Email', data: profile.email, icon: <bi.BiEnvelope /> },
+                  {
+                    label: 'username',
+                    data: profile.username,
+                    desc: 'People will be able to find you by this username and contact you.',
+                    icon: <bi.BiAt />,
+                  },
+                  { label: 'bio', data: profile.bio, icon: <bi.BiInfoCircle /> },
+                  { label: 'phone', data: profile.phone, icon: <bi.BiPhone /> },
+                  { label: 'email', data: profile.email, icon: <bi.BiEnvelope /> },
                 ]
                   .map((elem) => (
-                    <div key={elem.label} className="py-2 px-4 grid grid-cols-[auto_1fr_auto] gap-4 items-start border-0 border-b border-solid border-spill-100 dark:border-spill-800">
+                    <div key={elem.label} className="py-2 px-4 break-all grid grid-cols-[auto_1fr_auto] gap-4 items-start border-0 border-b border-solid border-spill-100 dark:border-spill-800">
                       <i>{elem.icon}</i>
                       <span>
-                        <p className="text-sm opacity-60 mb-0.5">{elem.label}</p>
-                        <p>{elem.data}</p>
+                        <p className="text-sm opacity-60 capitalize">{elem.label}</p>
+                        <p
+                          id="profile-edit-control"
+                          className="mt-1 w-full"
+                          suppressContentEditableWarning
+                          aria-hidden
+                          onKeyPress={(e) => {
+                            if (elem.label === 'phone') {
+                              if (!'0123456789'.includes(e.key)) {
+                                e.preventDefault();
+                              }
+                            }
+                          }}
+                          onInput={(e) => {
+                            setForm((prev) => ({
+                              ...prev,
+                              [elem.label]: e.target.innerText,
+                            }));
+                          }}
+                        >
+                          {elem.data}
+                        </p>
+                        { elem.desc && <p className="mt-2 text-sm opacity-60">{elem.desc}</p> }
+                        <p id="error-respond" className="hidden mt-2 text-sm text-rose-600 dark:text-rose-400"></p>
                       </span>
-                      { elem.label === 'Username' && (
-                        <button type="button" className="p-1 rounded-md bg-spill-100 hover:bg-spill-200 dark:bg-spill-800 dark:hover:bg-spill-700">
-                          <bi.BiQr />
+                      { elem.label !== 'email' && (
+                        <button
+                          type="button"
+                          className="p-1 rounded-full hover:bg-spill-100 dark:hover:bg-spill-800"
+                          onClick={(e) => handleEditBtn(e, elem)}
+                        >
+                          <bi.BiPencil size={20} className="pointer-events-none" />
+                          <bi.BiCheck size={20} className="hidden pointer-events-none text-sky-600 dark:text-sky-400" />
                         </button>
                       ) }
                     </div>
