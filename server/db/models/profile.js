@@ -33,19 +33,17 @@ const ProfileSchema = new Schema({
   bio: {
     type: Schema.Types.String,
     trim: true,
-    default: 'Hi there! I\'m using spill',
+    default: '',
   },
   phone: {
-    number: {
-      type: Schema.Types.String,
-      trim: true,
-      default: '',
-    },
-    code: {
-      type: Schema.Types.String,
-      trim: true,
-      default: '',
-    },
+    type: Schema.Types.String,
+    trim: true,
+    default: '',
+  },
+  dialCode: {
+    type: Schema.Types.String,
+    trim: true,
+    default: '',
   },
   online: {
     type: Schema.Types.Boolean,
@@ -54,6 +52,7 @@ const ProfileSchema = new Schema({
   },
 }, {
   timestamps: true,
+  versionKey: false,
 });
 
 module.exports = model('profiles', ProfileSchema);
