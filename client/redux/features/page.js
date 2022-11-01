@@ -4,11 +4,14 @@ const PageSlice = createSlice({
   name: 'page',
   initialState: {
     friendProfile: false,
+    profile: false,
+    contact: false,
+    setting: false,
   },
   reducers: {
     setPage(state, action) {
       const { target = null, data = null } = action.payload;
-      state[target] = data || !state[target];
+      state[target] = data ?? !state[target];
     },
   },
 });
