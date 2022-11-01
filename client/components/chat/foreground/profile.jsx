@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import * as bi from 'react-icons/bi';
-import { setModal } from '../../../redux/features/modal';
+import { setPage } from '../../../redux/features/page';
 
 function Profile() {
   const dispatch = useDispatch();
-  const modal = useSelector((state) => state.modal);
+  const page = useSelector((state) => state.page);
 
   const [profile, setProfile] = useState(null);
   const [form, setForm] = useState({
@@ -19,16 +19,16 @@ function Profile() {
 
   const handleGetProfile = async (signal) => {
     try {
-      // get profile if profile modal is opened
-      if (modal.profile) {
+      // get profile if profile page is opened
+      if (page.profile) {
         const { data } = await axios.get('/profiles', {
-          params: { userId: modal.profile },
+          params: { userId: page.profile },
           signal,
         });
 
         setProfile(data.payload);
       } else {
-        // destroy when modal profile is closed after 150ms
+        // destroy when profile page is closed after 150ms
         setTimeout(() => setProfile(null), 150);
       }
     }
@@ -49,7 +49,6 @@ function Profile() {
       if (form[elem.label] !== profile[elem.label]) {
         try {
           await axios.put('/profiles', { [elem.label]: form[elem.label] });
-          console.log(form);
         }
         catch (error0) {
           const errRespond = parent.querySelector('#error-respond');
@@ -86,12 +85,12 @@ function Profile() {
     return () => {
       abortCtrl.abort();
     };
-  }, [modal.profile]);
+  }, [page.profile]);
 
   return (
     <div
       className={`
-        ${modal.profile ? 'delay-75' : '-translate-x-full'}
+        ${page.profile ? 'delay-75' : '-translate-x-full'}
         transition duration-200 absolute w-full h-full z-10 grid grid-rows-[auto_1fr] overflow-hidden
         bg-white dark:bg-spill-900 dark:text-white/90
       `}
@@ -103,7 +102,7 @@ function Profile() {
             type="button"
             className="p-2 rounded-full hover:bg-spill-100 dark:hover:bg-spill-800"
             onClick={() => {
-              dispatch(setModal({ target: 'profile' }));
+              dispatch(setPage({ target: 'profile' }));
             }}
           >
             <bi.BiArrowBack />

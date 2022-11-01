@@ -4,24 +4,24 @@ import axios from 'axios';
 import * as bi from 'react-icons/bi';
 import * as comp from './sub';
 // redux actions
+import { setPage } from '../../../redux/features/page';
 import { setModal } from '../../../redux/features/modal';
-import { setSubModal } from '../../../redux/features/submodal';
 import { setRoom } from '../../../redux/features/chat';
 
 function Contact() {
   const dispatch = useDispatch();
-  const modal = useSelector((state) => state.modal);
+  const page = useSelector((state) => state.page);
 
   const [contacts, setContacts] = useState(null);
 
   const handleGetContacts = async (signal) => {
     try {
-      // get contacts if contact modal is opened
-      if (modal.contact) {
+      // get contacts if contact page is opened
+      if (page.contact) {
         const { data } = await axios.get('/contacts', { signal });
         setContacts(data.payload);
       } else {
-        // reset when modal is closed
+        // reset when page is closed
         setContacts(null);
       }
     }
@@ -37,12 +37,12 @@ function Contact() {
     return () => {
       ctrl.abort();
     };
-  }, [modal.contact]);
+  }, [page.contact]);
 
   return (
     <div
       className={`
-        ${modal.contact ? 'delay-75' : '-translate-x-full'}
+        ${page.contact ? 'delay-75' : '-translate-x-full'}
         transition duration-200 absolute w-full h-full z-10 grid grid-rows-[auto_1fr] overflow-hidden
         bg-white dark:bg-spill-900 dark:text-white/90
       `}
@@ -57,7 +57,7 @@ function Contact() {
           <button
             type="button"
             onClick={() => {
-              dispatch(setModal({ target: 'contact' }));
+              dispatch(setPage({ target: 'contact' }));
             }}
           >
             <bi.BiArrowBack className="text-2xl" />
@@ -76,8 +76,9 @@ function Contact() {
                 key={elem.target}
                 className="grid grid-cols-[auto_1fr_auto] gap-6 p-4 items-center cursor-default border-0 border-b border-solid border-spill-200 dark:border-spill-800 hover:bg-spill-100/60 dark:hover:bg-spill-800/60"
                 aria-hidden
-                onClick={() => {
-                  dispatch(setSubModal({ target: elem.target }));
+                onClick={(e) => {
+                  e.stopPropagation();
+                  dispatch(setModal({ target: elem.target }));
                 }}
               >
                 <i>{elem.icon}</i>
@@ -99,7 +100,8 @@ function Contact() {
                 key={elem._id}
                 aria-hidden
                 className="grid grid-cols-[auto_1fr_auto] gap-4 p-4 items-center cursor-default border-0 border-b border-solid border-spill-200 dark:border-spill-800 hover:bg-spill-100/60 dark:hover:bg-spill-800/60"
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   dispatch(setRoom({
                     ownersId: [elem.userId, elem.friendId],
                     roomId: elem.roomId,

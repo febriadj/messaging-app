@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import * as bi from 'react-icons/bi';
-import { setSubModal } from '../../../../redux/features/submodal';
+import { setModal } from '../../../../redux/features/modal';
 
 function NewContact({ handleGetContacts }) {
   const dispatch = useDispatch();
-  const submodal = useSelector((state) => state.submodal);
+  const modal = useSelector((state) => state.modal);
 
   const [respond, setRespond] = useState({ success: true, message: null });
   const [form, setForm] = useState({ username: '', fullname: '' });
@@ -31,7 +31,7 @@ function NewContact({ handleGetContacts }) {
       handleGetContacts();
 
       setTimeout(() => {
-        dispatch(setSubModal({
+        dispatch(setModal({
           target: 'newcontact',
         }));
       }, 1000);
@@ -44,26 +44,26 @@ function NewContact({ handleGetContacts }) {
     }
   };
 
+  useEffect(() => {
+    setRespond((prev) => ({ ...prev, message: null }));
+    setForm({ username: '', fullname: '' });
+  }, [modal.newcontact]);
+
   return (
     <div
       className={`
-        ${submodal.newcontact ? 'z-10' : '-z-50 opacity-0 delay-300'}
+        ${modal.newcontact ? 'z-10' : '-z-50 opacity-0 delay-300'}
         absolute w-full h-full flex justify-center items-center
         bg-spill-600/20 dark:bg-black/40 dark:text-white/90
       `}
     >
-      <span
-        className="absolute w-full h-full -z-10"
+      <div
         aria-hidden
-        onClick={() => {
-          dispatch(setSubModal({ target: 'newcontact' }));
-          // reset state
-          setRespond((prev) => ({ ...prev, message: null }));
-          setForm({ username: '', fullname: '' });
+        className={`${!modal.newcontact && 'scale-0'} transition m-8 p-4 w-full rounded-md bg-white dark:bg-spill-800`}
+        onClick={(e) => {
+          e.stopPropagation();
         }}
       >
-      </span>
-      <div className={`${!submodal.newcontact && 'scale-0'} transition m-8 p-4 w-full rounded-md bg-white dark:bg-spill-800`}>
         {/* header */}
         <div className="mb-6">
           <h1 className="text-2xl font-bold">New Contact</h1>
@@ -117,7 +117,7 @@ function NewContact({ handleGetContacts }) {
                 type="button"
                 className="py-2 px-4 rounded-md hover:bg-gray-100 dark:hover:bg-spill-700"
                 onClick={() => {
-                  dispatch(setSubModal({ target: 'signout' }));
+                  dispatch(setModal({ target: 'signout' }));
                   // reset state
                   setRespond((prev) => ({ ...prev, message: null }));
                   setForm({ username: '', fullname: '' });

@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import * as bi from 'react-icons/bi';
-import { setModal } from '../../../redux/features/modal';
+import { setPage } from '../../../redux/features/page';
 
 function Setting() {
   const dispatch = useDispatch();
-  const modal = useSelector((state) => state.modal);
+  const page = useSelector((state) => state.page);
 
   const [setting, setSetting] = useState(null);
 
@@ -127,7 +127,7 @@ function Setting() {
   return (
     <div
       className={`
-        ${modal.setting ? 'delay-75' : '-translate-x-full'}
+        ${page.setting ? 'delay-75' : '-translate-x-full'}
         transition duration-200 absolute w-full h-full z-10 grid grid-rows-[auto_1fr] overflow-hidden
         bg-white dark:bg-spill-900 dark:text-white/90
       `}
@@ -137,7 +137,7 @@ function Setting() {
         <button
           type="button"
           onClick={() => {
-            dispatch(setModal({ target: 'setting' }));
+            dispatch(setPage({ target: 'setting' }));
           }}
         >
           <bi.BiArrowBack className="text-2xl" />
@@ -151,7 +151,14 @@ function Setting() {
               <h1 className="font-bold ml-4">{struct.section}</h1>
               {
                 struct.child.map((child) => (
-                  <div key={child.target} aria-hidden className="p-4 grid grid-cols-[auto_1fr_auto] items-start gap-6 cursor-default border-0 border-b border-solid border-spill-200 dark:border-spill-800 hover:bg-spill-100/60 dark:hover:bg-spill-800/60">
+                  <div
+                    key={child.target}
+                    aria-hidden
+                    className="p-4 grid grid-cols-[auto_1fr_auto] items-start gap-6 cursor-default border-0 border-b border-solid border-spill-200 dark:border-spill-800 hover:bg-spill-100/60 dark:hover:bg-spill-800/60"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
+                  >
                     <i>{child.icon}</i>
                     <span>
                       <p>{child.title}</p>
@@ -165,11 +172,10 @@ function Setting() {
                             ${setting[child.target] ? 'bg-sky-200 dark:bg-sky-400' : 'bg-spill-200 dark:bg-spill-700'}
                             flex relative p-1 w-10 rounded-full
                           `}
-                          onClick={async () => {
-                            await axios.put('/settings', {
-                              [child.target]: !setting[child.target],
-                            });
+                          onClick={async (e) => {
+                            e.stopPropagation();
 
+                            await axios.put('/settings', { [child.target]: !setting[child.target] });
                             handleGetSetting();
                           }}
                         >

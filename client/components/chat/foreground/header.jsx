@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import * as bi from 'react-icons/bi';
 import config from '../../../config';
 import { setModal } from '../../../redux/features/modal';
+import { setPage } from '../../../redux/features/page';
 
 function Header() {
   const dispatch = useDispatch();
@@ -23,9 +24,19 @@ function Header() {
                 type="button"
                 key={elem.target}
                 className="p-1 rounded-full hover:bg-spill-100 dark:hover:bg-spill-800"
-                onClick={() => dispatch(setModal({
-                  target: elem.target,
-                }))}
+                onClick={(e) => {
+                  e.stopPropagation();
+
+                  if (elem.target !== 'minibox') {
+                    dispatch(setPage({ target: elem.target }));
+                    dispatch(setModal({
+                      target: 'minibox',
+                      data: false,
+                    }));
+                  } else {
+                    dispatch(setModal({ target: elem.target }));
+                  }
+                }}
               >
                 {elem.icon}
               </button>
