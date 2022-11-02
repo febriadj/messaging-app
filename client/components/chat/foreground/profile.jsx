@@ -97,7 +97,7 @@ function Profile() {
     >
       {/* header */}
       <div className="h-16 px-2 flex gap-6 justify-between items-center">
-        <div className="flex gap-6 items-center">
+        <div className="flex gap-4 items-center">
           <button
             type="button"
             className="p-2 rounded-full hover:bg-spill-100 dark:hover:bg-spill-800"
