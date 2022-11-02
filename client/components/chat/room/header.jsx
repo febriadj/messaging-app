@@ -24,10 +24,10 @@ function Header() {
   }, [room]);
 
   return (
-    <div className="h-16 px-4 flex gap-4 items-center bg-white dark:bg-spill-900">
+    <div className="h-16 px-2 flex gap-4 items-center bg-white dark:bg-spill-900">
       <button
         type="button"
-        className="md:hidden"
+        className="p-2 rounded-full hover:bg-spill-100 dark:hover:bg-spill-800"
         onClick={() => dispatch(setRoom(null))}
       >
         <bi.BiArrowBack />
