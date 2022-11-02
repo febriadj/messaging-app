@@ -9,11 +9,11 @@ function Header() {
   const dispatch = useDispatch();
 
   return (
-    <div className="py-4 px-5 grid gap-4 bg-white dark:bg-spill-900 dark:text-white/90">
-      <div className="flex gap-5 justify-between items-center">
+    <div className="grid items-center bg-white dark:bg-spill-900 dark:text-white/90">
+      <div className="h-16 pl-4 pr-2 flex gap-5 justify-between items-center">
         {/* brand name */}
         <h1 className="text-2xl font-bold font-display">{config.brandName}</h1>
-        <div className="flex gap-1 translate-x-1">
+        <div className="flex">
           {
             [
               { target: 'status', icon: <bi.BiRotateLeft /> },
@@ -23,7 +23,7 @@ function Header() {
               <button
                 type="button"
                 key={elem.target}
-                className="p-1 rounded-full hover:bg-spill-100 dark:hover:bg-spill-800"
+                className="p-2 rounded-full hover:bg-spill-100 dark:hover:bg-spill-800"
                 onClick={(e) => {
                   e.stopPropagation();
 
@@ -45,16 +45,18 @@ function Header() {
         </div>
       </div>
       {/* search bar */}
-      <label htmlFor="search" className="flex gap-3 items-center">
-        <bi.BiSearchAlt />
-        <input
-          type="text"
-          name="search"
-          id="search"
-          className="w-full"
-          placeholder="Search chat or group in inbox"
-        />
-      </label>
+      <div className="px-4 pb-4">
+        <label htmlFor="search" className="flex gap-3 items-center">
+          <bi.BiSearchAlt />
+          <input
+            type="text"
+            name="search"
+            id="search"
+            className="w-full placeholder:opacity-80"
+            placeholder="Search chat or group in inbox"
+          />
+        </label>
+      </div>
     </div>
   );
 }
