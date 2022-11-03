@@ -16,7 +16,7 @@ function Logout() {
     >
       <div
         aria-hidden
-        className={`${!modal.signout && 'scale-0'} transition w-[400px] m-10 p-5 rounded-md bg-white dark:bg-spill-700`}
+        className={`${!modal.signout && 'scale-0'} transition w-[400px] m-10 p-5 rounded-md bg-white dark:bg-spill-800`}
         onClick={(e) => {
           e.stopPropagation();
         }}
@@ -26,7 +26,7 @@ function Logout() {
         <span className="flex gap-2 mt-5 justify-end">
           <button
             type="button"
-            className="py-2 px-4 rounded-md hover:bg-gray-100 dark:hover:bg-spill-600"
+            className="py-2 px-4 rounded-md hover:bg-gray-100 dark:hover:bg-spill-700"
             onClick={() => {
               dispatch(setModal({ target: 'signout' }));
             }}
