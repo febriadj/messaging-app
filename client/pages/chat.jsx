@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { setModal } from '../redux/features/modal';
 import * as cont from '../containers/chat';
-import * as comp from '../components/chat';
+import * as comp from '../components/utils';
 
 function Chat() {
   const dispatch = useDispatch();
