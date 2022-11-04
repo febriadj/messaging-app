@@ -1,14 +1,10 @@
 import React, { useState } from 'react';
-import { Helmet } from 'react-helmet';
 import axios from 'axios';
 import * as bi from 'react-icons/bi';
-import * as fc from 'react-icons/fc';
 
-function Login({ setLogin }) {
+function Login({ setRespond }) {
   const cache = JSON.parse(localStorage.getItem('cache'));
 
-  // respond API request
-  const [respond, setRespond] = useState({ success: true, message: null });
   const [form, setForm] = useState({
     me: false,
     username: cache?.me || '',
@@ -21,14 +17,6 @@ function Login({ setLogin }) {
       ...prev,
       [e.target.name]: e.target.type === 'checkbox' ? e.target.checked : e.target.value,
     }));
-
-    // close respond modal if opened
-    if (respond.message) {
-      setRespond((prev) => ({
-        ...prev,
-        message: null,
-      }));
-    }
   };
 
   const handleSubmit = async (e) => {
@@ -58,102 +46,62 @@ function Login({ setLogin }) {
   };
 
   return (
-    <div className="absolute w-full h-full bg-white">
-      <Helmet>
-        <title>Sign in - Spill</title>
-      </Helmet>
+    <form method="post" className="grid gap-2" onSubmit={handleSubmit}>
       {
-        respond.message && (
-          <div className="absolute w-full flex justify-center">
-            <span className={`${respond.success ? 'bg-emerald-50' : 'bg-red-50'} mt-2 mx-10 py-1 px-3 shadow-lg flex justify-between items-center gap-3`}>
-              <p>{respond.message}</p>
-              {
-                respond.success
-                  ? <bi.BiCheck className="text-xl text-emerald-600" />
-                  : <bi.BiX className="text-xl text-red-600" />
-              }
-            </span>
-          </div>
-        )
+        [
+          {
+            target: 'username',
+            type: 'text',
+            placeholder: 'Username or Email',
+            icon: <bi.BiUser size={20} />,
+            minLength: 3,
+          },
+          {
+            target: 'password',
+            type: 'password',
+            placeholder: 'Password',
+            icon: <bi.BiLockOpenAlt size={20} />,
+            minLength: 6,
+          },
+        ].map((elem) => (
+          <label key={elem.target} htmlFor="username" className="relative flex items-center">
+            <i className="absolute translate-x-4">{elem.icon}</i>
+            <input
+              type={elem.type}
+              name={elem.target}
+              id={elem.target}
+              placeholder={elem.placeholder}
+              minLength={elem.minLength}
+              className={`${form[elem.target].length > 0 ? 'peer valid:bg-gray-50' : ''} w-full py-2 pl-12 pr-3 border border-solid border-gray-300 rounded-md focus:border-gray-900`}
+              value={form[elem.target]}
+              onChange={handleChange}
+              required
+            />
+            <bi.BiCheck className="absolute right-0 text-xl text-emerald-600 hidden peer-valid:block -translate-x-4" />
+            <bi.BiX className="absolute right-0 text-xl text-red-600 hidden peer-invalid:block -translate-x-4" />
+          </label>
+        ))
       }
-      <div className="py-5 px-10">
-        <h1 className="text-2xl font-bold">Sign in</h1>
-        <div className="grid gap-2 mt-5">
-          <button type="button" className="relative py-2 flex justify-center items-center rounded-md border border-solid border-gray-300 hover:bg-gray-50">
-            <fc.FcGoogle className="text-xl absolute left-0 translate-x-3" />
-            <p className="text-center">Continue with Google</p>
-          </button>
-        </div>
-        <div className="mt-3 mb-5 grid grid-cols-[1fr_auto_1fr] gap-3 items-center">
-          <span className="block w-full h-[1px] bg-gray-300"></span>
-          <p>or</p>
-          <span className="block w-full h-[1px] bg-gray-300"></span>
-        </div>
-        <form method="post" className="grid gap-2" onSubmit={handleSubmit}>
-          <label htmlFor="username" className="relative flex items-center">
-            <bi.BiUser className="absolute text-xl translate-x-3" />
-            <input
-              type="text"
-              name="username"
-              id="username"
-              placeholder="Username or email"
-              minLength={3}
-              className={`${form.username.length > 0 ? 'peer valid:bg-gray-50' : ''} w-full py-3 pl-12 pr-3 border border-solid border-gray-300 rounded-md focus:border-gray-900`}
-              value={form.username}
-              onChange={handleChange}
-              required
-            />
-            <bi.BiCheck className="absolute right-0 text-xl text-emerald-600 hidden peer-valid:block -translate-x-3" />
-            <bi.BiX className="absolute right-0 text-xl text-red-600 hidden peer-invalid:block -translate-x-3" />
-          </label>
-          <label htmlFor="password" className="relative flex items-center">
-            <bi.BiLockOpenAlt className="absolute text-xl translate-x-3" />
-            <input
-              type="password"
-              name="password"
-              id="password"
-              placeholder="Password"
-              minLength={6}
-              className={`${form.password.length > 0 ? 'peer valid:bg-gray-50' : ''} w-full py-3 pl-12 pr-3 border border-solid border-gray-300 rounded-md focus:border-gray-900`}
-              value={form.password}
-              onChange={handleChange}
-              required
-            />
-            <bi.BiCheck className="absolute right-0 text-xl text-emerald-600 hidden peer-valid:block -translate-x-3" />
-            <bi.BiX className="absolute right-0 text-xl text-red-600 hidden peer-invalid:block -translate-x-3" />
-          </label>
-          <span className="flex">
-            <label htmlFor="me" className="flex items-center gap-2 cursor-pointer">
-              <input
-                type="checkbox"
-                name="me"
-                id="me"
-                onChange={handleChange}
-                defaultChecked={!!cache?.me}
-              />
-              <p>remember me</p>
-            </label>
-          </span>
-          <button type="submit" className="bg-blue-600 hover:bg-blue-700 mt-5 py-3 rounded-md">
-            <p className="font-bold text-white">Sign in</p>
-          </button>
-        </form>
-        <div className="absolute bottom-0 py-5">
-          <span className="flex items-center gap-2">
-            <p>Don&#39;t have an account?</p>
-            <button
-              type="button"
-              className="font-bold hover:underline"
-              onClick={() => {
-                setLogin(false);
-              }}
-            >
-              Sign up
-            </button>
-          </span>
-        </div>
-      </div>
-    </div>
+      <span className="flex">
+        <label htmlFor="me" className="flex items-center gap-2 cursor-pointer">
+          <input
+            type="checkbox"
+            name="me"
+            id="me"
+            onChange={handleChange}
+            defaultChecked={!!cache?.me}
+          />
+          <p>remember me</p>
+        </label>
+      </span>
+      {/* submit btn */}
+      <button
+        type="submit"
+        className="font-bold mt-6 py-2 rounded-md text-white bg-sky-600 hover:bg-sky-700"
+      >
+        Sign in
+      </button>
+    </form>
   );
 }
 
