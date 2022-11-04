@@ -10,9 +10,9 @@ function Login({ setLogin }) {
   // respond API request
   const [respond, setRespond] = useState({ success: true, message: null });
   const [form, setForm] = useState({
-    username: cache?.remember || '',
+    me: false,
+    username: cache?.me || '',
     password: '',
-    remember: false,
   });
 
   const handleChange = (e) => {
@@ -34,37 +34,26 @@ function Login({ setLogin }) {
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
-
-      const { data } = await axios({
-        method: 'POST',
-        url: '/users/login',
-        data: form,
-      });
-
-      // revert form state
-      setForm((prev) => ({ ...prev, username: '', password: '' }));
+      const { data } = await axios.post('/users/login', form);
 
       // store jwt token on localStorage
+      localStorage.setItem('token', data.payload);
       localStorage.setItem('cache', JSON.stringify({
-        token: data.payload,
-        remember: form.remember ? form.username : null,
+        me: form.me ? form.username : null,
       }));
 
-      setRespond((prev) => ({
-        ...prev,
-        success: true,
-        message: data.message,
-      }));
+      // reset form
+      setForm((prev) => ({ ...prev, username: '', password: '' }));
+      setRespond({ success: true, message: data.message });
 
       // reload this page after 1s
       setTimeout(() => window.location.reload(), 1000);
     }
     catch (error0) {
-      setRespond((prev) => ({
-        ...prev,
+      setRespond({
         success: false,
         message: error0.response.data.message,
-      }));
+      });
     }
   };
 
@@ -134,13 +123,13 @@ function Login({ setLogin }) {
             <bi.BiX className="absolute right-0 text-xl text-red-600 hidden peer-invalid:block -translate-x-3" />
           </label>
           <span className="flex">
-            <label htmlFor="remember" className="flex items-center gap-2 cursor-pointer">
+            <label htmlFor="me" className="flex items-center gap-2 cursor-pointer">
               <input
                 type="checkbox"
-                name="remember"
-                id="remember"
+                name="me"
+                id="me"
                 onChange={handleChange}
-                defaultChecked={!!cache?.remember}
+                defaultChecked={!!cache?.me}
               />
               <p>remember me</p>
             </label>

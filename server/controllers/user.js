@@ -9,22 +9,34 @@ const response = require('../helpers/response');
 const encrypt = require('../helpers/encrypt');
 const decrypt = require('../helpers/decrypt');
 
-exports.registerStep1 = async (req, res) => {
+exports.register = async (req, res) => {
   try {
-    const { username, email, password } = req.body;
-    // generate one-time password
+    // generate otp code
     const otp = Math.floor(1000 + Math.random() * 9000);
+
+    const { _id: userId } = await new UserModel({
+      ...req.body,
+      password: encrypt(req.body.password),
+      otp, // -> one-time password
+    }).save();
+
+    // account setting
+    await new SettingModel({ userId }).save();
+    // save user data (without password) on profile model
+    await new ProfileModel({
+      ...req.body,
+      userId,
+      fullname: req.body.username,
+    }).save();
+
+    // generate access token
+    const token = jwt.sign({ _id: userId }, 'shhhhh');
 
     response({
       res,
       statusCode: 201,
-      message: 'Pre-registration successful',
-      payload: {
-        otp, // -> send otp code to store in localStorage
-        username,
-        email,
-        password: encrypt(password),
-      },
+      message: 'Successfully created a new account',
+      payload: token,
     });
   }
   catch (error0) {
@@ -37,29 +49,34 @@ exports.registerStep1 = async (req, res) => {
   }
 };
 
-exports.registerStep2 = async (req, res) => {
+exports.verify = async (req, res) => {
   try {
-    const { _id: userId } = await new UserModel(req.body).save();
+    const { userId, otp } = req.body;
 
-    // account setting
-    await new SettingModel({ userId }).save();
+    // find the user by _id and OTP.
+    // if the user is found, update the verified and OTP fields
+    const user = await UserModel.findOneAndUpdate(
+      { _id: userId, otp },
+      { $set: { verified: true, otp: null } },
+    );
 
-    // save user data (without password) on profile model
-    const profile = await new ProfileModel({
-      userId,
-      fullname: req.body.username,
-      ...req.body,
-    }).save();
+    // if the user not found
+    if (!user) {
+      // send a response as an OTP validation error
+      const errData = {
+        message: 'Invalid OTP code',
+        statusCode: 401,
+      };
+      throw errData;
+    }
 
     response({
       res,
-      statusCode: 201,
-      message: 'Successfully created a new account',
-      payload: profile,
+      message: 'Successfully verified an account',
+      payload: user,
     });
   }
   catch (error0) {
-    console.log(error0.message);
     response({
       res,
       statusCode: error0.statusCode || 500,

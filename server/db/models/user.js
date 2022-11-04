@@ -18,6 +18,16 @@ const UserSchema = new Schema({
     type: Schema.Types.String,
     required: true,
   },
+  verified: {
+    type: Schema.Types.Boolean,
+    required: true,
+    default: false,
+  },
+  otp: {
+    type: Schema.Types.Number,
+  },
+}, {
+  versionKey: false,
 });
 
 module.exports = model('users', UserSchema);

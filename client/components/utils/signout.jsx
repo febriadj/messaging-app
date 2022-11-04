@@ -37,13 +37,10 @@ function Logout() {
             type="button"
             className="py-2 px-4 rounded-md bg-blue-600 hover:bg-blue-700"
             onClick={() => {
+              // delete access token
+              localStorage.removeItem('token');
               // close modal
               dispatch(setModal({ target: 'signout' }));
-              const cache = JSON.parse(localStorage.getItem('cache'));
-
-              delete cache.token;
-              // set cache without access token
-              localStorage.setItem('cache', JSON.stringify(cache));
 
               // reload & display auth page after 0.5s
               setTimeout(() => {

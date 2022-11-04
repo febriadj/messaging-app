@@ -11,35 +11,45 @@ function App() {
   const dispatch = useDispatch();
   const { master } = useSelector((state) => state.user);
 
-  // get & parse cache from localStorage
-  const cache = JSON.parse(localStorage.getItem('cache'));
+  // get access token from localStorage
+  const token = localStorage.getItem('token');
 
-  const handleGetMaster = async () => {
+  const handleGetMaster = async (signal) => {
     try {
-      // set default authorization
-      axios.defaults.headers.Authorization = `Bearer ${cache.token}`;
+      if (token) {
+        // set default authorization
+        axios.defaults.headers.Authorization = `Bearer ${token}`;
 
-      const { data } = await axios.get('/users');
-      socket.emit('user/signin', { userId: data.payload._id });
-      // set master
-      dispatch(setMaster(data.payload));
+        const { data } = await axios.get('/users', { signal });
+        // set master
+        dispatch(setMaster(data.payload));
+        socket.emit('user/signin', { userId: data.payload._id });
+      }
     }
     catch (error0) {
-      console.error(error0.message);
+      console.error(error0.response.data.message);
     }
   };
 
   useEffect(() => {
+    const abortCtrl = new AbortController();
     // set default base url
     axios.defaults.baseURL = 'http://localhost:8080/api';
+    handleGetMaster(abortCtrl.signal);
 
-    if (cache?.token) handleGetMaster();
+    return () => {
+      abortCtrl.abort();
+    };
   }, []);
 
   return (
     <BrowserRouter>
       <Routes>
-        <Route exact path="*" element={master ? <page.chat /> : <page.auth />} />
+        {
+          master
+            ? <Route exact path="*" element={master.verified ? <page.chat /> : <page.verify />} />
+            : <Route exact path="*" element={<page.auth />} />
+        }
       </Routes>
     </BrowserRouter>
   );
