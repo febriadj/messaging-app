@@ -1,3 +1,5 @@
+const path = require('path');
+const fs = require('fs');
 const jwt = require('jsonwebtoken');
 
 const UserModel = require('../db/models/user');
@@ -5,6 +7,7 @@ const ProfileModel = require('../db/models/profile');
 const SettingModel = require('../db/models/setting');
 
 const response = require('../helpers/response');
+const mailer = require('../helpers/mailer');
 
 const encrypt = require('../helpers/encrypt');
 const decrypt = require('../helpers/decrypt');
@@ -31,6 +34,16 @@ exports.register = async (req, res) => {
 
     // generate access token
     const token = jwt.sign({ _id: userId }, 'shhhhh');
+    const template = fs.readFileSync(path.resolve(__dirname, '../helpers/templates/otp.html'), 'utf8');
+
+    // send the OTP/verification code to user's email
+    await mailer({
+      to: req.body.email,
+      fullname: req.body.username,
+      subject: 'Please activate your account',
+      html: template,
+      otp,
+    });
 
     response({
       res,
