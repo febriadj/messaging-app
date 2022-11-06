@@ -68,6 +68,7 @@
     "linkify-react": "^4.0.2",
     "moment": "^2.29.4",
     "mongoose": "^6.6.5",
+    "nodemailer": "^6.8.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-helmet": "^6.1.0",
