@@ -159,3 +159,39 @@ exports.find = async (req, res) => {
     });
   }
 };
+
+exports.delete = async (req, res) => {
+  try {
+    const userId = req.user._id;
+
+    const user = await UserModel.findOne({ _id: userId });
+    const compare = decrypt(req.body.password, user.password);
+
+    if (!compare) {
+      const errData = {
+        message: 'Invalid password',
+        statusCode: 401,
+      };
+      throw errData;
+    }
+
+    // delete user, profile & setting
+    await UserModel.deleteOne({ _id: userId });
+    await ProfileModel.deleteOne({ userId });
+    await SettingModel.deleteOne({ userId });
+
+    response({
+      res,
+      message: 'Account deleted successfully',
+      payload: user,
+    });
+  }
+  catch (error0) {
+    response({
+      res,
+      statusCode: error0.statusCode || 500,
+      success: false,
+      message: error0.message,
+    });
+  }
+};
