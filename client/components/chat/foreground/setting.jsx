@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import * as bi from 'react-icons/bi';
 import { setPage } from '../../../redux/features/page';
+import { setModal } from '../../../redux/features/modal';
 
 function Setting() {
   const dispatch = useDispatch();
@@ -41,7 +42,7 @@ function Setting() {
           icon: <bi.BiKey />,
         },
         {
-          target: 'delete',
+          target: 'deleteAcc',
           title: 'Delete account',
           desc: null,
           toggle: false,
@@ -158,6 +159,7 @@ function Setting() {
                     className="p-4 grid grid-cols-[auto_1fr_auto] items-start gap-6 cursor-default border-0 border-b border-solid border-spill-200 dark:border-spill-800 hover:bg-spill-100/60 dark:hover:bg-spill-800/60"
                     onClick={(e) => {
                       e.stopPropagation();
+                      dispatch(setModal({ target: child.target }));
                     }}
                   >
                     <i>{child.icon}</i>

@@ -16,6 +16,8 @@ function Chat() {
       }}
     >
       <comp.signout />
+      <comp.deleteAcc />
+
       <cont.foreground />
       <cont.room />
     </div>
