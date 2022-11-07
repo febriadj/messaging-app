@@ -195,3 +195,50 @@ exports.delete = async (req, res) => {
     });
   }
 };
+
+exports.changePass = async (req, res) => {
+  try {
+    const errData = {};
+    const userId = req.user._id;
+    const { oldPass, newPass, confirmNewPass } = req.body;
+
+    const user = await UserModel.findOne({ _id: userId });
+
+    // compare password
+    if (!decrypt(oldPass, user.password)) {
+      errData.statusCode = 401;
+      errData.message = 'Invalid password';
+
+      throw errData;
+    }
+
+    if (newPass !== confirmNewPass) {
+      errData.statusCode = 400;
+      errData.message = 'New password doesn\'t match';
+
+      throw errData;
+    }
+
+    // change password
+    await UserModel.updateOne(
+      { _id: userId },
+      { $set: { password: encrypt(newPass) } },
+    );
+
+    // exclude password field when sending user data to client
+    delete user.password;
+    response({
+      res,
+      message: 'Password changed successfully',
+      payload: user,
+    });
+  }
+  catch (error0) {
+    response({
+      res,
+      statusCode: error0.statusCode || 500,
+      success: false,
+      message: error0.message,
+    });
+  }
+};
