@@ -6,6 +6,7 @@ const ModalSlice = createSlice({
     minibox: false,
     signout: false,
     newcontact: false,
+    changePass: false,
     deleteAcc: false,
   },
   reducers: {

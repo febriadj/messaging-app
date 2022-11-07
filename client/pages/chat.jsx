@@ -16,6 +16,7 @@ function Chat() {
       }}
     >
       <comp.signout />
+      <comp.changePass />
       <comp.deleteAcc />
 
       <cont.foreground />
