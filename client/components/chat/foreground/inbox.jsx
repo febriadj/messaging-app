@@ -67,21 +67,32 @@ function Inbox() {
             className="p-4 grid grid-cols-[auto_1fr] gap-4 items-center cursor-default border-0 border-b border-solid border-spill-200 dark:border-spill-800 hover:bg-spill-100/60 dark:hover:bg-spill-800/60"
             onClick={() => {
               const profile = elem.owners.find((x) => x.userId !== master._id);
+
               dispatch(setRoom({
                 ownersId: elem.ownersId,
                 roomId: elem.roomId,
-                profile,
+                profile: !profile
+                  ? {
+                    avatar: 'default-avatar.png',
+                    fullname: '[inactive]',
+                    updatedAt: new Date().toISOString(),
+                    active: false,
+                  }
+                  : {
+                    ...profile,
+                    active: true,
+                  },
               }));
             }}
           >
             <img
-              src={`assets/images/${elem.owners.find((x) => x.userId !== master._id).avatar}`}
-              alt={`assets/images/${elem.owners.find((x) => x.userId !== master._id).avatar}`}
+              src={`assets/images/${elem.owners.find((x) => x.userId !== master._id)?.avatar ?? 'default-avatar.png'}`}
+              alt={`assets/images/${elem.owners.find((x) => x.userId !== master._id)?.avatar ?? 'default-avatar.png'}`}
               className="w-14 h-14 rounded-full"
             />
             <div className="overflow-hidden grid gap-0.5">
               <div className="grid grid-cols-[1fr_auto] gap-3">
-                <p className="text-lg font-bold truncate">{elem.owners.find((x) => x.userId !== master._id)?.fullname || ''}</p>
+                <p className="text-lg font-bold truncate">{elem.owners.find((x) => x.userId !== master._id)?.fullname || '[inactive]'}</p>
                 <p className="text-sm opacity-60">{moment(elem.content.time).fromNow()}</p>
               </div>
               <div className="grid grid-cols-[1fr_auto] gap-2 items-center">

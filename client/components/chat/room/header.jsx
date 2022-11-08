@@ -36,8 +36,10 @@ function Header() {
         className="flex gap-4 items-center cursor-pointer"
         aria-hidden
         onClick={() => {
-          if (!page.friendProfile) {
-            dispatch(setPage({ target: 'friendProfile' }));
+          if (room.profile.active && !page.friendProfile) {
+            dispatch(setPage({
+              target: 'friendProfile',
+            }));
           }
         }}
       >

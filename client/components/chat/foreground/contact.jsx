@@ -106,17 +106,27 @@ function Contact() {
                   dispatch(setRoom({
                     ownersId: [elem.userId, elem.friendId],
                     roomId: elem.roomId,
-                    profile: elem.profile,
+                    profile: !elem.profile
+                      ? {
+                        avatar: 'default-avatar.png',
+                        fullname: '[inactive]',
+                        updatedAt: new Date().toISOString(),
+                        active: false,
+                      }
+                      : {
+                        ...elem.profile,
+                        active: true,
+                      },
                   }));
                 }}
               >
                 <img
-                  src={`assets/images/${elem.profile.avatar}`}
-                  alt={`assets/images/${elem.profile.avatar}`}
+                  src={`assets/images/${elem.profile?.avatar ?? 'default-avatar.png'}`}
+                  alt={`assets/images/${elem.profile?.avatar ?? 'default-avatar.png'}`}
                   className="w-14 h-14 rounded-full"
                 />
                 <span className="overflow-hidden">
-                  <h1 className="text-lg font-bold">{elem.fullname || elem.profile.fullname}</h1>
+                  <h1 className="text-lg font-bold">{elem.profile?.fullname ?? '[inactive]'}</h1>
                   { elem.profile.bio.length > 0 && (
                     <p className="truncate opacity-60 mt-0.5">{elem.profile.bio}</p>
                   ) }

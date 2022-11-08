@@ -26,7 +26,7 @@ function Monitor({ chats, setChats }) {
   }, []);
 
   return (
-    <div id="monitor" className="overflow-y-auto bg-spill-100 dark:bg-spill-950 scrollbar-thin scrollbar-thumb-spill-300 hover:scrollbar-thumb-spill-400 dark:scrollbar-thumb-spill-800 dark:hover:scrollbar-thumb-spill-700">
+    <div id="monitor" className="relative overflow-y-auto bg-spill-100 dark:bg-spill-950 scrollbar-thin scrollbar-thumb-spill-300 hover:scrollbar-thumb-spill-400 dark:scrollbar-thumb-spill-800 dark:hover:scrollbar-thumb-spill-700">
       <div className="relative py-2 flex flex-col">
         {
           chats && chats.map((elem, i, arr) => (
@@ -89,6 +89,15 @@ function Monitor({ chats, setChats }) {
               </div>
             </React.Fragment>
           ))
+        }
+        {
+          chats && !room.profile.active && (
+            <div className="py-2 px-6 flex justify-center border-0 border-y border-solid border-rose-400 dark:border-rose-200/60 bg-rose-400/10 dark:bg-rose-200/20">
+              <div className="w-[560px]">
+                <p className="text-rose-900 dark:text-rose-100">This account has been deleted by the owner, you no longer have access to send messages to this account.</p>
+              </div>
+            </div>
+          )
         }
       </div>
     </div>

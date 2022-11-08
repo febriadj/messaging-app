@@ -20,10 +20,10 @@ function Send({ setChats }) {
     }));
   };
 
-  const handleSubmit = async (e) => {
-    try {
-      e.preventDefault();
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
+    if (room.profile.active && (form.text.length > 0 || form.file)) {
       socket.emit('chat/insert', {
         ...form,
         ownersId: room.ownersId,
@@ -33,12 +33,8 @@ function Send({ setChats }) {
 
       // reset form
       setForm({ text: '', file: null });
-      setTimeout(() => {
-        setEmojiBoard(false);
-      }, 150);
-    }
-    catch (error0) {
-      console.error(error0.message);
+      // close emoji board after 150ms
+      setTimeout(() => setEmojiBoard(false), 150);
     }
   };
 
