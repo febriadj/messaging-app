@@ -30,7 +30,7 @@ function Setting() {
         {
           target: 'lock',
           title: 'Lock',
-          desc: 'Make others people unable to add your contact.',
+          desc: 'Other people can\'t add your contact.',
           toggle: true,
           icon: <bi.BiLockOpenAlt />,
         },
@@ -56,14 +56,14 @@ function Setting() {
         {
           target: 'enterToSend',
           title: 'Enter to send message',
-          desc: null,
+          desc: 'Enter key will send your message',
           toggle: true,
           icon: <bi.BiPaperPlane />,
         },
         {
           target: 'keepArchived',
           title: 'Keep archived',
-          desc: 'Archived chat stay in the archive when you receive a new message.',
+          desc: 'Archived chats will remain archived when you receive a new messages.',
           toggle: true,
           icon: <bi.BiArchive />,
         },
@@ -92,8 +92,8 @@ function Setting() {
           icon: <bi.BiMailSend />,
         },
         {
-          target: 'term',
-          title: 'Term & privacy police',
+          target: 'terms',
+          title: 'Terms & privacy policy',
           desc: null,
           toggle: false,
           icon: <bi.BiCheckShield />,
@@ -129,7 +129,7 @@ function Setting() {
     <div
       className={`
         ${page.setting ? 'delay-75' : '-translate-x-full'}
-        transition duration-200 absolute w-full h-full z-10 grid grid-rows-[auto_1fr] overflow-hidden
+        transition duration-200 absolute w-full h-full z-10 select-none grid grid-rows-[auto_1fr] overflow-hidden
         bg-white dark:bg-spill-900 dark:text-white/90
       `}
     >
