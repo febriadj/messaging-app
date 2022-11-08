@@ -2,11 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import * as bi from 'react-icons/bi';
+import * as ri from 'react-icons/ri';
 import * as comp from './sub';
 // redux actions
 import { setPage } from '../../../redux/features/page';
 import { setModal } from '../../../redux/features/modal';
 import { setRoom } from '../../../redux/features/chat';
+
+import config from '../../../config';
 
 function Contact() {
   const dispatch = useDispatch();
@@ -63,7 +66,7 @@ function Contact() {
           >
             <bi.BiArrowBack className="text-2xl" />
           </button>
-          <h1 className="text-2xl font-bold">Contact</h1>
+          <h1 className="text-2xl font-bold">Contacts</h1>
         </div>
       </div>
       {/* content */}
@@ -71,7 +74,7 @@ function Contact() {
         <div className="grid">
           {
             [
-              { target: 'newcontact', text: 'New Contact', icon: <bi.BiUserPlus /> },
+              { target: 'newcontact', text: 'New Contact', icon: <ri.RiUserAddFill /> },
             ].map((elem) => (
               <div
                 key={elem.target}
@@ -85,7 +88,15 @@ function Contact() {
                 <i>{elem.icon}</i>
                 <p className="font-bold">{elem.text}</p>
                 { elem.target === 'newcontact' && (
-                  <i><bi.BiQr /></i>
+                  <button
+                    type="button"
+                    className="opacity-60 hover:opacity-100"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
+                  >
+                    <i><bi.BiQr /></i>
+                  </button>
                 ) }
               </div>
             ))
@@ -93,14 +104,16 @@ function Contact() {
         </div>
         <div className="grid">
           <span className="py-2 px-4 text-sm bg-spill-100/60 dark:bg-black/20">
-            <p className="opacity-60">Your contact list</p>
+            <p className="opacity-80">
+              { contacts ? `Contacts on ${config.brandName}: ${contacts.length}` : 'Loading...' }
+            </p>
           </span>
           {
             contacts && contacts.map((elem) => (
               <div
                 key={elem._id}
                 aria-hidden
-                className="grid grid-cols-[auto_1fr_auto] gap-4 p-4 items-center cursor-default border-0 border-b border-solid border-spill-200 dark:border-spill-800 hover:bg-spill-100/60 dark:hover:bg-spill-800/60"
+                className="grid grid-cols-[auto_1fr_auto] gap-4 p-4 pr-2 items-center cursor-default border-0 border-b border-solid border-spill-200 dark:border-spill-800 hover:bg-spill-100/60 dark:hover:bg-spill-800/60"
                 onClick={(e) => {
                   e.stopPropagation();
                   dispatch(setRoom({
@@ -126,12 +139,20 @@ function Contact() {
                   className="w-14 h-14 rounded-full"
                 />
                 <span className="overflow-hidden">
-                  <h1 className="text-lg font-bold">{elem.profile?.fullname ?? '[inactive]'}</h1>
+                  <h1 className="truncate text-lg font-bold">{elem.profile?.fullname ?? '[inactive]'}</h1>
                   { elem.profile.bio.length > 0 && (
                     <p className="truncate opacity-60 mt-0.5">{elem.profile.bio}</p>
                   ) }
                 </span>
-                <bi.BiDotsVerticalRounded />
+                <button
+                  type="button"
+                  className="p-2 rounded-full hover:bg-spill-200 dark:hover:bg-spill-700"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
+                >
+                  <i><bi.BiDotsVerticalRounded /></i>
+                </button>
               </div>
             ))
           }

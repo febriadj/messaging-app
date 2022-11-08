@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import axios from 'axios';
 import * as ri from 'react-icons/ri';
-import Linkify from 'linkify-react';
 import socket from '../../../helpers/socket';
 import { setRoom } from '../../../redux/features/chat';
 
@@ -101,14 +100,12 @@ function Inbox() {
                     <i>
                       {
                         elem.unreadMessage === 0
-                          ? <ri.RiCheckDoubleFill size={20} className="text-sky-400" />
-                          : <ri.RiCheckFill size={20} className="opacity-80" />
+                          ? <ri.RiCheckDoubleFill size={20} className="text-sky-600 dark:text-sky-400" />
+                          : <ri.RiCheckFill size={20} />
                       }
                     </i>
                   ) }
-                  <p className="truncate opacity-80">
-                    <Linkify as="span">{elem.content.text}</Linkify>
-                  </p>
+                  <p className="truncate">{elem.content.text}</p>
                 </span>
                 {
                   ((elem.content.from !== master._id) && elem.unreadMessage > 0) && (
