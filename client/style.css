@@ -10,6 +10,10 @@
   font-family: 'Roboto', sans-serif;
 }
 
+body {
+  user-select: none;
+}
+
 input:-webkit-autofill {
   transition: "color 9999s ease-out, background-color 9999s ease-out";
   transition-delay: 9999s;
