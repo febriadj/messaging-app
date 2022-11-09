@@ -11,6 +11,7 @@ function ForeGround() {
       <comp.setting />
       <comp.contact />
       <comp.profile />
+      <comp.openContact />
 
       <comp.header />
       <comp.inbox />
