@@ -18,6 +18,7 @@ function Chat() {
       <comp.signout />
       <comp.changePass />
       <comp.deleteAcc />
+      <comp.qr />
 
       <cont.foreground />
       <cont.room />
