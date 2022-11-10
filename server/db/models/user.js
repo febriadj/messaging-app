@@ -1,4 +1,5 @@
 const { Schema, model } = require('mongoose');
+const uniqueId = require('../../helpers/uniqueId');
 
 const UserSchema = new Schema({
   username: {
@@ -17,6 +18,11 @@ const UserSchema = new Schema({
   password: {
     type: Schema.Types.String,
     required: true,
+  },
+  qrCode: {
+    type: Schema.Types.String,
+    required: true,
+    default: uniqueId(16, { lowercase: false }),
   },
   verified: {
     type: Schema.Types.Boolean,
