@@ -20,7 +20,7 @@ function Setting() {
           title: 'Dark mode',
           desc: null,
           toggle: true,
-          icon: <bi.BiAdjust />,
+          icon: <bi.BiBrightnessHalf />,
         },
       ],
     },
@@ -46,7 +46,7 @@ function Setting() {
           title: 'Delete account',
           desc: null,
           toggle: false,
-          icon: <bi.BiPowerOff />,
+          icon: <bi.BiTrash />,
         },
       ],
     },
@@ -89,7 +89,7 @@ function Setting() {
           title: 'Feedback',
           desc: null,
           toggle: false,
-          icon: <bi.BiMailSend />,
+          icon: <bi.BiMessageDetail />,
         },
         {
           target: 'terms',
@@ -103,7 +103,7 @@ function Setting() {
           title: 'License',
           desc: null,
           toggle: false,
-          icon: <bi.BiCopyright />,
+          icon: <bi.BiInfoCircle />,
         },
       ],
     },
@@ -144,7 +144,7 @@ function Setting() {
         >
           <bi.BiArrowBack className="text-2xl" />
         </button>
-        <h1 className="text-2xl font-bold">Setting</h1>
+        <h1 className="text-2xl font-bold">Settings</h1>
       </div>
       <div className="grid gap-6 overflow-y-auto scrollbar-thin scrollbar-thumb-spill-200 hover:scrollbar-thumb-spill-300 dark:scrollbar-thumb-spill-700 dark:hover:scrollbar-thumb-spill-600">
         {
