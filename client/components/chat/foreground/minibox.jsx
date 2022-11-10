@@ -25,11 +25,11 @@ function Minibox() {
               target: 'profile',
               data: user.master._id,
               html: 'Profile',
-              icon: <bi.BiUserCircle />,
+              icon: <bi.BiUser size={20} />,
             },
-            { target: 'starred', html: 'Starred Message', icon: <bi.BiStar /> },
-            { target: 'setting', html: 'Setting', icon: <bi.BiCog /> },
-            { target: 'signout', html: 'Sign out', icon: <bi.BiLogOutCircle /> },
+            { target: 'starred', html: 'Starred Messages', icon: <bi.BiStar size={20} /> },
+            { target: 'setting', html: 'Settings', icon: <bi.BiCog size={20} /> },
+            { target: 'signout', html: 'Sign out', icon: <bi.BiLogOutCircle size={20} /> },
           ].map((elem) => (
             <button
               type="button"
@@ -49,7 +49,7 @@ function Minibox() {
                 );
               }}
             >
-              <i className="opacity-20">{elem.icon}</i>
+              <i className="opacity-40">{elem.icon}</i>
               <p>{elem.html}</p>
             </button>
           ))
