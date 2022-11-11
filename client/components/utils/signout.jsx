@@ -11,12 +11,12 @@ function Logout() {
       className={`
         ${modal.signout ? 'delay-75 z-50' : '-z-50 opacity-0 delay-300'}
         absolute w-full h-full flex justify-center items-center
-        bg-spill-600/40 dark:bg-black/40 dark:text-white/90
+        bg-spill-600/40 dark:bg-black/40
       `}
     >
       <div
         aria-hidden
-        className={`${!modal.signout && 'scale-0'} transition w-[400px] m-10 p-5 rounded-md bg-white dark:bg-spill-800`}
+        className={`${!modal.signout && 'scale-0'} transition w-[400px] m-6 p-4 rounded-md bg-white dark:bg-spill-800`}
         onClick={(e) => {
           e.stopPropagation();
         }}
@@ -35,7 +35,7 @@ function Logout() {
           </button>
           <button
             type="button"
-            className="py-2 px-4 rounded-md bg-blue-600 hover:bg-blue-700"
+            className="py-2 px-4 rounded-md bg-sky-600 hover:bg-sky-700"
             onClick={() => {
               // delete access token
               localStorage.removeItem('token');
@@ -48,7 +48,7 @@ function Logout() {
               }, 500);
             }}
           >
-            <p className="font-bold text-white/90">Sign out</p>
+            <p className="font-bold">Sign out</p>
           </button>
         </span>
       </div>
