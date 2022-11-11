@@ -18,7 +18,7 @@ function FriendProfile() {
     >
       {/* header */}
       <div className="h-16 px-2 flex gap-6 justify-between items-center">
-        <div className="flex gap-6 items-center">
+        <div className="flex gap-4 items-center">
           <button
             type="button"
             className="p-2 rounded-full hover:bg-spill-100 dark:hover:bg-spill-800"
@@ -31,12 +31,6 @@ function FriendProfile() {
           </button>
           <h1 className="text-2xl font-bold">Profile</h1>
         </div>
-        <button
-          type="button"
-          className="p-2 rounded-full hover:bg-spill-100 dark:hover:bg-spill-800"
-        >
-          <bi.BiQr />
-        </button>
       </div>
       {
         profile && (
@@ -51,10 +45,10 @@ function FriendProfile() {
             <div className="grid">
               {
                 [
-                  { label: 'Username', data: profile.username, icon: <bi.BiAt /> },
-                  { label: 'Bio', data: profile.bio, icon: <bi.BiInfoCircle /> },
-                  { label: 'Phone', data: profile.phone, icon: <bi.BiPhone /> },
-                  { label: 'Email', data: profile.email, icon: <bi.BiEnvelope /> },
+                  { label: 'Username', data: profile.username, icon: <bi.BiAt size={20} /> },
+                  { label: 'Bio', data: profile.bio, icon: <bi.BiInfoCircle size={20} /> },
+                  { label: 'Phone', data: profile.phone, icon: <bi.BiPhone size={20} /> },
+                  { label: 'Email', data: profile.email, icon: <bi.BiEnvelope size={20} /> },
                 ]
                   .map((elem) => (
                     <div key={elem.label} className="py-2 px-4 grid grid-cols-[auto_1fr_auto] gap-4 items-start border-0 border-b border-solid border-spill-100 dark:border-spill-800">
