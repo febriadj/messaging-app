@@ -26,7 +26,7 @@ function Monitor({ chats, setChats }) {
   }, []);
 
   return (
-    <div id="monitor" className="relative overflow-y-auto bg-spill-100 dark:bg-spill-950 scrollbar-thin scrollbar-thumb-spill-300 hover:scrollbar-thumb-spill-400 dark:scrollbar-thumb-spill-800 dark:hover:scrollbar-thumb-spill-700">
+    <div id="monitor" className="select-text relative overflow-y-auto bg-spill-100 dark:bg-spill-950 scrollbar-thin scrollbar-thumb-spill-300 hover:scrollbar-thumb-spill-400 dark:scrollbar-thumb-spill-800 dark:hover:scrollbar-thumb-spill-700">
       <div className="relative py-2 flex flex-col">
         {
           chats && chats.map((elem, i, arr) => (
@@ -47,7 +47,7 @@ function Monitor({ chats, setChats }) {
                   {/* chat card */}
                   <div
                     className={`
-                      ${elem.userId === master._id ? ' ml-12 rounded-l-xl bg-sky-200 dark:bg-sky-400/40' : 'mr-12 rounded-r-xl bg-white dark:bg-spill-800'}
+                      ${elem.userId === master._id ? ' ml-12 rounded-l-xl bg-sky-200 dark:bg-sky-600/40' : 'mr-12 rounded-r-xl bg-white dark:bg-spill-800'}
                       ${elem.userId === arr[i - 1]?.userId && moment(elem.createdAt).date() === moment(arr[i - 1]?.createdAt).date() && 'rounded-xl'}
                       relative p-2 rounded-b-xl overflow-hidden
                     `}
