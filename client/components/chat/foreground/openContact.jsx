@@ -7,7 +7,9 @@ function OpenContact() {
   const dispatch = useDispatch();
   const page = useSelector((state) => state.page);
 
-  const somePageIsOpened = Object.values(page).some((elem) => !!elem);
+  const somePageIsOpened = Object
+    .entries(page).filter((e) => e[0] !== 'friendProfile')
+    .some((elem) => !!elem[1]);
 
   return (
     <button
