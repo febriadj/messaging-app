@@ -1,35 +1,69 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import * as bi from 'react-icons/bi';
 import emojis from './emoji.json';
 
 function EmojiBoard({ setForm }) {
+  const [category, setCategory] = useState('Smileys & Emotion');
+
   useEffect(() => {
     const monitor = document.querySelector('#monitor');
-    monitor.scrollTop += 160;
+    monitor.scrollTop += 192;
   }, []);
 
   return (
-    <div id="emoji-board" className="h-36 mb-4 px-3 overflow-y-auto scrollbar-thin scrollbar-thumb-spill-200 hover:scrollbar-thumb-spill-300 dark:scrollbar-thumb-spill-700 dark:hover:scrollbar-thumb-spill-600">
-      {
-        emojis.map((elem) => (
-          <button
-            key={elem.emoji}
-            type="button"
-            className="w-8 h-8 text-xl rounded-full hover:bg-spill-100 dark:hover:bg-spill-800"
-            onClick={() => {
-              const { selectionStart } = document.querySelector('#new-message');
+    <div className="grid grid-rows-[1fr_auto]">
+      <div id="emoji-board" className="h-36 px-3 overflow-y-auto scrollbar-thin scrollbar-thumb-spill-200 hover:scrollbar-thumb-spill-300 dark:scrollbar-thumb-spill-700 dark:hover:scrollbar-thumb-spill-600">
+        {
+          emojis.filter((elem) => elem.category === category).map((elem) => (
+            <button
+              key={elem.emoji}
+              type="button"
+              className="w-9 h-9 text-2xl rounded-full hover:bg-spill-200 dark:hover:bg-spill-700"
+              onClick={() => {
+                const { selectionStart } = document.querySelector('#new-message');
 
-              setForm((prev) => {
-                const start = prev.text.slice(0, selectionStart);
-                const end = prev.text.slice(selectionStart);
+                setForm((prev) => {
+                  const start = prev.text.slice(0, selectionStart);
+                  const end = prev.text.slice(selectionStart);
 
-                return { ...prev, text: start + elem.emoji + end };
-              });
-            }}
-          >
-            {elem.emoji}
-          </button>
-        ))
-      }
+                  return { ...prev, text: start + elem.emoji + end };
+                });
+              }}
+            >
+              {elem.emoji}
+            </button>
+          ))
+        }
+      </div>
+      <div className="flex justify-center">
+        <div className="px-4 h-12 max-w-[460px] w-full grid grid-cols-[1fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr_auto] items-center">
+          {
+            [
+              { category: 'Smileys & Emotion', icon: <bi.BiSmile /> },
+              { category: 'People & Body', icon: <bi.BiWalk /> },
+              { category: 'Animals & Nature', icon: <bi.BiBug /> },
+              { category: 'Food & Drink', icon: <bi.BiCoffee /> },
+              { category: 'Travel & Places', icon: <bi.BiCar /> },
+              { category: 'Activities', icon: <bi.BiFootball /> },
+              { category: 'Objects', icon: <bi.BiBulb /> },
+              { category: 'Symbols', icon: <bi.BiShapeSquare /> },
+              { category: 'Flags', icon: <bi.BiFlag /> },
+            ].map((elem) => (
+              <span key={elem.category} className="flex">
+                <button
+                  type="button"
+                  className={`${elem.category === category && 'opacity-100 text-sky-600 dark:text-sky-400'} opacity-60 hover:opacity-100`}
+                  onClick={() => {
+                    setCategory(elem.category);
+                  }}
+                >
+                  <i>{elem.icon}</i>
+                </button>
+              </span>
+            ))
+          }
+        </div>
+      </div>
     </div>
   );
 }
