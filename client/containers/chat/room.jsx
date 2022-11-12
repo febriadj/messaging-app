@@ -11,7 +11,6 @@ function Room() {
 
   const handleGetChats = async (signal) => {
     try {
-      setChats(null);
       // get chats if room is opened
       if (room) {
         const { data } = await axios.get('/chats', {
@@ -30,6 +29,10 @@ function Room() {
             behavior: 'smooth',
           });
         }, 500);
+      } else {
+        setTimeout(() => {
+          setChats(null);
+        }, 150);
       }
     }
     catch (error0) {
@@ -44,10 +47,6 @@ function Room() {
         prevRoom,
         newRoom: room.roomId,
       });
-
-      socket.on('room/join', (args) => {
-        setPrevRoom(args);
-      });
     }
   };
 
@@ -59,9 +58,18 @@ function Room() {
 
     return () => {
       abortCtrl.abort();
-      socket.off('room/join');
     };
   }, [room]);
+
+  useEffect(() => {
+    socket.on('room/join', (args) => {
+      setPrevRoom(args);
+    });
+
+    return () => {
+      socket.off('room/join');
+    };
+  }, []);
 
   return (
     <div
