@@ -8,7 +8,7 @@ import { setRoom } from '../../../redux/features/chat';
 
 function Inbox() {
   const dispatch = useDispatch();
-  const master = useSelector((state) => state.user.master);
+  const { user: { master }, chat: { room } } = useSelector((state) => state);
   const [inboxs, setInboxs] = useState(null);
 
   const handleGetInboxs = async (signal) => {
@@ -63,25 +63,32 @@ function Inbox() {
           <div
             key={elem._id}
             aria-hidden
-            className="p-4 grid grid-cols-[auto_1fr] gap-4 items-center cursor-default border-0 border-b border-solid border-spill-200 dark:border-spill-800 hover:bg-spill-100/60 dark:hover:bg-spill-800/60"
+            className={`
+              ${room?.roomId === elem.roomId && 'bg-spill-100/60 dark:bg-spill-800/60'}
+              p-4 grid grid-cols-[auto_1fr] gap-4 items-center cursor-default
+              border-0 border-b border-solid border-spill-200 dark:border-spill-800
+              hover:bg-spill-100/60 dark:hover:bg-spill-800/60
+            `}
             onClick={() => {
-              const profile = elem.owners.find((x) => x.userId !== master._id);
+              if (room?.roomId !== elem.roomId) {
+                const profile = elem.owners.find((x) => x.userId !== master._id);
 
-              dispatch(setRoom({
-                ownersId: elem.ownersId,
-                roomId: elem.roomId,
-                profile: !profile
-                  ? {
-                    avatar: 'default-avatar.png',
-                    fullname: '[inactive]',
-                    updatedAt: new Date().toISOString(),
-                    active: false,
-                  }
-                  : {
-                    ...profile,
-                    active: true,
-                  },
-              }));
+                dispatch(setRoom({
+                  ownersId: elem.ownersId,
+                  roomId: elem.roomId,
+                  profile: !profile
+                    ? {
+                      avatar: 'default-avatar.png',
+                      fullname: '[inactive]',
+                      updatedAt: new Date().toISOString(),
+                      active: false,
+                    }
+                    : {
+                      ...profile,
+                      active: true,
+                    },
+                }));
+              }
             }}
           >
             <img
