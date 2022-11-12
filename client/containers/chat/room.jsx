@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
+import * as md from 'react-icons/md';
 import * as comp from '../../components/chat/room';
 import socket from '../../helpers/socket';
 
@@ -71,7 +72,7 @@ function Room() {
       `}
     >
       {
-        room && (
+        room ? (
           <>
             <div className={`${page.friendProfile && '-translate-x-full md:translate-x-0 xl:mr-[380px]'} transition-all w-full h-full grid grid-rows-[auto_1fr_auto] overflow-hidden`}>
               <comp.header />
@@ -80,6 +81,13 @@ function Room() {
             </div>
             <comp.friendProfile />
           </>
+        ) : (
+          <div className="w-full h-full flex justify-center items-center">
+            <div className="w-[400px] flex flex-col items-center">
+              <i className="opacity-40"><md.MdDevices size={140} /></i>
+              <p className="mt-4 opacity-60 text-center">You can use Spillgram on other devices such as desktop, tablet, and mobile phone.</p>
+            </div>
+          </div>
         )
       }
     </div>
