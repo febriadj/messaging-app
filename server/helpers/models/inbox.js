@@ -11,6 +11,20 @@ exports.find = async (query) => {
         as: 'owners',
       },
     },
+    {
+      $lookup: {
+        from: 'groups',
+        localField: 'roomId',
+        foreignField: 'roomId',
+        as: 'group',
+      },
+    },
+    {
+      $unwind: {
+        path: '$group',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
   ]).sort({ 'content.time': -1 });
 
   return inboxs;
