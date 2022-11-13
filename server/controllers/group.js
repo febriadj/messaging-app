@@ -28,3 +28,23 @@ exports.participantsName = async (req, res) => {
     });
   }
 };
+
+exports.participants = async (req, res) => {
+  try {
+    const { participantsId } = req.query;
+    const participants = await ProfileModel.find({ userId: { $in: participantsId } });
+
+    response({
+      res,
+      payload: participants,
+    });
+  }
+  catch (error0) {
+    response({
+      res,
+      statusCode: error0.statusCode || 500,
+      success: false,
+      message: error0.message,
+    });
+  }
+};
