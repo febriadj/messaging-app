@@ -5,15 +5,23 @@ const ProfileModel = require('../../db/models/profile');
 const GroupModel = require('../../db/models/group');
 const InboxModel = require('../../db/models/inbox');
 
+const config = require('../../config');
+const uniqueId = require('../../helpers/uniqueId');
+
 module.exports = (socket) => {
-  socket.on('group/create', async (args) => {
+  socket.on('group/create', async (args, cb) => {
     try {
       const roomId = `group-${uuidv4()}`;
 
       // get full name of admin
       const profile = await ProfileModel.findOne({ userId: args.adminId }, { fullname: 1 });
 
-      const group = await new GroupModel({ roomId, ...args }).save();
+      const group = await new GroupModel({
+        ...args,
+        roomId,
+        link: `${config.host}/group/+${uniqueId(16)}`,
+      }).save();
+
       const inbox = await new InboxModel({
         ownersId: args.participantsId,
         roomId,
@@ -26,13 +34,20 @@ module.exports = (socket) => {
       }).save();
 
       // include master
-      io.to(args.participantsId).emit('group/create', {
-        group,
-        ...inbox._doc,
+      io.to(args.participantsId).emit('group/create', { group, ...inbox._doc });
+
+      // return success callback
+      cb({
+        success: true,
+        message: 'Group created successfully',
       });
     }
     catch (error0) {
-      console.error(error0.message);
+      // return error callback
+      cb({
+        success: false,
+        message: error0.message,
+      });
     }
   });
 };
