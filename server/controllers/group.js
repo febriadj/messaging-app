@@ -1,14 +1,21 @@
+const GroupModel = require('../db/models/group');
 const ProfileModel = require('../db/models/profile');
+
 const response = require('../helpers/response');
 
 exports.participantsName = async (req, res) => {
   try {
-    const { participantsId } = req.query;
+    const { roomId } = req.query;
 
+    // find group by roomId
+    const group = await GroupModel.findOne({ roomId });
+    // find participants
     const participants = await ProfileModel.find({
-      userId: { $in: participantsId },
+      userId: { $in: group.participantsId },
     }, {
       _id: 0,
+      fullname: 1,
+    }).sort({
       fullname: 1,
     });
 
@@ -31,8 +38,16 @@ exports.participantsName = async (req, res) => {
 
 exports.participants = async (req, res) => {
   try {
-    const { participantsId } = req.query;
-    const participants = await ProfileModel.find({ userId: { $in: participantsId } });
+    const { roomId } = req.query;
+
+    // find group by roomId
+    const group = await GroupModel.findOne({ roomId });
+    // find participants
+    const participants = await ProfileModel.find({
+      userId: { $in: group.participantsId },
+    }).sort({
+      fullname: 1,
+    });
 
     response({
       res,
