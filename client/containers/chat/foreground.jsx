@@ -12,6 +12,7 @@ function ForeGround() {
       <comp.contact />
       <comp.profile />
       <comp.openContact />
+      <comp.selectParticipant />
 
       <comp.header />
       <comp.inbox />

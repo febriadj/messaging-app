@@ -74,7 +74,8 @@ function Contact() {
         <div className="grid">
           {
             [
-              { target: 'newcontact', text: 'New Contact', icon: <ri.RiUserAddFill /> },
+              { target: 'selectParticipant', text: 'Create a new Group', icon: <ri.RiGroupLine /> },
+              { target: 'newcontact', text: 'New Contact', icon: <ri.RiUserAddLine /> },
             ].map((elem) => (
               <div
                 key={elem.target}
@@ -82,7 +83,12 @@ function Contact() {
                 aria-hidden
                 onClick={(e) => {
                   e.stopPropagation();
-                  dispatch(setModal({ target: elem.target }));
+
+                  if (elem.target === 'newcontact') {
+                    dispatch(setModal({ target: elem.target }));
+                  } else {
+                    dispatch(setPage({ target: elem.target }));
+                  }
                 }}
               >
                 <i>{elem.icon}</i>
@@ -119,6 +125,7 @@ function Contact() {
                   dispatch(setRoom({
                     ownersId: [elem.userId, elem.friendId],
                     roomId: elem.roomId,
+                    roomType: 'private',
                     profile: !elem.profile
                       ? {
                         avatar: 'default-avatar.png',

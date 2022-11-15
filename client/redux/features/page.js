@@ -3,10 +3,12 @@ import { createSlice } from '@reduxjs/toolkit';
 const PageSlice = createSlice({
   name: 'page',
   initialState: {
-    friendProfile: false,
     profile: false,
     contact: false,
     setting: false,
+    selectParticipant: false,
+    friendProfile: false,
+    groupProfile: false,
   },
   reducers: {
     setPage(state, action) {
