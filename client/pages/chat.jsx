@@ -19,6 +19,7 @@ function Chat() {
       <comp.changePass />
       <comp.deleteAcc />
       <comp.qr />
+      <comp.newGroup />
 
       <cont.foreground />
       <cont.room />

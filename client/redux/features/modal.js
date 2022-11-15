@@ -9,6 +9,7 @@ const ModalSlice = createSlice({
     changePass: false,
     deleteAcc: false,
     qr: false,
+    newGroup: false,
   },
   reducers: {
     setModal(state, action) {
