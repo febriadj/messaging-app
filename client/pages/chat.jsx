@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { setModal } from '../redux/features/modal';
 import * as cont from '../containers/chat';
-import * as comp from '../components/utils';
+import * as modal from '../components/modals';
 
 function Chat() {
   const dispatch = useDispatch();
@@ -15,11 +15,11 @@ function Chat() {
         dispatch(setModal({ target: '*' }));
       }}
     >
-      <comp.signout />
-      <comp.changePass />
-      <comp.deleteAcc />
-      <comp.qr />
-      <comp.newGroup />
+      <modal.signout />
+      <modal.changePass />
+      <modal.deleteAcc />
+      <modal.qr />
+      <modal.newGroup />
 
       <cont.foreground />
       <cont.room />
