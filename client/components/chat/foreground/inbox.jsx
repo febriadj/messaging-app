@@ -49,15 +49,21 @@ function Inbox() {
       });
     });
 
+    socket.on('group/create', (payload) => {
+      setInboxs((prev) => [payload, ...prev]);
+    });
+
     return () => {
       abortCtrl.abort();
+
+      socket.off('group/create');
       socket.off('inbox/find');
       socket.off('inbox/read');
     };
   }, []);
 
   return (
-    <div className="-z-10 flex flex-col overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 dark:bg-spill-900">
+    <div className="-z-10 flex flex-col overflow-y-auto dark:bg-spill-900 scrollbar-thin scrollbar-thumb-spill-200 hover:scrollbar-thumb-spill-300 dark:scrollbar-thumb-spill-700 dark:hover:scrollbar-thumb-spill-600">
       {
         inboxs && inboxs.map((elem) => (
           <div
@@ -71,34 +77,43 @@ function Inbox() {
             `}
             onClick={() => {
               if (room?.roomId !== elem.roomId) {
-                const profile = elem.owners.find((x) => x.userId !== master._id);
+                if (elem.roomType === 'private') {
+                  const profile = elem.owners.find((x) => x.userId !== master._id);
 
-                dispatch(setRoom({
-                  ownersId: elem.ownersId,
-                  roomId: elem.roomId,
-                  profile: !profile
-                    ? {
-                      avatar: 'default-avatar.png',
-                      fullname: '[inactive]',
-                      updatedAt: new Date().toISOString(),
-                      active: false,
-                    }
-                    : {
-                      ...profile,
-                      active: true,
-                    },
-                }));
+                  dispatch(setRoom({
+                    ...elem,
+                    profile: !profile
+                      ? {
+                        avatar: 'default-avatar.png',
+                        fullname: '[inactive]',
+                        updatedAt: new Date().toISOString(),
+                        active: false,
+                      }
+                      : {
+                        ...profile,
+                        active: true,
+                      },
+                  }));
+                } else {
+                  dispatch(setRoom(elem));
+                }
               }
             }}
           >
             <img
-              src={`assets/images/${elem.owners.find((x) => x.userId !== master._id)?.avatar ?? 'default-avatar.png'}`}
-              alt={`assets/images/${elem.owners.find((x) => x.userId !== master._id)?.avatar ?? 'default-avatar.png'}`}
+              src="assets/images/default-avatar.png"
+              alt="assets/images/default-avatar.png"
               className="w-14 h-14 rounded-full"
             />
             <div className="overflow-hidden grid gap-0.5">
               <div className="grid grid-cols-[1fr_auto] gap-3">
-                <p className="text-lg font-bold truncate">{elem.owners.find((x) => x.userId !== master._id)?.fullname || '[inactive]'}</p>
+                <p className="text-lg font-bold truncate">
+                  {
+                    elem.roomType === 'private'
+                      ? elem.owners.find((x) => x.userId !== master._id)?.fullname || '[inactive]'
+                      : elem.group.name
+                  }
+                </p>
                 <p className="text-sm opacity-60">{moment(elem.content.time).fromNow()}</p>
               </div>
               <div className="grid grid-cols-[1fr_auto] gap-2 items-center">

@@ -1,11 +1,9 @@
-const ChatModel = require('../db/models/chat');
 const response = require('../helpers/response');
+const Chat = require('../helpers/models/chats');
 
 exports.find = async (req, res) => {
   try {
-    const chats = await ChatModel.find({
-      $or: [req.query],
-    }).sort({ createdAt: 1 });
+    const chats = await Chat.find(req.query);
 
     response({
       res,

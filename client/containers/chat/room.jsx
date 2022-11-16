@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import axios from 'axios';
 import * as md from 'react-icons/md';
 import * as comp from '../../components/chat/room';
+import * as group from '../../components/chat/room/group';
 import socket from '../../helpers/socket';
 
 function Room() {
@@ -11,6 +12,8 @@ function Room() {
 
   const handleGetChats = async (signal) => {
     try {
+      setChats(null);
+
       // get chats if room is opened
       if (room) {
         const { data } = await axios.get('/chats', {
@@ -29,10 +32,6 @@ function Room() {
             behavior: 'smooth',
           });
         }, 500);
-      } else {
-        setTimeout(() => {
-          setChats(null);
-        }, 150);
       }
     }
     catch (error0) {
@@ -80,7 +79,7 @@ function Room() {
       `}
     >
       {
-        room ? (
+        room && room.roomType === 'private' && (
           <>
             <div className={`${page.friendProfile && '-translate-x-full md:translate-x-0 xl:mr-[380px]'} transition-all w-full h-full grid grid-rows-[auto_1fr_auto] overflow-hidden`}>
               <comp.header />
@@ -89,7 +88,22 @@ function Room() {
             </div>
             <comp.friendProfile />
           </>
-        ) : (
+        )
+      }
+      {
+        room && room.roomType === 'group' && (
+          <>
+            <div className={`${page.groupProfile && '-translate-x-full md:translate-x-0 xl:mr-[380px]'} transition-all w-full h-full grid grid-rows-[auto_1fr_auto] overflow-hidden`}>
+              <group.header />
+              <group.monitor chats={chats} setChats={setChats} />
+              <group.send setChats={setChats} />
+            </div>
+            <group.groupProfile />
+          </>
+        )
+      }
+      {
+        !room && (
           <div className="w-full h-full flex justify-center items-center">
             <div className="w-[400px] flex flex-col items-center">
               <i className="opacity-40"><md.MdDevices size={140} /></i>

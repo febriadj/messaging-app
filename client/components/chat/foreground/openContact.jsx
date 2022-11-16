@@ -8,7 +8,7 @@ function OpenContact() {
   const page = useSelector((state) => state.page);
 
   const somePageIsOpened = Object
-    .entries(page).filter((e) => e[0] !== 'friendProfile')
+    .entries(page).filter((e) => !['friendProfile', 'groupProfile'].includes(e[0]))
     .some((elem) => !!elem[1]);
 
   return (
