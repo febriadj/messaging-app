@@ -12,7 +12,13 @@ function EmojiBoard({ setForm }) {
 
   return (
     <div className="grid grid-rows-[1fr_auto]">
-      <div id="emoji-board" className="h-36 px-3 overflow-y-auto scrollbar-thin scrollbar-thumb-spill-200 hover:scrollbar-thumb-spill-300 dark:scrollbar-thumb-spill-700 dark:hover:scrollbar-thumb-spill-600">
+      <div
+        className="h-36 px-3 overflow-y-auto scrollbar-thin scrollbar-thumb-spill-200 hover:scrollbar-thumb-spill-300 dark:scrollbar-thumb-spill-700 dark:hover:scrollbar-thumb-spill-600"
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(36px, 1fr))',
+        }}
+      >
         {
           emojis.filter((elem) => elem.category === category).map((elem) => (
             <button

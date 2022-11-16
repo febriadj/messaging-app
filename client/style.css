@@ -29,8 +29,3 @@ a {
 .dark a {
   color: #bae6fd;
 }
-
-#emoji-board {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(32px, 1fr));
-}
