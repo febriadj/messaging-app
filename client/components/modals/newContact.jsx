@@ -96,8 +96,8 @@ function NewContact({ handleGetContacts }) {
                     desc: 'The contact name will make it easy to identify this contact.',
                   },
                 ].map((elem) => (
-                  <div>
-                    <label key={elem.target} htmlFor={elem.target} className={`${elem.target === 'newPass' && 'mt-4'} relative flex items-center`}>
+                  <div key={elem.target}>
+                    <label htmlFor={elem.target} className={`${elem.target === 'newPass' && 'mt-4'} relative flex items-center`}>
                       <input
                         type={elem.target}
                         name={elem.target}
