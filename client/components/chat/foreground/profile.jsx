@@ -161,11 +161,11 @@ function Profile() {
                     label: 'username',
                     data: profile.username,
                     desc: 'People will be able to find you by this username and contact you.',
-                    icon: <bi.BiAt size={20} />,
+                    icon: <bi.BiAt />,
                   },
-                  { label: 'bio', data: profile.bio, icon: <bi.BiInfoCircle size={20} /> },
-                  { label: 'phone', data: profile.phone, icon: <bi.BiPhone size={20} /> },
-                  { label: 'email', data: profile.email, icon: <bi.BiEnvelope size={20} /> },
+                  { label: 'bio', data: profile.bio, icon: <bi.BiInfoCircle /> },
+                  { label: 'phone', data: profile.phone, icon: <bi.BiPhone /> },
+                  { label: 'email', data: profile.email, icon: <bi.BiEnvelope /> },
                 ]
                   .map((elem) => (
                     <div key={elem.label} className="py-2 px-4 break-all grid grid-cols-[auto_1fr_auto] gap-4 items-start border-0 border-b border-solid border-spill-100 dark:border-spill-800">

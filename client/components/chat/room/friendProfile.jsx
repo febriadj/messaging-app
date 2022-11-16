@@ -45,16 +45,16 @@ function FriendProfile() {
             <div className="grid">
               {
                 [
-                  { label: 'Username', data: profile.username, icon: <bi.BiAt size={20} /> },
-                  { label: 'Bio', data: profile.bio, icon: <bi.BiInfoCircle size={20} /> },
-                  { label: 'Phone', data: profile.phone, icon: <bi.BiPhone size={20} /> },
-                  { label: 'Email', data: profile.email, icon: <bi.BiEnvelope size={20} /> },
+                  { label: 'Username', data: profile.username, icon: <bi.BiAt /> },
+                  { label: 'Bio', data: profile.bio, icon: <bi.BiInfoCircle /> },
+                  { label: 'Phone', data: profile.phone, icon: <bi.BiPhone /> },
+                  { label: 'Email', data: profile.email, icon: <bi.BiEnvelope /> },
                 ]
                   .map((elem) => (
                     <div key={elem.label} className="py-2 px-4 grid grid-cols-[auto_1fr_auto] gap-4 items-start border-0 border-b border-solid border-spill-100 dark:border-spill-800">
                       <i>{elem.icon}</i>
                       <span>
-                        <p className="text-sm opacity-60 mb-0.5">{elem.label}</p>
+                        <p className="text-sm opacity-60 mb-1">{elem.label}</p>
                         <p className="break-all">{elem.data}</p>
                       </span>
                     </div>
