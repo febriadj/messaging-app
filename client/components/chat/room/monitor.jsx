@@ -10,7 +10,7 @@ function Monitor({ chats, setChats }) {
 
   useEffect(() => {
     if (chats) {
-      if (master._id !== chats[chats.length - 1].userId) {
+      if (master._id !== chats[chats.length - 1]?.userId) {
         const { roomId, ownersId } = room;
         socket.emit('chat/read', { roomId, ownersId });
       }
@@ -27,7 +27,7 @@ function Monitor({ chats, setChats }) {
 
   return (
     <div id="monitor" className="select-text relative overflow-y-auto bg-spill-100 dark:bg-spill-950 scrollbar-thin scrollbar-thumb-spill-300 hover:scrollbar-thumb-spill-400 dark:scrollbar-thumb-spill-800 dark:hover:scrollbar-thumb-spill-700">
-      <div className="relative py-2 flex flex-col">
+      <div className="relative py-4 flex flex-col">
         {
           chats && chats.map((elem, i, arr) => (
             <React.Fragment key={elem._id}>
@@ -35,14 +35,14 @@ function Monitor({ chats, setChats }) {
                 // chat header: show datetime every new days
                 moment(elem.createdAt).date() !== (i > 0 && moment(arr[i - 1].createdAt).date())
                   && (
-                    <div className="my-4 flex justify-center">
+                    <div className="my-2 flex justify-center">
                       <span className="block py-0.5 px-2 rounded-full bg-white dark:bg-spill-800">
                         <p className="text-sm">{moment(elem.createdAt).format('LL')}</p>
                       </span>
                     </div>
                   )
               }
-              <div className={`${elem.userId !== arr[i + 1]?.userId && 'mb-4'} w-full py-0.5 px-6 flex justify-center`}>
+              <div className={`${elem.userId !== arr[i + 1]?.userId && 'mb-2'} w-full py-0.5 px-4 flex justify-center`}>
                 <div className={`${elem.userId === master._id && 'justify-end'} w-[560px] flex`}>
                   {/* chat card */}
                   <div
