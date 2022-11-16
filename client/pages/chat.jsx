@@ -19,6 +19,7 @@ function Chat() {
       <modal.changePass />
       <modal.deleteAcc />
       <modal.qr />
+      <modal.newContact />
       <modal.newGroup />
 
       <cont.foreground />

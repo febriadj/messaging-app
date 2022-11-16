@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import * as bi from 'react-icons/bi';
 import * as ri from 'react-icons/ri';
-import * as comp from './sub';
 // redux actions
 import { setPage } from '../../../redux/features/page';
 import { setModal } from '../../../redux/features/modal';
@@ -50,10 +49,6 @@ function Contact() {
         bg-white dark:bg-spill-900 dark:text-white/90
       `}
     >
-      {/* sub components or modals */}
-      <comp.newContact
-        handleGetContacts={handleGetContacts}
-      />
       {/* header */}
       <div className="h-16 px-2 grid gap-4">
         <div className="flex gap-4 items-center">
