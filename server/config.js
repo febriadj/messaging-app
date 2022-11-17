@@ -7,4 +7,8 @@ module.exports = {
     uri: process.env.MONGO_URI,
     name: 'spill',
   },
+  cors: {
+    origin: ['http://localhost:3000'],
+    method: '*',
+  },
 };
