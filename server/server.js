@@ -7,25 +7,27 @@ const cors = require('cors');
 const routes = require('./routes');
 const config = require('./config');
 const db = require('./db/connect');
+const cloudinary = require('./middleware/cloudinary');
 
 const app = express();
 const server = http.createServer(app);
 
-const corsOptions = {
-  origin: config.isDev ? 'http://localhost:3000' : config.host,
-};
-
-db();
-// store socket on global object
-global.io = new SocketServer(server, { cors: corsOptions });
-require('./socket');
-
 // middleware
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
-// setting cors
-app.use(cors(corsOptions));
-// api
+app.use(cors(config.cors));
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({
+  limit: '10mb',
+  parameterLimit: 100000,
+  extended: false,
+}));
+
+cloudinary();
+db();
+
 app.use('/api', routes);
+
+// store socket on global object
+global.io = new SocketServer(server, { cors: config.cors });
+require('./socket');
 
 module.exports = server;
