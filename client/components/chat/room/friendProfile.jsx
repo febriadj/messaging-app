@@ -36,7 +36,11 @@ function FriendProfile() {
         profile && (
           <div className="overflow-y-auto scrollbar-thin scrollbar-thumb-spill-200 hover:scrollbar-thumb-spill-300 dark:scrollbar-thumb-spill-700 dark:hover:scrollbar-thumb-spill-600">
             <div className="p-4 flex flex-col items-center">
-              <img src={`assets/images/${profile.avatar}`} alt="" className="w-28 h-28 rounded-full" />
+              <img
+                src={profile.avatar}
+                alt=""
+                className="w-28 h-28 rounded-full"
+              />
               <div className="w-full text-center mt-4 overflow-hidden">
                 <h1 className="text-2xl font-bold break-all mb-1">{profile.fullname}</h1>
                 <p className="text-sm opacity-60">{profile.online ? 'online' : `last seen ${moment(profile.updatedAt).fromNow()}`}</p>

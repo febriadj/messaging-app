@@ -10,6 +10,8 @@ const ModalSlice = createSlice({
     deleteAcc: false,
     qr: false,
     newGroup: false,
+    avatarUpload: false,
+    imageCropper: false, // -> { src: String, back: String | null }
   },
   reducers: {
     setModal(state, action) {

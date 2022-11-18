@@ -2,12 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import * as bi from 'react-icons/bi';
+import * as md from 'react-icons/md';
+import { setAvatar } from '../../../redux/features/user';
 import { setPage } from '../../../redux/features/page';
 import { setModal } from '../../../redux/features/modal';
 
 function Profile() {
   const dispatch = useDispatch();
   const page = useSelector((state) => state.page);
+  const avatar = useSelector((state) => state.user.avatar);
 
   const [profile, setProfile] = useState(null);
   const [form, setForm] = useState({
@@ -28,6 +31,7 @@ function Profile() {
         });
 
         setProfile(data.payload);
+        dispatch(setAvatar(data.payload.avatar));
       } else {
         // destroy when profile page is closed after 150ms
         setTimeout(() => setProfile(null), 150);
@@ -128,7 +132,23 @@ function Profile() {
         profile && (
           <div className="select-text overflow-y-auto scrollbar-thin scrollbar-thumb-spill-200 hover:scrollbar-thumb-spill-300 dark:scrollbar-thumb-spill-700 dark:hover:scrollbar-thumb-spill-600">
             <div className="p-4 flex flex-col items-center">
-              <img src={`assets/images/${profile.avatar}`} alt="" className="w-28 h-28 rounded-full" />
+              <button
+                type="button"
+                className="group relative w-28 h-28 rounded-full overflow-hidden cursor-pointer"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  dispatch(setModal({ target: 'avatarUpload' }));
+                }}
+              >
+                <span className="group-hover:opacity-100 bg-black/40 absolute w-full h-full z-10 opacity-0 flex justify-center items-center">
+                  <i className="text-white"><md.MdPhotoCamera size={40} /></i>
+                </span>
+                <img
+                  src={avatar}
+                  alt=""
+                  className="w-full h-full"
+                />
+              </button>
               <label htmlFor="profile-edit-control" className="relative flex items-start mt-4 px-10 cursor-text">
                 <h1
                   id="profile-edit-control"

@@ -136,8 +136,8 @@ function Contact() {
                 }}
               >
                 <img
-                  src={`assets/images/${elem.profile?.avatar ?? 'default-avatar.png'}`}
-                  alt={`assets/images/${elem.profile?.avatar ?? 'default-avatar.png'}`}
+                  src={elem.profile?.avatar}
+                  alt=""
                   className="w-14 h-14 rounded-full"
                 />
                 <span className="overflow-hidden">

@@ -44,8 +44,8 @@ function Header() {
         }}
       >
         <img
-          src={`assets/images/${room.profile.avatar}`}
-          alt={`assets/images/${room.profile.avatar}`}
+          src={room.profile.avatar}
+          alt=""
           className="w-10 h-10 rounded-full"
         />
         <span className="">

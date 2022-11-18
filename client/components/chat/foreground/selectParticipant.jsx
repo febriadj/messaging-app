@@ -91,8 +91,8 @@ function SelectParticipant() {
                   selectedParticipants.map((elem) => (
                     <div key={elem._id} className="flex-none flex flex-col items-center">
                       <img
-                        src={`assets/images/${elem.profile?.avatar ?? 'default-avatar.png'}`}
-                        alt={`assets/images/${elem.profile?.avatar ?? 'default-avatar.png'}`}
+                        src={elem.profile.avatar}
+                        alt=""
                         className="w-14 h-14 rounded-full"
                       />
                       <p className="mt-1 text-sm opacity-60">
@@ -157,8 +157,8 @@ function SelectParticipant() {
             >
               <span className="relative">
                 <img
-                  src={`assets/images/${elem.profile?.avatar ?? 'default-avatar.png'}`}
-                  alt={`assets/images/${elem.profile?.avatar ?? 'default-avatar.png'}`}
+                  src={elem.profile.avatar}
+                  alt=""
                   className="w-14 h-14 rounded-full"
                 />
                 {

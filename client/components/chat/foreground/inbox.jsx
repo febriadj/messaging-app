@@ -101,8 +101,12 @@ function Inbox() {
             }}
           >
             <img
-              src="assets/images/default-avatar.png"
-              alt="assets/images/default-avatar.png"
+              src={
+                elem.roomType === 'private'
+                  ? elem.owners.find((x) => x.userId !== master._id)?.avatar
+                  : 'assets/images/default-avatar.png'
+              }
+              alt=""
               className="w-14 h-14 rounded-full"
             />
             <div className="overflow-hidden grid gap-0.5">

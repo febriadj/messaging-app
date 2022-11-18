@@ -112,7 +112,7 @@ function GroupProfile() {
                         hover:bg-spill-100/60 dark:hover:bg-spill-800/60
                       `}
                     >
-                      <img src="assets/images/default-avatar.png" alt="assets/images/default-avatar.png" className="w-14 h-14 rounded-full" />
+                      <img src={elem.avatar} alt="" className="w-14 h-14 rounded-full" />
                       <span className="truncate">
                         <h1 className="truncate text-lg font-bold">
                           {elem.fullname}

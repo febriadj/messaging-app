@@ -1,11 +1,13 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setModal } from '../redux/features/modal';
 import * as cont from '../containers/chat';
-import * as modal from '../components/modals';
+import * as comp from '../components/modals';
 
 function Chat() {
   const dispatch = useDispatch();
+  const modal = useSelector((state) => state.modal);
+
   return (
     <div
       aria-hidden
@@ -15,12 +17,15 @@ function Chat() {
         dispatch(setModal({ target: '*' }));
       }}
     >
-      <modal.signout />
-      <modal.changePass />
-      <modal.deleteAcc />
-      <modal.qr />
-      <modal.newContact />
-      <modal.newGroup />
+      <comp.signout />
+      <comp.changePass />
+      <comp.deleteAcc />
+      <comp.qr />
+      <comp.newContact />
+      <comp.newGroup />
+      <comp.avatarUpload />
+      <comp.webcam />
+      { modal.imageCropper && <comp.imageCropper /> }
 
       <cont.foreground />
       <cont.room />
