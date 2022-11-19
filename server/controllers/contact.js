@@ -68,7 +68,7 @@ exports.find = async (req, res) => {
         },
       },
       { $unwind: '$profile' },
-    ]).sort({ fullname: 1 });
+    ]).sort({ 'profile.fullname': 1 });
 
     response({
       res,
