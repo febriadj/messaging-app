@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import * as bi from 'react-icons/bi';
-import emojis from '../../../../json/emoji.json';
+import emojis from '../../../json/emoji.json';
 
 function EmojiBoard({ setForm }) {
   const [category, setCategory] = useState('Smileys & Emotion');

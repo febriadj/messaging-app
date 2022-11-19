@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import * as bi from 'react-icons/bi';
-import { setPage } from '../../../redux/features/page';
-import { setModal } from '../../../redux/features/modal';
+import { setPage } from '../redux/features/page';
+import { setModal } from '../redux/features/modal';
 
 function Setting() {
   const dispatch = useDispatch();

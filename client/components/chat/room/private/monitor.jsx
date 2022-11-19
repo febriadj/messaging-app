@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import moment from 'moment';
 import * as ri from 'react-icons/ri';
 import Linkify from 'linkify-react';
-import socket from '../../../helpers/socket';
+import socket from '../../../../helpers/socket';
 
 function Monitor({ chats, setChats }) {
   const { user: { master }, chat: { room } } = useSelector((state) => state);

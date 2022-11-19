@@ -3,9 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import * as bi from 'react-icons/bi';
 
-import { setModal } from '../../../redux/features/modal';
-import { setPage } from '../../../redux/features/page';
-import { setSelectedParticipants } from '../../../redux/features/chore';
+import { setModal } from '../redux/features/modal';
+import { setPage } from '../redux/features/page';
+import { setSelectedParticipants } from '../redux/features/chore';
 
 function SelectParticipant() {
   const dispatch = useDispatch();

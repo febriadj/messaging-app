@@ -2,9 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import * as md from 'react-icons/md';
-import * as comp from '../../components/chat/room';
-import * as group from '../../components/chat/room/group';
+import * as pChat from '../../components/chat/room/private';
+import * as gChat from '../../components/chat/room/group';
+
 import socket from '../../helpers/socket';
+// pages
+import FriendProfile from '../../pages/friendProfile';
+import GroupProfile from '../../pages/groupProfile';
 
 function Room() {
   const { chat: { room }, page } = useSelector((state) => state);
@@ -82,11 +86,11 @@ function Room() {
         room && room.roomType === 'private' && (
           <>
             <div className={`${page.friendProfile && '-translate-x-full md:translate-x-0 xl:mr-[380px]'} transition-all w-full h-full grid grid-rows-[auto_1fr_auto] overflow-hidden`}>
-              <comp.header />
-              <comp.monitor chats={chats} setChats={setChats} />
-              <comp.send setChats={setChats} />
+              <pChat.header />
+              <pChat.monitor chats={chats} setChats={setChats} />
+              <pChat.send setChats={setChats} />
             </div>
-            <comp.friendProfile />
+            <FriendProfile />
           </>
         )
       }
@@ -94,11 +98,11 @@ function Room() {
         room && room.roomType === 'group' && (
           <>
             <div className={`${page.groupProfile && '-translate-x-full md:translate-x-0 xl:mr-[380px]'} transition-all w-full h-full grid grid-rows-[auto_1fr_auto] overflow-hidden`}>
-              <group.header />
-              <group.monitor chats={chats} setChats={setChats} />
-              <group.send setChats={setChats} />
+              <gChat.header />
+              <gChat.monitor chats={chats} setChats={setChats} />
+              <gChat.send setChats={setChats} />
             </div>
-            <group.groupProfile />
+            <GroupProfile />
           </>
         )
       }

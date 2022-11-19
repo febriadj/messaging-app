@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import * as bi from 'react-icons/bi';
-import { setPage } from '../../../redux/features/page';
+import { setPage } from '../redux/features/page';
 
 function FriendProfile() {
   const dispatch = useDispatch();

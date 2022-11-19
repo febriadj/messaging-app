@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import * as bi from 'react-icons/bi';
-import { setRoom } from '../../../redux/features/chat';
-import { setPage } from '../../../redux/features/page';
+import { setRoom } from '../../../../redux/features/chat';
+import { setPage } from '../../../../redux/features/page';
 
 function Header() {
   const dispatch = useDispatch();

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import * as bi from 'react-icons/bi';
 import socket from '../../../../helpers/socket';
-import * as comp from '../sub';
+import EmojiBoard from '../emojiBoard';
 
 function Send({ setChats }) {
   const { user: { master }, chat: { room } } = useSelector((state) => state);
@@ -113,7 +113,7 @@ function Send({ setChats }) {
         </button>
       </div>
       {
-        emojiBoard && <comp.emojiBoard setForm={setForm} />
+        emojiBoard && <EmojiBoard setForm={setForm} />
       }
     </div>
   );

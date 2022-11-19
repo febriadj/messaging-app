@@ -2,11 +2,11 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setModal } from '../redux/features/modal';
 import * as cont from '../containers/chat';
-import * as comp from '../components/modals';
+import * as modal from '../components/modals';
 
 function Chat() {
   const dispatch = useDispatch();
-  const modal = useSelector((state) => state.modal);
+  const imageCropper = useSelector((state) => state.modal.imageCropper);
 
   return (
     <div
@@ -17,15 +17,15 @@ function Chat() {
         dispatch(setModal({ target: '*' }));
       }}
     >
-      <comp.signout />
-      <comp.changePass />
-      <comp.deleteAcc />
-      <comp.qr />
-      <comp.newContact />
-      <comp.newGroup />
-      <comp.avatarUpload />
-      <comp.webcam />
-      { modal.imageCropper && <comp.imageCropper /> }
+      <modal.signout />
+      <modal.changePass />
+      <modal.deleteAcc />
+      <modal.qr />
+      <modal.newContact />
+      <modal.newGroup />
+      <modal.avatarUpload />
+      <modal.webcam />
+      { imageCropper && <modal.imageCropper /> }
 
       <cont.foreground />
       <cont.room />

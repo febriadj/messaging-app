@@ -4,11 +4,11 @@ import axios from 'axios';
 import * as bi from 'react-icons/bi';
 import * as ri from 'react-icons/ri';
 // redux actions
-import { setPage } from '../../../redux/features/page';
-import { setModal } from '../../../redux/features/modal';
-import { setRoom } from '../../../redux/features/chat';
+import { setPage } from '../redux/features/page';
+import { setModal } from '../redux/features/modal';
+import { setRoom } from '../redux/features/chat';
 
-import config from '../../../config';
+import config from '../config';
 
 function Contact() {
   const dispatch = useDispatch();

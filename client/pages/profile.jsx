@@ -3,9 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import * as bi from 'react-icons/bi';
 import * as md from 'react-icons/md';
-import { setAvatar } from '../../../redux/features/user';
-import { setPage } from '../../../redux/features/page';
-import { setModal } from '../../../redux/features/modal';
+import { setAvatar } from '../redux/features/user';
+import { setPage } from '../redux/features/page';
+import { setModal } from '../redux/features/modal';
 
 function Profile() {
   const dispatch = useDispatch();

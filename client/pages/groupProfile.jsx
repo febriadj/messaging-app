@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import * as bi from 'react-icons/bi';
-import { setPage } from '../../../../redux/features/page';
+import { setPage } from '../redux/features/page';
 
 function GroupProfile() {
   const dispatch = useDispatch();
