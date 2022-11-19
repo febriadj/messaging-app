@@ -4,7 +4,7 @@ import axios from 'axios';
 import * as bi from 'react-icons/bi';
 import { setModal } from '../../redux/features/modal';
 
-function NewContact({ handleGetContacts }) {
+function NewContact() {
   const dispatch = useDispatch();
   const modal = useSelector((state) => state.modal);
 
@@ -26,9 +26,6 @@ function NewContact({ handleGetContacts }) {
       // reset form state
       setForm({ username: '', fullname: '' });
       setRespond({ success: true, message: data.message });
-
-      // local props: update contact list
-      handleGetContacts();
 
       setTimeout(() => {
         dispatch(setModal({

@@ -13,6 +13,7 @@ import config from '../config';
 function Contact() {
   const dispatch = useDispatch();
   const page = useSelector((state) => state.page);
+  const newcontact = useSelector((state) => state.modal.newcontact);
 
   const [contacts, setContacts] = useState(null);
 
@@ -39,7 +40,7 @@ function Contact() {
     return () => {
       ctrl.abort();
     };
-  }, [page.contact]);
+  }, [page.contact, newcontact]);
 
   return (
     <div
