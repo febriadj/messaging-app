@@ -66,7 +66,14 @@ function GroupMonitor({ chats, setChats }) {
                     }
                     {/* chat body message */}
                     <div className="px-1">
-                      <p className="font-bold break-all text-sky-800 dark:text-sky-200">{elem.profile.fullname}</p>
+                      <span className="truncate grid grid-cols-[auto_1fr] gap-2 items-start">
+                        <img
+                          src={elem.profile.avatar}
+                          alt=""
+                          className="w-5 h-5 rounded-full"
+                        />
+                        <p className="font-bold truncate text-sky-800 dark:text-sky-200">{elem.profile.fullname}</p>
+                      </span>
                       <p className="mt-0.5 break-all">
                         <Linkify as="span">{elem.text}</Linkify>
                         <span className={`${elem.userId === master._id && 'mr-5'} invisible text-xs ml-1`}>{moment(elem.createdAt).format('LT')}</span>
