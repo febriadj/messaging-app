@@ -28,7 +28,7 @@ const GroupSchema = new Schema({
   avatar: {
     type: Schema.Types.String,
     required: true,
-    default: `${config.host}/avatar/default-group-avatar.png`,
+    default: process.env.DEFAULT_GROUP_AVATAR,
   },
   link: {
     type: Schema.Types.String,

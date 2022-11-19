@@ -28,7 +28,7 @@ const ProfileSchema = new Schema({
   avatar: {
     type: Schema.Types.String,
     required: true,
-    default: 'default-avatar.png',
+    default: process.env.DEFAULT_AVATAR,
   },
   bio: {
     type: Schema.Types.String,
