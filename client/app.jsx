@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import './style.css';
-import * as page from './pages';
+import * as route from './routes';
 import { setMaster } from './redux/features/user';
 import socket from './helpers/socket';
 
@@ -47,8 +47,8 @@ function App() {
       <Routes>
         {
           master
-            ? <Route exact path="*" element={master.verified ? <page.chat /> : <page.verify />} />
-            : <Route exact path="*" element={<page.auth />} />
+            ? <Route exact path="*" element={master.verified ? <route.chat /> : <route.verify />} />
+            : <Route exact path="*" element={<route.auth />} />
         }
       </Routes>
     </BrowserRouter>
