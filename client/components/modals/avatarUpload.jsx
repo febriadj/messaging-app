@@ -84,6 +84,12 @@ function AvatarUpload() {
           <button
             type="button"
             className="w-full p-4 rounded-md flex flex-col justify-center items-center bg-spill-100/60 dark:bg-spill-900/40 hover:bg-spill-200/80 dark:hover:bg-spill-900/80 border border-solid border-spill-400 dark:border-spill-600"
+            onClick={() => {
+              dispatch(setModal({
+                target: 'webcam',
+                data: { back: 'avatarUpload' },
+              }));
+            }}
           >
             <i><bi.BiCamera size={40} /></i>
             <p className="mt-1 opacity-60">Camera</p>
