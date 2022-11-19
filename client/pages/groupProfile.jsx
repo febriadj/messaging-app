@@ -39,7 +39,7 @@ function GroupProfile() {
     return () => {
       abortCtrl.abort();
     };
-  }, [page.groupProfile]);
+  }, [group, page.groupProfile]);
 
   return (
     <div
