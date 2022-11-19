@@ -53,7 +53,7 @@ function QR() {
             <>
               <div className="h-16 pl-4 pr-2 grid grid-cols-[1fr_auto] gap-4 items-center">
                 <div className="flex gap-4 items-center overflow-hidden">
-                  <img src="assets/images/default-avatar.png" alt="assets/images/default-avatar.png" className="w-10 h-10 rounded-full" />
+                  <img src={qr.avatar} alt="" className="w-10 h-10 rounded-full" />
                   <span className="truncate">
                     <p className="truncate font-bold">{qr.fullname}</p>
                     <p className="truncate text-sm opacity-80">{qr.bio}</p>
