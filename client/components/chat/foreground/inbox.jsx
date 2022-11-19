@@ -104,7 +104,7 @@ function Inbox() {
               src={
                 elem.roomType === 'private'
                   ? elem.owners.find((x) => x.userId !== master._id)?.avatar
-                  : 'assets/images/default-avatar.png'
+                  : 'assets/images/default-group-avatar.png'
               }
               alt=""
               className="w-14 h-14 rounded-full"
