@@ -2,16 +2,16 @@ import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import moment from 'moment';
 import * as ri from 'react-icons/ri';
+import * as bi from 'react-icons/bi';
 import Linkify from 'linkify-react';
 import socket from '../../../../helpers/socket';
 
-function GroupMonitor({ chats, setChats }) {
+function GroupMonitor({ loaded, chats, setChats }) {
   const { user: { master }, chat: { room } } = useSelector((state) => state);
 
   useEffect(() => {
     if (chats) {
       if (master._id !== chats[chats.length - 1]?.userId) {
-        console.log(chats);
         const { roomId, ownersId } = room;
         socket.emit('chat/read', { roomId, ownersId });
       }
@@ -27,7 +27,21 @@ function GroupMonitor({ chats, setChats }) {
   }, []);
 
   return (
-    <div id="monitor" className="select-text relative overflow-y-auto bg-spill-100 dark:bg-spill-950 scrollbar-thin scrollbar-thumb-spill-300 hover:scrollbar-thumb-spill-400 dark:scrollbar-thumb-spill-800 dark:hover:scrollbar-thumb-spill-700">
+    <div
+      id="monitor"
+      className={`
+        ${loaded ? 'scrollbar-thin' : 'scrollbar-none'} scrollbar-thumb-spill-300 hover:scrollbar-thumb-spill-400 dark:scrollbar-thumb-spill-800 dark:hover:scrollbar-thumb-spill-700
+        select-text relative overflow-y-auto bg-spill-100 dark:bg-spill-950
+      `}
+    >
+      { !loaded && (
+        <div className="absolute w-full h-full z-10 flex justify-center items-center bg-spill-950">
+          <span className="flex gap-2 items-center">
+            <i className="animate-spin"><bi.BiLoaderAlt size={18} /></i>
+            <p>Loading...</p>
+          </span>
+        </div>
+      ) }
       <div className="relative py-4 flex flex-col">
         {
           chats && chats.map((elem, i, arr) => (

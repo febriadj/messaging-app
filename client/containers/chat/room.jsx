@@ -12,10 +12,13 @@ import GroupProfile from '../../pages/groupProfile';
 
 function Room() {
   const { chat: { room }, page } = useSelector((state) => state);
+
+  const [loaded, setLoaded] = useState(false);
   const [chats, setChats] = useState(null);
 
   const handleGetChats = async (signal) => {
     try {
+      setLoaded(false);
       setChats(null);
 
       // get chats if room is opened
@@ -31,11 +34,10 @@ function Room() {
 
         setTimeout(() => {
           const monitor = document.querySelector('#monitor');
-          monitor.scrollTo({
-            top: monitor.scrollHeight,
-            behavior: 'smooth',
-          });
-        }, 500);
+          monitor.scrollTop = monitor.scrollHeight;
+
+          setLoaded(true);
+        }, 150);
       }
     }
     catch (error0) {
@@ -87,7 +89,7 @@ function Room() {
           <>
             <div className={`${page.friendProfile && '-translate-x-full md:translate-x-0 xl:mr-[380px]'} transition-all w-full h-full grid grid-rows-[auto_1fr_auto] overflow-hidden`}>
               <pChat.header />
-              <pChat.monitor chats={chats} setChats={setChats} />
+              <pChat.monitor loaded={loaded} chats={chats} setChats={setChats} />
               <pChat.send setChats={setChats} />
             </div>
             <FriendProfile />
@@ -99,7 +101,7 @@ function Room() {
           <>
             <div className={`${page.groupProfile && '-translate-x-full md:translate-x-0 xl:mr-[380px]'} transition-all w-full h-full grid grid-rows-[auto_1fr_auto] overflow-hidden`}>
               <gChat.header />
-              <gChat.monitor chats={chats} setChats={setChats} />
+              <gChat.monitor loaded={loaded} chats={chats} setChats={setChats} />
               <gChat.send setChats={setChats} />
             </div>
             <GroupProfile />
