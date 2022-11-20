@@ -23,7 +23,7 @@ function App() {
         const { data } = await axios.get('/users', { signal });
         // set master
         dispatch(setMaster(data.payload));
-        socket.emit('user/signin', { userId: data.payload._id });
+        socket.emit('user/connect', data.payload._id);
       }
     }
     catch (error0) {

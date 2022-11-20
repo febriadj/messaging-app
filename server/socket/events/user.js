@@ -1,6 +1,6 @@
 module.exports = (socket) => {
-  // on user sign in
-  socket.on('user/signin', async (args) => {
-    socket.join(args.userId);
+  // user connect
+  socket.on('user/connect', (userId) => {
+    socket.join(userId);
   });
 };
