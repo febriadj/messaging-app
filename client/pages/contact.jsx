@@ -6,7 +6,7 @@ import * as ri from 'react-icons/ri';
 // redux actions
 import { setPage } from '../redux/features/page';
 import { setModal } from '../redux/features/modal';
-import { setRoom } from '../redux/features/chat';
+import { setChatRoom } from '../redux/features/room';
 
 import config from '../config';
 
@@ -118,21 +118,26 @@ function Contact() {
                 className="grid grid-cols-[auto_1fr_auto] gap-4 p-4 pr-2 items-center cursor-default border-0 border-b border-solid border-spill-200 dark:border-spill-800 hover:bg-spill-100/60 dark:hover:bg-spill-800/60"
                 onClick={(e) => {
                   e.stopPropagation();
-                  dispatch(setRoom({
-                    ownersId: [elem.userId, elem.friendId],
-                    roomId: elem.roomId,
-                    roomType: 'private',
-                    profile: !elem.profile
-                      ? {
-                        avatar: 'default-avatar.png',
-                        fullname: '[inactive]',
-                        updatedAt: new Date().toISOString(),
-                        active: false,
-                      }
-                      : {
-                        ...elem.profile,
-                        active: true,
-                      },
+
+                  dispatch(setChatRoom({
+                    isOpen: true,
+                    refreshId: elem.roomId,
+                    data: {
+                      ownersId: [elem.userId, elem.friendId],
+                      roomId: elem.roomId,
+                      roomType: 'private',
+                      profile: !elem.profile
+                        ? {
+                          avatar: 'default-avatar.png',
+                          fullname: '[inactive]',
+                          updatedAt: new Date().toISOString(),
+                          active: false,
+                        }
+                        : {
+                          ...elem.profile,
+                          active: true,
+                        },
+                    },
                   }));
                 }}
               >

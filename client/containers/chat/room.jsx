@@ -11,7 +11,7 @@ import FriendProfile from '../../pages/friendProfile';
 import GroupProfile from '../../pages/groupProfile';
 
 function Room() {
-  const { chat: { room }, page } = useSelector((state) => state);
+  const { room: { chat: chatRoom }, page } = useSelector((state) => state);
 
   const [loaded, setLoaded] = useState(false);
   const [chats, setChats] = useState(null);
@@ -22,9 +22,9 @@ function Room() {
       setChats(null);
 
       // get chats if room is opened
-      if (room) {
+      if (chatRoom.isOpen) {
         const { data } = await axios.get('/chats', {
-          params: { roomId: room.roomId },
+          params: { roomId: chatRoom.data.roomId },
           signal,
         });
 
@@ -47,10 +47,10 @@ function Room() {
 
   const [prevRoom, setPrevRoom] = useState(null);
   const handleJoinRoom = () => {
-    if (room) {
+    if (chatRoom.isOpen) {
       socket.emit('room/join', {
         prevRoom,
-        newRoom: room.roomId,
+        newRoom: chatRoom.data.roomId,
       });
     }
   };
@@ -64,7 +64,7 @@ function Room() {
     return () => {
       abortCtrl.abort();
     };
-  }, [room]);
+  }, [chatRoom.isOpen, chatRoom.refreshId]);
 
   useEffect(() => {
     socket.on('room/join', (args) => {
@@ -79,13 +79,13 @@ function Room() {
   return (
     <div
       className={`
-        ${!room && 'translate-x-full md:translate-x-0'}
+        ${!chatRoom.data && 'translate-x-full md:translate-x-0'}
         transition absolute md:relative flex z-10 w-full h-full overflow-hidden
         bg-spill-100 dark:bg-spill-950
       `}
     >
       {
-        room && room.roomType === 'private' && (
+        chatRoom.data && chatRoom.data.roomType === 'private' && (
           <>
             <div className={`${page.friendProfile && '-translate-x-full md:translate-x-0 xl:mr-[380px]'} transition-all w-full h-full grid grid-rows-[auto_1fr_auto] overflow-hidden`}>
               <pChat.header />
@@ -97,7 +97,7 @@ function Room() {
         )
       }
       {
-        room && room.roomType === 'group' && (
+        chatRoom.data && chatRoom.data.roomType === 'group' && (
           <>
             <div className={`${page.groupProfile && '-translate-x-full md:translate-x-0 xl:mr-[380px]'} transition-all w-full h-full grid grid-rows-[auto_1fr_auto] overflow-hidden`}>
               <gChat.header />
@@ -109,7 +109,7 @@ function Room() {
         )
       }
       {
-        !room && (
+        !chatRoom.data && (
           <div className="w-full h-full flex justify-center items-center">
             <div className="w-[400px] flex flex-col items-center">
               <i className="opacity-40"><md.MdDevices size={140} /></i>

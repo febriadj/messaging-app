@@ -6,7 +6,7 @@ import { setPage } from '../redux/features/page';
 
 function FriendProfile() {
   const dispatch = useDispatch();
-  const { chat: { room: { profile } }, page } = useSelector((state) => state);
+  const { room: { chat: { data: { profile } } }, page } = useSelector((state) => state);
 
   return (
     <div

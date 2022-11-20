@@ -2,33 +2,41 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import * as bi from 'react-icons/bi';
-import { setRoom } from '../../../../redux/features/chat';
+import { setChatRoom } from '../../../../redux/features/room';
 import { setPage } from '../../../../redux/features/page';
 
 function Header() {
   const dispatch = useDispatch();
-  const { chat: { room }, page } = useSelector((state) => state);
-  const [subtext, setSubtext] = useState('');
+  const { room: { chat: chatRoom }, page } = useSelector((state) => state);
+  const [subhead, setSubhead] = useState('');
 
-  const handleSubtext = () => {
-    setSubtext('click here to see contact info');
+  const handleSubhead = () => {
+    setSubhead('tap here for contact info');
 
     setTimeout(() => {
-      const lastSeen = moment(room.profile.updatedAt).fromNow();
-      setSubtext(room.profile.online ? 'online' : `last seen ${lastSeen}`);
+      const lastSeen = moment(chatRoom.data.profile.updatedAt).fromNow();
+      setSubhead(
+        chatRoom.data.profile.online
+          ? 'online'
+          : `last seen ${lastSeen}`,
+      );
     }, 3000);
   };
 
   useEffect(() => {
-    handleSubtext();
-  }, [room]);
+    handleSubhead();
+  }, [chatRoom.isOpen, chatRoom.refreshId]);
 
   return (
     <div className="h-16 px-2 md:pl-4 flex gap-2 items-center bg-white dark:bg-spill-900">
       <button
         type="button"
         className="block md:hidden p-2 rounded-full hover:bg-spill-100 dark:hover:bg-spill-800"
-        onClick={() => dispatch(setRoom(null))}
+        onClick={() => dispatch(setChatRoom({
+          isOpen: false,
+          refreshId: null,
+          data: null,
+        }))}
       >
         <bi.BiArrowBack />
       </button>
@@ -36,7 +44,7 @@ function Header() {
         className="flex gap-4 items-center cursor-pointer"
         aria-hidden
         onClick={() => {
-          if (room.profile.active && !page.friendProfile) {
+          if (chatRoom.data.profile.active && !page.friendProfile) {
             dispatch(setPage({
               target: 'friendProfile',
             }));
@@ -44,13 +52,13 @@ function Header() {
         }}
       >
         <img
-          src={room.profile.avatar}
+          src={chatRoom.data.profile.avatar}
           alt=""
           className="w-10 h-10 rounded-full"
         />
         <span className="">
-          <p className="font-bold">{room.profile.fullname}</p>
-          <p className="text-sm opacity-60">{subtext}</p>
+          <p className="font-bold">{chatRoom.data.profile.fullname}</p>
+          <p className="text-sm opacity-60">{subhead}</p>
         </span>
       </div>
     </div>

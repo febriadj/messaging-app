@@ -7,12 +7,12 @@ import Linkify from 'linkify-react';
 import socket from '../../../../helpers/socket';
 
 function Monitor({ loaded, chats, setChats }) {
-  const { user: { master }, chat: { room } } = useSelector((state) => state);
+  const { user: { master }, room: { chat: chatRoom } } = useSelector((state) => state);
 
   useEffect(() => {
     if (chats) {
       if (master._id !== chats[chats.length - 1]?.userId) {
-        const { roomId, ownersId } = room;
+        const { roomId, ownersId } = chatRoom.data;
         socket.emit('chat/read', { roomId, ownersId });
       }
     }
@@ -106,7 +106,7 @@ function Monitor({ loaded, chats, setChats }) {
           ))
         }
         {
-          chats && !room.profile.active && (
+          chats && !chatRoom.data.profile.active && (
             <div className="py-2 px-6 flex justify-center border-0 border-y border-solid border-rose-400 dark:border-rose-200/60 bg-rose-400/10 dark:bg-rose-200/20">
               <div className="w-[560px]">
                 <p className="text-rose-900 dark:text-rose-100">This account has been deleted by the owner, you no longer have access to send messages to this account.</p>

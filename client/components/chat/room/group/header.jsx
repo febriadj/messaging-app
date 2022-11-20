@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import * as bi from 'react-icons/bi';
-import { setRoom } from '../../../../redux/features/chat';
+import { setChatRoom } from '../../../../redux/features/room';
 import { setPage } from '../../../../redux/features/page';
 
 function Header() {
   const dispatch = useDispatch();
-  const { chat: { room }, page } = useSelector((state) => state);
+  const { room: { chat: chatRoom }, page } = useSelector((state) => state);
 
   const [subhead, setSubhead] = useState('');
 
@@ -15,7 +15,7 @@ function Header() {
     try {
       const { data } = await axios.get('/groups/participants/name', {
         params: {
-          roomId: room.group.roomId,
+          roomId: chatRoom.data.group.roomId,
         },
         signal,
       });
@@ -23,7 +23,7 @@ function Header() {
       setSubhead(data.payload.join(', '));
     }
     catch (error0) {
-      console.error(error0);
+      console.error(error0.message);
     }
   };
 
@@ -42,14 +42,18 @@ function Header() {
     return () => {
       abortCtrl.abort();
     };
-  }, [room]);
+  }, [chatRoom.isOpen, chatRoom.refreshId]);
 
   return (
     <div className="h-16 px-2 md:pl-4 flex gap-2 items-center bg-white dark:bg-spill-900">
       <button
         type="button"
         className="block md:hidden p-2 rounded-full hover:bg-spill-100 dark:hover:bg-spill-800"
-        onClick={() => dispatch(setRoom(null))}
+        onClick={() => dispatch(setChatRoom({
+          isOpen: false,
+          refreshId: null,
+          data: null,
+        }))}
       >
         <bi.BiArrowBack />
       </button>
@@ -70,7 +74,7 @@ function Header() {
           className="w-10 h-10 rounded-full"
         />
         <span className="">
-          <p className="font-bold">{room.group.name}</p>
+          <p className="font-bold">{chatRoom.data.group.name}</p>
           <p className="text-sm opacity-60">{subhead}</p>
         </span>
       </div>

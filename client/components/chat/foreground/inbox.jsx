@@ -4,11 +4,11 @@ import moment from 'moment';
 import axios from 'axios';
 import * as ri from 'react-icons/ri';
 import socket from '../../../helpers/socket';
-import { setRoom } from '../../../redux/features/chat';
+import { setChatRoom } from '../../../redux/features/room';
 
 function Inbox() {
   const dispatch = useDispatch();
-  const { user: { master }, chat: { room } } = useSelector((state) => state);
+  const { user: { master }, room: { chat: chatRoom } } = useSelector((state) => state);
   const [inboxs, setInboxs] = useState(null);
 
   const handleGetInboxs = async (signal) => {
@@ -70,32 +70,40 @@ function Inbox() {
             key={elem._id}
             aria-hidden
             className={`
-              ${room?.roomId === elem.roomId && 'bg-spill-100/60 dark:bg-spill-800/60'}
+              ${chatRoom.data?.roomId === elem.roomId && 'bg-spill-100/60 dark:bg-spill-800/60'}
               p-4 grid grid-cols-[auto_1fr] gap-4 items-center cursor-default
               border-0 border-b border-solid border-spill-200 dark:border-spill-800
               hover:bg-spill-100/60 dark:hover:bg-spill-800/60
             `}
             onClick={() => {
-              if (room?.roomId !== elem.roomId) {
+              if (chatRoom.data?.roomId !== elem.roomId) {
                 if (elem.roomType === 'private') {
                   const profile = elem.owners.find((x) => x.userId !== master._id);
 
-                  dispatch(setRoom({
-                    ...elem,
-                    profile: !profile
-                      ? {
-                        avatar: 'default-avatar.png',
-                        fullname: '[inactive]',
-                        updatedAt: new Date().toISOString(),
-                        active: false,
-                      }
-                      : {
-                        ...profile,
-                        active: true,
-                      },
+                  dispatch(setChatRoom({
+                    isOpen: true,
+                    refreshId: elem.roomId,
+                    data: {
+                      ...elem,
+                      profile: !profile
+                        ? {
+                          avatar: 'default-avatar.png',
+                          fullname: '[inactive]',
+                          updatedAt: new Date().toISOString(),
+                          active: false,
+                        }
+                        : {
+                          ...profile,
+                          active: true,
+                        },
+                    },
                   }));
                 } else {
-                  dispatch(setRoom(elem));
+                  dispatch(setChatRoom({
+                    isOpen: true,
+                    refreshId: elem.roomId,
+                    data: elem,
+                  }));
                 }
               }
             }}

@@ -6,7 +6,11 @@ import { setPage } from '../redux/features/page';
 
 function GroupProfile() {
   const dispatch = useDispatch();
-  const { user: { master }, chat: { room: { group } }, page } = useSelector((state) => state);
+  const {
+    user: { master },
+    room: { chat: { data: { group } } },
+    page,
+  } = useSelector((state) => state);
 
   const [peoples, setPeoples] = useState(null);
 

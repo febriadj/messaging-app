@@ -4,10 +4,10 @@ import * as fg from '../../components/chat/foreground';
 import * as page from '../../pages';
 
 function ForeGround() {
-  const room = useSelector((state) => state.chat.room);
+  const chatRoom = useSelector((state) => state.room.chat);
 
   return (
-    <div className={`${room && '-translate-x-full md:translate-x-0'} transition w-full h-full relative z-10 grid grid-rows-[auto_1fr] overflow-hidden`}>
+    <div className={`${chatRoom.isOpen && '-translate-x-full md:translate-x-0'} transition w-full h-full relative z-10 grid grid-rows-[auto_1fr] overflow-hidden`}>
       <page.setting />
       <page.contact />
       <page.profile />

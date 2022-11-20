@@ -7,12 +7,12 @@ import Linkify from 'linkify-react';
 import socket from '../../../../helpers/socket';
 
 function GroupMonitor({ loaded, chats, setChats }) {
-  const { user: { master }, chat: { room } } = useSelector((state) => state);
+  const { user: { master }, room: { chat: chatRoom } } = useSelector((state) => state);
 
   useEffect(() => {
     if (chats) {
       if (master._id !== chats[chats.length - 1]?.userId) {
-        const { roomId, ownersId } = room;
+        const { roomId, ownersId } = chatRoom.data;
         socket.emit('chat/read', { roomId, ownersId });
       }
     }

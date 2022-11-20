@@ -5,7 +5,7 @@ import socket from '../../../../helpers/socket';
 import EmojiBoard from '../emojiBoard';
 
 function Send({ setChats }) {
-  const { user: { master }, chat: { room } } = useSelector((state) => state);
+  const { user: { master }, room: { chat: chatRoom } } = useSelector((state) => state);
 
   const [emojiBoard, setEmojiBoard] = useState(false);
   const [form, setForm] = useState({
@@ -26,9 +26,9 @@ function Send({ setChats }) {
     if (form.text.length > 0 || form.file) {
       socket.emit('chat/insert', {
         ...form,
-        ownersId: room.ownersId,
+        ownersId: chatRoom.data.ownersId,
         userId: master._id,
-        roomId: room.roomId,
+        roomId: chatRoom.data.roomId,
       });
 
       // reset form
@@ -40,8 +40,7 @@ function Send({ setChats }) {
 
   useEffect(() => {
     socket.on('chat/insert', (payload) => {
-      if (room) {
-        console.log(payload);
+      if (chatRoom.isOpen) {
         // push new chat to state.chats
         setChats((prev) => {
           if (prev) {
