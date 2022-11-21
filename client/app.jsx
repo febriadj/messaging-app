@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
@@ -10,6 +10,8 @@ import socket from './helpers/socket';
 function App() {
   const dispatch = useDispatch();
   const { master } = useSelector((state) => state.user);
+
+  const [inactive, setInactive] = useState(false);
 
   // get access token from localStorage
   const token = localStorage.getItem('token');
@@ -37,8 +39,14 @@ function App() {
     axios.defaults.baseURL = 'http://localhost:8080/api';
     handleGetMaster(abortCtrl.signal);
 
+    socket.on('user/inactivate', () => {
+      setInactive(true);
+      dispatch(setMaster(null));
+    });
+
     return () => {
       abortCtrl.abort();
+      socket.off('user/inactivate');
     };
   }, []);
 
@@ -46,7 +54,10 @@ function App() {
     <BrowserRouter>
       <Routes>
         {
-          master
+          inactive && <Route exact path="*" element={<route.inactive />} />
+        }
+        {
+          !inactive && master
             ? <Route exact path="*" element={master.verified ? <route.chat /> : <route.verify />} />
             : <Route exact path="*" element={<route.auth />} />
         }

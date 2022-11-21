@@ -4,6 +4,7 @@ module.exports = (socket) => {
   // user connect
   socket.on('user/connect', async (userId) => {
     socket.join(userId);
+    socket.broadcast.to(userId).emit('user/inactivate', true);
 
     /* eslint-disable */
     // store userId in socket object
