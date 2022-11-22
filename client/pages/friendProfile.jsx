@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import * as bi from 'react-icons/bi';
 import { setPage } from '../redux/features/page';
+import { setModal } from '../redux/features/modal';
 
 function FriendProfile() {
   const dispatch = useDispatch();
@@ -39,7 +40,12 @@ function FriendProfile() {
               <img
                 src={profile.avatar}
                 alt=""
-                className="w-28 h-28 rounded-full"
+                className="w-28 h-28 rounded-full cursor-pointer hover:brightness-75"
+                aria-hidden
+                onClick={(e) => {
+                  e.stopPropagation();
+                  dispatch(setModal({ target: 'avatarFull', data: profile.avatar }));
+                }}
               />
               <div className="w-full text-center mt-4 overflow-hidden">
                 <h1 className="text-2xl font-bold break-all mb-1">{profile.fullname}</h1>
