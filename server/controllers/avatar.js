@@ -23,7 +23,7 @@ exports.upload = async (req, res) => {
         {
           crop: 'scale',
           aspect_ratio: '1.0',
-          width: 128,
+          width: 460,
         },
       ],
     });
