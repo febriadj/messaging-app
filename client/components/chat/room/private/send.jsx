@@ -18,6 +18,12 @@ function Send({ setChats }) {
       ...prev,
       [e.target.name]: e.target.value,
     }));
+
+    // set typing status
+    socket.emit('chat/typing', {
+      roomId: chatRoom.data.roomId,
+      userId: master._id,
+    });
   };
 
   const handleSubmit = (e) => {

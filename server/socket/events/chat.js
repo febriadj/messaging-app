@@ -66,4 +66,19 @@ module.exports = (socket) => {
       console.log(error0.message);
     }
   });
+
+  let typingEnds = null;
+  socket.on('chat/typing', ({ roomId }) => {
+    clearTimeout(typingEnds);
+
+    socket.broadcast
+      .to(roomId)
+      .emit('chat/typing', 'typing...');
+
+    typingEnds = setTimeout(() => {
+      socket.broadcast
+        .to(roomId)
+        .emit('chat/typing-ends', 'online');
+    }, 3000);
+  });
 };

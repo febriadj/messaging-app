@@ -64,9 +64,14 @@ function Header() {
       }
     });
 
+    socket.on('chat/typing', (message) => setSubhead(message));
+    socket.on('chat/typing-ends', (message) => setSubhead(message));
+
     return () => {
       socket.off('user/connect');
       socket.off('user/disconnect');
+      socket.off('chat/typing');
+      socket.off('chat/typing-ends');
     };
   }, []);
 
