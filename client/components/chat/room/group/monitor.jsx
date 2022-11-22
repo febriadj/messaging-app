@@ -35,7 +35,7 @@ function GroupMonitor({ loaded, chats, setChats }) {
       `}
     >
       { !loaded && (
-        <div className="absolute w-full h-full z-10 flex justify-center items-center bg-spill-950">
+        <div className="absolute w-full h-full z-10 flex justify-center items-center bg-spill-100 dark:bg-spill-950">
           <span className="flex gap-2 items-center">
             <i className="animate-spin"><bi.BiLoaderAlt size={18} /></i>
             <p>Loading...</p>
