@@ -4,11 +4,18 @@ import moment from 'moment';
 import * as bi from 'react-icons/bi';
 import { setChatRoom } from '../../../../redux/features/room';
 import { setPage } from '../../../../redux/features/page';
+import { setSelectedChats } from '../../../../redux/features/chore';
+import { setModal } from '../../../../redux/features/modal';
 import socket from '../../../../helpers/socket';
 
 function Header() {
   const dispatch = useDispatch();
-  const { room: { chat: chatRoom }, page } = useSelector((state) => state);
+  const {
+    room: { chat: chatRoom },
+    chore: { selectedChats },
+    page,
+  } = useSelector((state) => state);
+
   const [subhead, setSubhead] = useState('');
 
   const handleSubhead = () => {
@@ -76,40 +83,93 @@ function Header() {
   }, []);
 
   return (
-    <div className="h-16 px-2 md:pl-4 flex gap-2 items-center bg-white dark:bg-spill-900">
-      <button
-        type="button"
-        className="block md:hidden p-2 rounded-full hover:bg-spill-100 dark:hover:bg-spill-800"
-        onClick={() => dispatch(setChatRoom({
-          isOpen: false,
-          refreshId: null,
-          data: null,
-        }))}
-      >
-        <bi.BiArrowBack />
-      </button>
-      <div
-        className="flex gap-4 items-center cursor-pointer"
-        aria-hidden
-        onClick={() => {
-          if (chatRoom.data.profile.active && !page.friendProfile) {
-            dispatch(setPage({
-              target: 'friendProfile',
-            }));
-          }
-        }}
-      >
-        <img
-          src={chatRoom.data.profile.avatar}
-          alt=""
-          className="w-10 h-10 rounded-full"
-        />
-        <span className="">
-          <p className="font-bold">{chatRoom.data.profile.fullname}</p>
-          <p className="text-sm opacity-60">{subhead}</p>
-        </span>
-      </div>
-    </div>
+    <nav className="h-16 flex gap-4 justify-between items-center bg-white dark:bg-spill-900">
+      {
+        selectedChats.length === 0 && (
+          <>
+            <div className="pl-2 md:pl-4 flex gap-2 items-center">
+              <button
+                type="button"
+                className="block md:hidden p-2 rounded-full hover:bg-spill-100 dark:hover:bg-spill-800"
+                onClick={() => dispatch(setChatRoom({
+                  isOpen: false,
+                  refreshId: null,
+                  data: null,
+                }))}
+              >
+                <i><bi.BiArrowBack /></i>
+              </button>
+              <div
+                className="flex gap-4 items-center cursor-pointer"
+                aria-hidden
+                onClick={() => {
+                  if (chatRoom.data.profile.active && !page.friendProfile) {
+                    dispatch(setPage({
+                      target: 'friendProfile',
+                    }));
+                  }
+                }}
+              >
+                <img src={chatRoom.data.profile.avatar} alt="" className="w-10 h-10 rounded-full" />
+                <span className="">
+                  <p className="font-bold">{chatRoom.data.profile.fullname}</p>
+                  <p className="text-sm opacity-60">{subhead}</p>
+                </span>
+              </div>
+            </div>
+            <div className="pr-2 flex items-center">
+              <button
+                type="button"
+                className="p-2 rounded-full hover:bg-spill-100 dark:hover:bg-spill-800"
+              >
+                <i><bi.BiDotsVerticalRounded /></i>
+              </button>
+            </div>
+          </>
+        )
+      }
+      {
+        selectedChats.length > 0 && (
+          <>
+            <div className="pl-2 flex gap-4 items-center">
+              <button
+                type="button"
+                className="p-2 rounded-full hover:bg-spill-100 dark:hover:bg-spill-800"
+                onClick={() => dispatch(setSelectedChats([]))}
+              >
+                <i><bi.BiArrowBack /></i>
+              </button>
+              <p className="font-bold">{selectedChats.length}</p>
+            </div>
+            <div className="pr-2 flex items-center">
+              {
+                [
+                  {
+                    target: 'delete',
+                    icon: <bi.BiTrash />,
+                    async action() {
+                      dispatch(setModal({ target: 'confirmDeleteChat' }));
+                    },
+                  },
+                ].map((elem) => (
+                  <button
+                    key={elem.target}
+                    type="button"
+                    className="p-2 rounded-full hover:bg-spill-100 dark:hover:bg-spill-800"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      elem.action();
+                    }}
+                  >
+                    <i>{elem.icon}</i>
+                  </button>
+                ))
+              }
+            </div>
+          </>
+        )
+      }
+    </nav>
   );
 }
 

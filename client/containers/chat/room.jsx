@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import * as md from 'react-icons/md';
+
+import { setModal } from '../../redux/features/modal';
+import { setSelectedChats } from '../../redux/features/chore';
+import socket from '../../helpers/socket';
+
 import * as pChat from '../../components/chat/room/private';
 import * as gChat from '../../components/chat/room/group';
-
-import socket from '../../helpers/socket';
-// pages
 import FriendProfile from '../../pages/friendProfile';
 import GroupProfile from '../../pages/groupProfile';
 
 function Room() {
+  const dispatch = useDispatch();
   const { room: { chat: chatRoom }, page } = useSelector((state) => state);
 
   const [loaded, setLoaded] = useState(false);
@@ -20,6 +23,7 @@ function Room() {
     try {
       setLoaded(false);
       setChats(null);
+      dispatch(setSelectedChats([]));
 
       // get chats if room is opened
       if (chatRoom.isOpen) {
@@ -67,12 +71,24 @@ function Room() {
   }, [chatRoom.isOpen, chatRoom.refreshId]);
 
   useEffect(() => {
-    socket.on('room/join', (args) => {
-      setPrevRoom(args);
+    socket.on('room/join', (args) => setPrevRoom(args));
+
+    socket.on('chat/delete', (chatsId) => {
+      dispatch(setSelectedChats([]));
+      // close confirmDeleteChat modal
+      dispatch(setModal({
+        target: 'confirmDeleteChat',
+        data: false,
+      }));
+
+      setTimeout(() => {
+        setChats((prev) => prev.filter(({ _id }) => !chatsId.includes(_id)));
+      }, 300);
     });
 
     return () => {
       socket.off('room/join');
+      socket.off('chat/delete');
     };
   }, []);
 

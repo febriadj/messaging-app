@@ -22,6 +22,10 @@ const ChatSchema = new Schema({
     type: Schema.Types.String, // -> target chat._id
     default: null,
   },
+  deletedBy: {
+    type: Schema.Types.Array, // -> userId
+    default: [],
+  },
 }, {
   timestamps: true,
   versionKey: false,

@@ -27,6 +27,7 @@ function Chat() {
       <modal.webcam />
       { imageCropper && <modal.imageCropper /> }
       <modal.avatarFull />
+      <modal.confirmDeleteChat />
 
       <cont.foreground />
       <cont.room />

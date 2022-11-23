@@ -14,6 +14,7 @@ const ModalSlice = createSlice({
     imageCropper: false, // -> { src: String, back: String | null }
     webcam: false, // -> { back: String }
     avatarFull: false, // -> avatar src {String}
+    confirmDeleteChat: false,
   },
   reducers: {
     setModal(state, action) {

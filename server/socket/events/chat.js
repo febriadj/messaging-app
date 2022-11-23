@@ -1,4 +1,5 @@
 const { io } = global;
+
 const InboxModel = require('../../db/models/inbox');
 const ChatModel = require('../../db/models/chat');
 const ProfileModel = require('../../db/models/profile');
@@ -80,5 +81,36 @@ module.exports = (socket) => {
         .to(roomId)
         .emit('chat/typing-ends', 'online');
     }, 3000);
+  });
+
+  // delete chats
+  socket.on('chat/delete', async ({
+    userId, chatsId, roomId, deleteForEveryone,
+  }) => {
+    try {
+      if (deleteForEveryone) {
+        await ChatModel.deleteMany({ roomId, _id: { $in: chatsId } });
+        io.to(roomId).emit('chat/delete', chatsId);
+      } else {
+        await ChatModel.updateMany(
+          { roomId, _id: { $in: chatsId } },
+          { $push: { deletedBy: userId } },
+        );
+
+        // delete permanently if this message has been
+        // deleted by all room participants
+        const { ownersId } = await InboxModel.findOne({ roomId }, { _id: 0, ownersId: 1 });
+        console.log(ownersId);
+        await ChatModel.deleteMany({
+          roomId,
+          $expr: { $gte: [{ $size: '$deletedBy' }, ownersId.length] },
+        });
+
+        socket.emit('chat/delete', chatsId);
+      }
+    }
+    catch (error0) {
+      console.error(error0.message);
+    }
   });
 };
