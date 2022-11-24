@@ -7,10 +7,10 @@ import { setModal } from '../../redux/features/modal';
 import { setSelectedChats } from '../../redux/features/chore';
 import socket from '../../helpers/socket';
 
-import * as pChat from '../../components/chat/room/private';
-import * as gChat from '../../components/chat/room/group';
+import * as comp from '../../components/chat/room';
 import FriendProfile from '../../pages/friendProfile';
 import GroupProfile from '../../pages/groupProfile';
+import { setPage } from '../../redux/features/page';
 
 function Room() {
   const dispatch = useDispatch();
@@ -57,6 +57,9 @@ function Room() {
         newRoom: chatRoom.data.roomId,
       });
     }
+
+    dispatch(setPage({ target: 'friendProfile', data: false }));
+    dispatch(setPage({ target: 'groupProfile', data: false }));
   };
 
   useEffect(() => {
@@ -101,25 +104,14 @@ function Room() {
       `}
     >
       {
-        chatRoom.data && chatRoom.data.roomType === 'private' && (
+        chatRoom.data && (
           <>
-            <div className={`${page.friendProfile && '-translate-x-full md:translate-x-0 xl:mr-[380px]'} transition-all w-full h-full grid grid-rows-[auto_1fr_auto] overflow-hidden`}>
-              <pChat.header />
-              <pChat.monitor loaded={loaded} chats={chats} setChats={setChats} />
-              <pChat.send setChats={setChats} />
+            <div className={`${(page.groupProfile || page.friendProfile) && '-translate-x-full md:translate-x-0 xl:mr-[380px]'} transition-all w-full h-full grid grid-rows-[auto_1fr_auto] overflow-hidden`}>
+              <comp.header />
+              <comp.monitor loaded={loaded} chats={chats} setChats={setChats} />
+              <comp.send setChats={setChats} />
             </div>
             <FriendProfile />
-          </>
-        )
-      }
-      {
-        chatRoom.data && chatRoom.data.roomType === 'group' && (
-          <>
-            <div className={`${page.groupProfile && '-translate-x-full md:translate-x-0 xl:mr-[380px]'} transition-all w-full h-full grid grid-rows-[auto_1fr_auto] overflow-hidden`}>
-              <gChat.header />
-              <gChat.monitor loaded={loaded} chats={chats} setChats={setChats} />
-              <gChat.send setChats={setChats} />
-            </div>
             <GroupProfile />
           </>
         )

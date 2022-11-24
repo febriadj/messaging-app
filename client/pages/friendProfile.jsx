@@ -7,13 +7,13 @@ import { setModal } from '../redux/features/modal';
 
 function FriendProfile() {
   const dispatch = useDispatch();
-  const { room: { chat: { data: { profile } } }, page } = useSelector((state) => state);
+  const { page: { friendProfile: profile } } = useSelector((state) => state);
 
   return (
     <div
       className={`
-        ${!page.friendProfile && 'translate-x-full'}
-        transition absolute w-full sm:w-[380px] h-full right-0 grid grid-rows-[auto_1fr] overflow-hidden
+        ${!profile && 'translate-x-full'}
+        transition absolute w-full sm:w-[380px] h-full right-0 z-10 grid grid-rows-[auto_1fr] overflow-hidden
         bg-white dark:bg-spill-900
       `}
     >

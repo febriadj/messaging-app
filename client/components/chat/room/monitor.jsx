@@ -4,8 +4,8 @@ import moment from 'moment';
 import * as ri from 'react-icons/ri';
 import * as bi from 'react-icons/bi';
 import Linkify from 'linkify-react';
-import socket from '../../../../helpers/socket';
-import { setSelectedChats } from '../../../../redux/features/chore';
+import socket from '../../../helpers/socket';
+import { setSelectedChats } from '../../../redux/features/chore';
 
 function Monitor({ loaded, chats, setChats }) {
   const dispatch = useDispatch();
@@ -15,8 +15,10 @@ function Monitor({ loaded, chats, setChats }) {
     user: { master },
   } = useSelector((state) => state);
 
+  const isGroup = chatRoom.data.roomType === 'group';
   const longclickval = useRef(0);
 
+  const handleLongClickMove = () => clearInterval(longclickval.current);
   const handleLongClickEnd = () => clearInterval(longclickval.current);
   const handleLongClickStart = (chatId) => {
     let i = 1;
@@ -109,7 +111,8 @@ function Monitor({ loaded, chats, setChats }) {
                       `}
                       aria-hidden
                       onTouchStart={() => handleLongClickStart(elem._id)}
-                      onTouchEnd={() => handleLongClickEnd(elem._id)}
+                      onTouchEnd={() => handleLongClickEnd()}
+                      onTouchMove={() => handleLongClickMove()}
                       onClick={(e) => {
                         e.stopPropagation();
 
@@ -131,6 +134,13 @@ function Monitor({ loaded, chats, setChats }) {
                       }
                       {/* chat body message */}
                       <div className="px-1">
+                        {/* profile avatar in group chat */}
+                        { isGroup && (
+                          <span className="truncate grid grid-cols-[auto_1fr] gap-2 items-start cursor-pointer">
+                            <img src={elem.profile.avatar} alt="" className="w-5 h-5 rounded-full" />
+                            <p className="font-bold truncate text-sky-800 dark:text-sky-200">{elem.profile.fullname}</p>
+                          </span>
+                        ) }
                         <p
                           className="break-all"
                           aria-hidden
@@ -163,7 +173,7 @@ function Monitor({ loaded, chats, setChats }) {
             ))
         }
         {
-          chats && !chatRoom.data.profile.active && (
+          (chats && !isGroup) && !chatRoom.data.profile.active && (
             <div className="py-2 px-6 flex justify-center border-0 border-y border-solid border-rose-400 dark:border-rose-200/60 bg-rose-400/10 dark:bg-rose-200/20">
               <div className="w-[560px]">
                 <p className="text-rose-900 dark:text-rose-100">This account has been deleted by the owner, you no longer have access to send messages to this account.</p>

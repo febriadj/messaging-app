@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import * as bi from 'react-icons/bi';
-import { setChatRoom } from '../../../../redux/features/room';
-import { setPage } from '../../../../redux/features/page';
-import { setSelectedChats } from '../../../../redux/features/chore';
-import { setModal } from '../../../../redux/features/modal';
-import socket from '../../../../helpers/socket';
+import axios from 'axios';
+import { setChatRoom } from '../../../redux/features/room';
+import { setPage } from '../../../redux/features/page';
+import { setSelectedChats } from '../../../redux/features/chore';
+import { setModal } from '../../../redux/features/modal';
+import socket from '../../../helpers/socket';
 
 function Header() {
   const dispatch = useDispatch();
@@ -16,23 +17,51 @@ function Header() {
     page,
   } = useSelector((state) => state);
 
+  const isGroup = chatRoom.data.roomType === 'group';
   const [subhead, setSubhead] = useState('');
+  const [statusTimeout, setStatusTimeout] = useState(null);
 
-  const handleSubhead = () => {
-    setSubhead('tap here for contact info');
+  const handleGetParticipantsName = async (signal) => {
+    try {
+      const { data } = await axios.get('/groups/participants/name', {
+        params: {
+          roomId: chatRoom.data.roomId,
+        },
+        signal,
+      });
 
-    setTimeout(() => {
-      const lastSeen = moment(chatRoom.data.profile.updatedAt).fromNow();
-      setSubhead(
-        chatRoom.data.profile.online
-          ? 'online'
-          : `last seen ${lastSeen}`,
-      );
-    }, 3000);
+      setSubhead(data.payload.join(', '));
+    }
+    catch (error0) {
+      console.error(error0.message);
+    }
+  };
+
+  const handleSubhead = (signal) => {
+    setSubhead(isGroup ? 'click here for group info' : 'click here for contact info');
+    clearTimeout(statusTimeout);
+
+    setStatusTimeout(setTimeout(() => {
+      if (isGroup) {
+        handleGetParticipantsName(signal);
+      } else {
+        const lastSeen = moment(chatRoom.data.profile.updatedAt).fromNow();
+        setSubhead(
+          chatRoom.data.profile.online
+            ? 'online'
+            : `last seen ${lastSeen}`,
+        );
+      }
+    }, 3000));
   };
 
   useEffect(() => {
-    handleSubhead();
+    const abortCtrl = new AbortController();
+    handleSubhead(abortCtrl.signal);
+
+    return () => {
+      abortCtrl.abort();
+    };
   }, [chatRoom.isOpen, chatRoom.refreshId]);
 
   const setOnlineStatus = (args) => {
@@ -50,29 +79,31 @@ function Header() {
   };
 
   useEffect(() => {
-    // user online
-    socket.on('user/connect', (userId) => {
-      if (userId === chatRoom.data.profile.userId) {
-        setSubhead('online');
-        setOnlineStatus({ online: true });
-      }
-    });
+    if (!isGroup) {
+      // user online
+      socket.on('user/connect', (userId) => {
+        if (userId === chatRoom.data.profile.userId) {
+          setSubhead('online');
+          setOnlineStatus({ online: true });
+        }
+      });
 
-    // user offline
-    socket.on('user/disconnect', (userId) => {
-      if (userId === chatRoom.data.profile.userId) {
-        const updatedAt = new Date().toISOString();
+      // user offline
+      socket.on('user/disconnect', (userId) => {
+        if (userId === chatRoom.data.profile.userId) {
+          const updatedAt = new Date().toISOString();
 
-        setSubhead(`last seen ${moment(updatedAt).fromNow()}`);
-        setOnlineStatus({
-          online: false,
-          updatedAt,
-        });
-      }
-    });
+          setSubhead(`last seen ${moment(updatedAt).fromNow()}`);
+          setOnlineStatus({
+            online: false,
+            updatedAt,
+          });
+        }
+      });
 
-    socket.on('chat/typing', (message) => setSubhead(message));
-    socket.on('chat/typing-ends', (message) => setSubhead(message));
+      socket.on('chat/typing', (message) => setSubhead(message));
+      socket.on('chat/typing-ends', (message) => setSubhead(message));
+    }
 
     return () => {
       socket.off('user/connect');
@@ -103,17 +134,26 @@ function Header() {
                 className="flex gap-4 items-center cursor-pointer"
                 aria-hidden
                 onClick={() => {
-                  if (chatRoom.data.profile.active && !page.friendProfile) {
+                  if (!isGroup && chatRoom.data.profile.active && !page.friendProfile) {
                     dispatch(setPage({
                       target: 'friendProfile',
+                      data: chatRoom.data.profile.userId,
+                    }));
+                    return;
+                  }
+
+                  if (isGroup && !page.groupProfile) {
+                    dispatch(setPage({
+                      target: 'groupProfile',
+                      data: chatRoom.data.group._id,
                     }));
                   }
                 }}
               >
-                <img src={chatRoom.data.profile.avatar} alt="" className="w-10 h-10 rounded-full" />
-                <span className="">
-                  <p className="font-bold">{chatRoom.data.profile.fullname}</p>
-                  <p className="text-sm opacity-60">{subhead}</p>
+                <img src={isGroup ? chatRoom.data.group.avatar : chatRoom.data.profile.avatar} alt="" className="w-10 h-10 rounded-full" />
+                <span className="truncate">
+                  <p className="font-bold truncate">{isGroup ? chatRoom.data.group.name : chatRoom.data.profile.fullname}</p>
+                  <p className="text-sm opacity-60 truncate">{subhead}</p>
                 </span>
               </div>
             </div>

@@ -13,7 +13,7 @@ function GroupProfile() {
     page,
   } = useSelector((state) => state);
 
-  const [peoples, setPeoples] = useState(null);
+  const [participants, setParticipants] = useState(null);
 
   const handleGetParticipants = async (signal) => {
     try {
@@ -25,10 +25,10 @@ function GroupProfile() {
           signal,
         });
 
-        setPeoples(data.payload);
+        setParticipants(data.payload);
       } else {
         setTimeout(() => {
-          setPeoples(null);
+          setParticipants(null);
         }, 150);
       }
     }
@@ -108,16 +108,16 @@ function GroupProfile() {
             </div>
             <div>
               <div className="mt-6 px-4 flex gap-4 justify-between">
-                <p className="opacity-60">{`${peoples?.length} participants`}</p>
+                <p className="opacity-60">{`${participants?.length} participants`}</p>
                 <i><bi.BiSearchAlt /></i>
               </div>
               <div className="grid">
                 {
-                  peoples && peoples.map((elem) => (
+                  participants && participants.map((elem) => (
                     <div
                       key={elem._id}
                       className={`
-                        p-4 grid grid-cols-[auto_1fr] gap-4 items-center cursor-default
+                        p-4 grid grid-cols-[auto_1fr] gap-4 items-center cursor-pointer
                         border-0 border-b border-solid border-spill-200 dark:border-spill-800
                         hover:bg-spill-100/60 dark:hover:bg-spill-800/60
                       `}

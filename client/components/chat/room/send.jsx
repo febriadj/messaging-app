@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import * as bi from 'react-icons/bi';
-import socket from '../../../../helpers/socket';
-import EmojiBoard from '../emojiBoard';
+import socket from '../../../helpers/socket';
+import EmojiBoard from './emojiBoard';
 
 function Send({ setChats }) {
   const { user: { master }, room: { chat: chatRoom } } = useSelector((state) => state);
+
+  const isGroup = chatRoom.data.roomType === 'group';
 
   const [emojiBoard, setEmojiBoard] = useState(false);
   const [form, setForm] = useState({
@@ -18,23 +20,31 @@ function Send({ setChats }) {
       ...prev,
       [e.target.name]: e.target.value,
     }));
+
+    // set typing status
+    socket.emit('chat/typing', {
+      roomId: chatRoom.data.roomId,
+      userId: master._id,
+    });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (form.text.length > 0 || form.file) {
-      socket.emit('chat/insert', {
-        ...form,
-        ownersId: chatRoom.data.ownersId,
-        userId: master._id,
-        roomId: chatRoom.data.roomId,
-      });
+      if (isGroup || (!isGroup && chatRoom.data.profile.active)) {
+        socket.emit('chat/insert', {
+          ...form,
+          ownersId: chatRoom.data.ownersId,
+          userId: master._id,
+          roomId: chatRoom.data.roomId,
+        });
+      } else return;
 
-      // reset form
-      setForm({ text: '', file: null });
       // close emoji board after 150ms
       setTimeout(() => setEmojiBoard(false), 150);
+      // reset form
+      setForm({ text: '', file: null });
     }
   };
 
