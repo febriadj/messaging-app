@@ -24,6 +24,7 @@
         "react/self-closing-comp": "off",
         "react/prop-types": "off",
         "import/no-unresolved": "off",
-        "import/extensions": "off"
+        "import/extensions": "off",
+        "import/prefer-default-export": "off"
     }
 }
