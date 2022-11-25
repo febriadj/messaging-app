@@ -8,48 +8,46 @@ import { setModal } from '../redux/features/modal';
 function GroupProfile() {
   const dispatch = useDispatch();
   const {
+    page: { groupProfile }, // -> group _id
     user: { master },
-    room: { chat: { data: { group } } },
-    page,
   } = useSelector((state) => state);
 
   const [participants, setParticipants] = useState(null);
+  const [group, setGroup] = useState(null);
 
-  const handleGetParticipants = async (signal) => {
-    try {
-      if (page.groupProfile) {
-        const { data } = await axios.get('/groups/participants', {
-          params: {
-            roomId: group.roomId,
-          },
-          signal,
+  const handleGetGroup = (signal) => {
+    if (groupProfile) {
+      axios.all([
+        axios.get(`/groups/${groupProfile}`, { signal }),
+        axios.get(`/groups/${groupProfile}/participants`, { signal }),
+      ])
+        .then(axios.spread(({ data: data1 }, { data: data2 }) => {
+          setGroup(data1.payload);
+          setParticipants(data2.payload);
+        }))
+        .catch((error0) => {
+          console.error(error0);
         });
-
-        setParticipants(data.payload);
-      } else {
-        setTimeout(() => {
-          setParticipants(null);
-        }, 150);
-      }
-    }
-    catch (error0) {
-      console.error(error0);
+    } else {
+      setTimeout(() => setGroup(null), 150);
     }
   };
 
   useEffect(() => {
     const abortCtrl = new AbortController();
-    handleGetParticipants(abortCtrl.signal);
+    const { signal } = abortCtrl;
+
+    handleGetGroup(signal);
 
     return () => {
       abortCtrl.abort();
     };
-  }, [group, page.groupProfile]);
+  }, [groupProfile]);
 
   return (
     <div
       className={`
-        ${!page.groupProfile && 'translate-x-full'}
+        ${!groupProfile && 'translate-x-full'}
         transition absolute w-full sm:w-[380px] h-full right-0 grid grid-rows-[auto_1fr] overflow-hidden
         bg-white dark:bg-spill-900
       `}

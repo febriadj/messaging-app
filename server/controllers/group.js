@@ -3,12 +3,28 @@ const ProfileModel = require('../db/models/profile');
 
 const response = require('../helpers/response');
 
+exports.findById = async (req, res) => {
+  try {
+    const group = await GroupModel.findOne({ _id: req.params.groupId });
+    response({
+      res,
+      payload: group,
+    });
+  }
+  catch (error0) {
+    response({
+      res,
+      statusCode: error0.statusCode || 500,
+      success: false,
+      message: error0.message,
+    });
+  }
+};
+
 exports.participantsName = async (req, res) => {
   try {
-    const { roomId } = req.query;
-
-    // find group by roomId
-    const group = await GroupModel.findOne({ roomId });
+    // find group by groupId
+    const group = await GroupModel.findOne({ _id: req.params.groupId });
     // find participants
     const participants = await ProfileModel.find({
       userId: { $in: group.participantsId },
@@ -38,10 +54,8 @@ exports.participantsName = async (req, res) => {
 
 exports.participants = async (req, res) => {
   try {
-    const { roomId } = req.query;
-
-    // find group by roomId
-    const group = await GroupModel.findOne({ roomId });
+    // find group by groupId
+    const group = await GroupModel.findOne({ _id: req.params.groupId });
     // find participants
     const participants = await ProfileModel.find({
       userId: { $in: group.participantsId },

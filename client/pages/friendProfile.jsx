@@ -1,18 +1,50 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
+import axios from 'axios';
 import * as bi from 'react-icons/bi';
 import { setPage } from '../redux/features/page';
 import { setModal } from '../redux/features/modal';
 
 function FriendProfile() {
   const dispatch = useDispatch();
-  const { page: { friendProfile: profile } } = useSelector((state) => state);
+  const { page: { friendProfile } } = useSelector((state) => state);
+
+  const [profile, setProfile] = useState(null);
+
+  const handleGetProfile = async (signal) => {
+    try {
+      // get profile if profile page is opened
+      if (friendProfile) {
+        const { data } = await axios.get('/profiles', {
+          params: { userId: friendProfile },
+          signal,
+        });
+
+        setProfile(data.payload);
+      } else {
+        // reset when profile page is closed after 150ms
+        setTimeout(() => setProfile(null), 150);
+      }
+    }
+    catch (error0) {
+      console.error(error0.message);
+    }
+  };
+
+  useEffect(() => {
+    const abortCtrl = new AbortController();
+    handleGetProfile(abortCtrl.signal);
+
+    return () => {
+      abortCtrl.abort();
+    };
+  }, [friendProfile]);
 
   return (
     <div
       className={`
-        ${!profile && 'translate-x-full'}
+        ${!friendProfile && 'translate-x-full'}
         transition absolute w-full sm:w-[380px] h-full right-0 z-10 grid grid-rows-[auto_1fr] overflow-hidden
         bg-white dark:bg-spill-900
       `}

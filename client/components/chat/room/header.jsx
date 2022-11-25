@@ -23,13 +23,7 @@ function Header() {
 
   const handleGetParticipantsName = async (signal) => {
     try {
-      const { data } = await axios.get('/groups/participants/name', {
-        params: {
-          roomId: chatRoom.data.roomId,
-        },
-        signal,
-      });
-
+      const { data } = await axios.get(`/groups/${chatRoom.data.group._id}/participants/name`, { signal });
       setSubhead(data.payload.join(', '));
     }
     catch (error0) {
