@@ -87,7 +87,7 @@ function Inbox() {
                       ...elem,
                       profile: !profile
                         ? {
-                          avatar: 'default-avatar.png',
+                          avatar: 'assets/images/default-avatar.png',
                           fullname: '[inactive]',
                           updatedAt: new Date().toISOString(),
                           active: false,
@@ -111,7 +111,7 @@ function Inbox() {
             <img
               src={
                 elem.roomType === 'private'
-                  ? elem.owners.find((x) => x.userId !== master._id)?.avatar
+                  ? elem.owners.find((x) => x.userId !== master._id)?.avatar || 'assets/images/default-avatar.png'
                   : 'assets/images/default-group-avatar.png'
               }
               alt=""
