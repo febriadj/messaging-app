@@ -6,6 +6,7 @@ import * as bi from 'react-icons/bi';
 import Linkify from 'linkify-react';
 import socket from '../../../helpers/socket';
 import { setSelectedChats } from '../../../redux/features/chore';
+import { setPage } from '../../../redux/features/page';
 
 function Monitor({ loaded, chats, setChats }) {
   const dispatch = useDispatch();
@@ -13,6 +14,7 @@ function Monitor({ loaded, chats, setChats }) {
     chore: { selectedChats },
     room: { chat: chatRoom },
     user: { master },
+    page,
   } = useSelector((state) => state);
 
   const isGroup = chatRoom.data.roomType === 'group';
@@ -136,7 +138,21 @@ function Monitor({ loaded, chats, setChats }) {
                       <div className="px-1">
                         {/* profile avatar in group chat */}
                         { isGroup && (
-                          <span className="truncate grid grid-cols-[auto_1fr] gap-2 items-start cursor-pointer">
+                          <span
+                            className="truncate grid grid-cols-[auto_1fr] gap-2 items-start cursor-pointer"
+                            aria-hidden
+                            onClick={() => {
+                              if (
+                                master._id !== elem.userId
+                                && page.friendProfile !== elem.userId
+                              ) {
+                                dispatch(setPage({
+                                  target: 'friendProfile',
+                                  data: elem.userId,
+                                }));
+                              }
+                            }}
+                          >
                             <img src={elem.profile.avatar} alt="" className="w-5 h-5 rounded-full" />
                             <p className="font-bold truncate text-sky-800 dark:text-sky-200">{elem.profile.fullname}</p>
                           </span>

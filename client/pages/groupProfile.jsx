@@ -119,6 +119,15 @@ function GroupProfile() {
                         border-0 border-b border-solid border-spill-200 dark:border-spill-800
                         hover:bg-spill-100/60 dark:hover:bg-spill-800/60
                       `}
+                      aria-hidden
+                      onClick={() => {
+                        if (master._id !== elem.userId) {
+                          dispatch(setPage({
+                            target: 'friendProfile',
+                            data: elem.userId,
+                          }));
+                        }
+                      }}
                     >
                       <img src={elem.avatar} alt="" className="w-14 h-14 rounded-full" />
                       <span className="truncate">
