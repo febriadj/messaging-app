@@ -26,13 +26,11 @@ exports.participantsName = async (req, res) => {
     // find group by groupId
     const group = await GroupModel.findOne({ _id: req.params.groupId });
     // find participants
-    const participants = await ProfileModel.find({
-      userId: { $in: group.participantsId },
-    }, {
-      _id: 0,
-      fullname: 1,
-    }).sort({
-      fullname: 1,
+    const participants = await ProfileModel.find(
+      { userId: { $in: group.participantsId } },
+      { _id: 0, fullname: 1 },
+    ).sort({
+      updatedAt: -1,
     });
 
     const names = participants.map(({ fullname }) => fullname);
@@ -60,7 +58,7 @@ exports.participants = async (req, res) => {
     const participants = await ProfileModel.find({
       userId: { $in: group.participantsId },
     }).sort({
-      fullname: 1,
+      updatedAt: -1,
     });
 
     response({
