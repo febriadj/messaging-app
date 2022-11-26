@@ -28,7 +28,11 @@ module.exports = (socket) => {
           $set: {
             ownersId: args.ownersId,
             roomId: args.roomId,
-            content: { from: args.userId, text: chat.text, time: chat.createdAt },
+            content: {
+              from: args.userId,
+              text: args.roomType === 'group' ? `${profile.fullname}: ${chat.text}` : chat.text,
+              time: chat.createdAt,
+            },
           },
         },
         { new: true, upsert: true },

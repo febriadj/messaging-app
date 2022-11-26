@@ -36,6 +36,7 @@ function Send({ setChats }) {
         socket.emit('chat/insert', {
           ...form,
           ownersId: chatRoom.data.ownersId,
+          roomType: chatRoom.data.roomType,
           userId: master._id,
           roomId: chatRoom.data.roomId,
         });
