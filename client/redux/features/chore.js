@@ -7,6 +7,7 @@ const ChoreSlice = createSlice({
     selectedChats: [],
   },
   reducers: {
+    /* eslint-disable no-param-reassign */
     setSelectedParticipants(state, action) {
       state.selectedParticipants = action.payload ?? [];
     },
@@ -22,6 +23,7 @@ const ChoreSlice = createSlice({
         state.selectedChats = [];
       }
     },
+    /* eslint-enable no-param-reassign */
   },
 });
 

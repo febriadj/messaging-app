@@ -11,10 +11,12 @@ const PageSlice = createSlice({
     groupProfile: false,
   },
   reducers: {
+    /* eslint-disable no-param-reassign */
     setPage(state, action) {
       const { target = null, data = null } = action.payload;
       state[target] = data ?? !state[target];
     },
+    /* eslint-enable no-param-reassign */
   },
 });
 

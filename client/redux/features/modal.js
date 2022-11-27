@@ -17,6 +17,7 @@ const ModalSlice = createSlice({
     confirmDeleteChat: false,
   },
   reducers: {
+    /* eslint-disable no-param-reassign */
     setModal(state, action) {
       const { target = '*', data = null } = action.payload;
 
@@ -30,6 +31,7 @@ const ModalSlice = createSlice({
         });
       }
     },
+    /* eslint-enable no-param-reassign */
   },
 });
 

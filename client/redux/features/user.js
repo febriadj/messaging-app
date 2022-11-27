@@ -7,12 +7,14 @@ const UserSlice = createSlice({
     avatar: null,
   },
   reducers: {
+    /* eslint-disable no-param-reassign */
     setMaster(state, action) {
       state.master = action.payload;
     },
     setAvatar(state, action) {
       state.avatar = action.payload;
     },
+    /* eslint-enable no-param-reassign */
   },
 });
 

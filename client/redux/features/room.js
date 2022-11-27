@@ -10,6 +10,7 @@ const RoomSlice = createSlice({
     },
   },
   reducers: {
+    /* eslint-disable no-param-reassign */
     setChatRoom(state, action) {
       const { isOpen, refreshId, data } = action.payload;
 
@@ -17,6 +18,7 @@ const RoomSlice = createSlice({
       state.chat.refreshId = refreshId;
       state.chat.data = data;
     },
+    /* eslint-enable no-param-reassign */
   },
 });
 
