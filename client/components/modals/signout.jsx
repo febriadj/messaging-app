@@ -11,7 +11,7 @@ function Logout() {
       className={`
         ${modal.signout ? 'delay-75 z-50' : '-z-50 opacity-0 delay-300'}
         absolute w-full h-full flex justify-center items-center
-        bg-spill-600/40 dark:bg-black/40
+        bg-spill-600/40 dark:bg-black/60
       `}
     >
       <div
