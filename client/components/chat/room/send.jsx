@@ -4,7 +4,8 @@ import * as bi from 'react-icons/bi';
 import socket from '../../../helpers/socket';
 import EmojiBoard from './emojiBoard';
 import { setModal } from '../../../redux/features/modal';
-import base64Encode from '../../../helpers/base64Encode';
+
+import AttachMenu from '../../modals/attachMenu';
 
 function Send({ setChats }) {
   const dispatch = useDispatch();
@@ -80,6 +81,7 @@ function Send({ setChats }) {
 
   return (
     <div className="bg-white dark:bg-spill-900">
+      <AttachMenu />
       <div className="px-2 h-16 grid grid-cols-[auto_1fr_auto] gap-2 items-center">
         <span className="flex">
           <button
@@ -91,30 +93,16 @@ function Send({ setChats }) {
           >
             <i>{emojiBoard ? <bi.BiX /> : <bi.BiSmile />}</i>
           </button>
-          <label htmlFor="send-photo" className="p-2 cursor-pointer rounded-full hover:bg-spill-100 dark:hover:bg-spill-800">
-            <i><bi.BiImageAlt /></i>
-            <input
-              type="file"
-              accept="image/png, image/jpg, image/jpeg, image/webp"
-              name="sendPhoto"
-              id="send-photo"
-              className="hidden"
-              onChange={async (e) => {
-                if (e.target.files) {
-                  const base64 = await base64Encode(e.target.files[0]);
-
-                  dispatch(setModal({
-                    target: 'sendFile',
-                    data: {
-                      type: 'image',
-                      originalname: e.target.files[0].name,
-                      url: base64,
-                    },
-                  }));
-                }
-              }}
-            />
-          </label>
+          <button
+            type="button"
+            className="p-2 rounded-full -rotate-90 hover:bg-spill-100 dark:hover:bg-spill-800"
+            onClick={(e) => {
+              e.stopPropagation();
+              dispatch(setModal({ target: 'attachMenu' }));
+            }}
+          >
+            <i><bi.BiPaperclip /></i>
+          </button>
         </span>
         <input
           type="text"

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as bi from 'react-icons/bi';
 import { setModal } from '../../redux/features/modal';
 import socket from '../../helpers/socket';
+import bytesToSize from '../../helpers/bytesToSize';
 
 function SendFile() {
   const dispatch = useDispatch();
@@ -55,7 +56,7 @@ function SendFile() {
       >
         {/* header */}
         <div className="h-14 pl-4 pr-2 flex gap-4 justify-between items-center">
-          <h1 className="text-lg font-bold">Send Photo</h1>
+          <h1 className="text-lg font-bold">{`Send ${sendFile.type === 'image' ? 'Photo' : 'File'}`}</h1>
           <button
             type="button"
             className="p-2 rounded-full hover:bg-spill-100 dark:hover:bg-spill-700"
@@ -70,9 +71,20 @@ function SendFile() {
           </button>
         </div>
         {
-          sendFile && (
+          sendFile && sendFile.type === 'image' && (
             <div className="p-2 flex justify-center items-center bg-spill-100 dark:bg-spill-950">
               <img src={sendFile.url} alt="" className="max-h-80" />
+            </div>
+          )
+        }
+        {
+          sendFile && sendFile.type === 'all' && (
+            <div className="py-2 px-4 flex gap-4 items-center">
+              <i><bi.BiFile size={40} /></i>
+              <span className="truncate">
+                <p className="font-bold truncate">{sendFile.originalname}</p>
+                <p className="text-sm opacity-60 mt-0.5">{bytesToSize(sendFile.size)}</p>
+              </span>
             </div>
           )
         }

@@ -141,7 +141,9 @@ function Inbox() {
                   ) }
                   <span className="truncate flex gap-1 items-center">
                     { elem.roomType === 'group' && <p className="mr-1">{`${elem.content.senderName}:`}</p> }
+
                     { elem.file && elem.file.type === 'image' && <img src={elem.file.url} alt="" className="h-5" /> }
+                    { elem.file && elem.file.type !== 'image' && <i><ri.RiFileTextFill size={20} /></i> }
 
                     <p className="truncate">{elem.content.text}</p>
                   </span>

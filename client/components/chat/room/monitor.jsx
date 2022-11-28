@@ -137,7 +137,27 @@ function Monitor({ loaded, chats, setChats }) {
                       {
                         elem.file && (
                           <div className="mb-2">
-                            <img src={elem.file.url} alt="" className="w-full rounded-lg" />
+                            { elem.file.type === 'image' && <img src={elem.file.url} alt="" className="w-full rounded-lg" /> }
+                            { elem.file.type !== 'image' && (
+                              <span
+                                className={`
+                                  ${elem.userId === master._id ? 'bg-sky-100' : 'bg-spill-100'}
+                                  p-2 grid grid-cols-[auto_1fr_auto] gap-2 rounded-lg dark:bg-black/20
+                                `}
+                              >
+                                <i className="translate-y-0.5"><ri.RiFileTextFill size={20} /></i>
+                                <p className="break-all">{elem.file.originalname}</p>
+                                <a
+                                  href={elem.file.url}
+                                  download={elem.file.originalname}
+                                  className="block ml-2 translate-y-0.5"
+                                >
+                                  <i className="text-black dark:text-white hover:text-sky-600 dark:hover:text-sky-400">
+                                    <bi.BiDownload size={20} />
+                                  </i>
+                                </a>
+                              </span>
+                            ) }
                           </div>
                         )
                       }

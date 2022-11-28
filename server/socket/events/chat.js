@@ -127,9 +127,14 @@ module.exports = (socket) => {
         );
 
         const filesId = chats.filter((elem) => !!elem.fileId).map((elem) => elem.fileId);
-        await FileModel.deleteMany({ roomId, fileId: filesId });
 
-        await cloud.api.delete_resources(filesId);
+        if (filesId.length > 0) {
+          await FileModel.deleteMany({ roomId, fileId: filesId });
+
+          await cloud.api.delete_resources(filesId, { resource_type: 'image' });
+          await cloud.api.delete_resources(filesId, { resource_type: 'video' });
+          await cloud.api.delete_resources(filesId, { resource_type: 'raw' });
+        }
       };
 
       if (deleteForEveryone) {
