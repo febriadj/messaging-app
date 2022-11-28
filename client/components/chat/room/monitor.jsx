@@ -134,6 +134,13 @@ function Monitor({ loaded, chats, setChats }) {
                           </div>
                         )
                       }
+                      {
+                        elem.file && (
+                          <div className="mb-2">
+                            <img src={elem.file.url} alt="" className="w-full rounded-lg" />
+                          </div>
+                        )
+                      }
                       {/* chat body message */}
                       <div className="px-1">
                         {/* profile avatar in group chat */}

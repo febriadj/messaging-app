@@ -139,7 +139,12 @@ function Inbox() {
                       }
                     </i>
                   ) }
-                  <p className="truncate">{elem.content.text}</p>
+                  <span className="truncate flex gap-1 items-center">
+                    { elem.roomType === 'group' && <p className="mr-1">{`${elem.content.senderName}:`}</p> }
+                    { elem.file && elem.file.type === 'image' && <img src={elem.file.url} alt="" className="h-5" /> }
+
+                    <p className="truncate">{elem.content.text}</p>
+                  </span>
                 </span>
                 {
                   ((elem.content.from !== master._id) && elem.unreadMessage > 0) && (

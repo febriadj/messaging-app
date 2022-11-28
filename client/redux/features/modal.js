@@ -15,6 +15,7 @@ const ModalSlice = createSlice({
     webcam: false, // -> { back: String }
     avatarFull: false, // -> avatar src {String}
     confirmDeleteChat: false,
+    sendFile: false,
   },
   reducers: {
     /* eslint-disable no-param-reassign */

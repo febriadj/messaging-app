@@ -18,6 +18,20 @@ exports.find = async (query) => {
       },
     },
     {
+      $lookup: {
+        from: 'files',
+        localField: 'fileId',
+        foreignField: 'fileId',
+        as: 'file',
+      },
+    },
+    {
+      $unwind: {
+        path: '$file',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
       $project: {
         'profile.username': 0,
         'profile.email': 0,

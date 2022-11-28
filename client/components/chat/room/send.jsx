@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as bi from 'react-icons/bi';
 import socket from '../../../helpers/socket';
 import EmojiBoard from './emojiBoard';
+import { setModal } from '../../../redux/features/modal';
+import base64Encode from '../../../helpers/base64Encode';
 
 function Send({ setChats }) {
+  const dispatch = useDispatch();
   const { user: { master }, room: { chat: chatRoom } } = useSelector((state) => state);
 
   const isGroup = chatRoom.data.roomType === 'group';
@@ -79,23 +82,39 @@ function Send({ setChats }) {
     <div className="bg-white dark:bg-spill-900">
       <div className="px-2 h-16 grid grid-cols-[auto_1fr_auto] gap-2 items-center">
         <span className="flex">
-          {
-            [
-              emojiBoard ? { target: 'x', icon: <bi.BiX /> } : { target: 'emojiBoard', icon: <bi.BiSmile /> },
-              { target: 'file', icon: <bi.BiImageAlt /> },
-            ].map((elem) => (
-              <button
-                type="button"
-                key={elem.target}
-                className="p-2 rounded-full hover:bg-spill-100 dark:hover:bg-spill-800"
-                onClick={() => {
-                  setEmojiBoard((prev) => !prev);
-                }}
-              >
-                <i>{elem.icon}</i>
-              </button>
-            ))
-          }
+          <button
+            type="button"
+            className="p-2 rounded-full hover:bg-spill-100 dark:hover:bg-spill-800"
+            onClick={() => {
+              setEmojiBoard((prev) => !prev);
+            }}
+          >
+            <i>{emojiBoard ? <bi.BiX /> : <bi.BiSmile />}</i>
+          </button>
+          <label htmlFor="send-photo" className="p-2 cursor-pointer rounded-full hover:bg-spill-100 dark:hover:bg-spill-800">
+            <i><bi.BiImageAlt /></i>
+            <input
+              type="file"
+              accept="image/png, image/jpg, image/jpeg, image/webp"
+              name="sendPhoto"
+              id="send-photo"
+              className="hidden"
+              onChange={async (e) => {
+                if (e.target.files) {
+                  const base64 = await base64Encode(e.target.files[0]);
+
+                  dispatch(setModal({
+                    target: 'sendFile',
+                    data: {
+                      type: 'image',
+                      originalname: e.target.files[0].name,
+                      url: base64,
+                    },
+                  }));
+                }
+              }}
+            />
+          </label>
         </span>
         <input
           type="text"

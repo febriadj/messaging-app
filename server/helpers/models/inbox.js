@@ -25,6 +25,20 @@ exports.find = async (query) => {
         preserveNullAndEmptyArrays: true,
       },
     },
+    {
+      $lookup: {
+        from: 'files',
+        localField: 'fileId',
+        foreignField: 'fileId',
+        as: 'file',
+      },
+    },
+    {
+      $unwind: {
+        path: '$file',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
   ]).sort({ 'content.time': -1 });
 
   return inboxs;

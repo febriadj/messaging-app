@@ -1,24 +1,49 @@
 const { io } = global;
+const cloud = require('cloudinary').v2;
 
 const InboxModel = require('../../db/models/inbox');
 const ChatModel = require('../../db/models/chat');
+const FileModel = require('../../db/models/file');
 const ProfileModel = require('../../db/models/profile');
 
 const Inbox = require('../../helpers/models/inbox');
 const Chat = require('../../helpers/models/chats');
+const uniqueId = require('../../helpers/uniqueId');
 
 module.exports = (socket) => {
   // event when user sends message
   socket.on('chat/insert', async (args) => {
     try {
-      const chat = await new ChatModel(args).save();
-      const profile = await ProfileModel.findOne({
-        userId: args.userId,
-      }, {
-        userId: 1,
-        avatar: 1,
-        fullname: 1,
-      });
+      let fileId = null;
+      let file;
+
+      if (args.file) {
+        const arrOriname = args.file.originalname.split('.');
+        const format = arrOriname.length === 1 ? 'txt' : arrOriname.reverse()[0];
+
+        const upload = await cloud.uploader.upload(args.file.url, {
+          folder: 'chat',
+          public_id: `${uniqueId(20)}.${format}`,
+          resource_type: 'auto',
+        });
+
+        fileId = upload.public_id;
+
+        file = await new FileModel({
+          fileId,
+          url: upload.url,
+          originalname: args.file.originalname,
+          type: upload.resource_type,
+          format,
+          size: upload.bytes,
+        }).save();
+      }
+
+      const chat = await new ChatModel({ ...args, fileId }).save();
+      const profile = await ProfileModel.findOne(
+        { userId: args.userId },
+        { userId: 1, avatar: 1, fullname: 1 },
+      );
 
       // create a new inbox if it doesn't exist and update it if exists
       await InboxModel.findOneAndUpdate(
@@ -26,11 +51,13 @@ module.exports = (socket) => {
         {
           $inc: { unreadMessage: 1 },
           $set: {
-            ownersId: args.ownersId,
             roomId: args.roomId,
+            ownersId: args.ownersId,
+            fileId,
             content: {
               from: args.userId,
-              text: args.roomType === 'group' ? `${profile.fullname}: ${chat.text}` : chat.text,
+              senderName: profile.fullname,
+              text: chat.text || chat.text.length > 0 ? chat.text : file.originalname,
               time: chat.createdAt,
             },
           },
@@ -40,7 +67,7 @@ module.exports = (socket) => {
 
       const inboxs = await Inbox.find({ ownersId: { $all: args.ownersId } });
 
-      io.to(args.roomId).emit('chat/insert', { ...chat._doc, profile });
+      io.to(args.roomId).emit('chat/insert', { ...chat._doc, profile, file });
       // send the latest inbox data to be merge with old inbox data
       io.to(args.ownersId).emit('inbox/find', inboxs[0]);
     }
@@ -92,8 +119,23 @@ module.exports = (socket) => {
     userId, chatsId, roomId, deleteForEveryone,
   }) => {
     try {
+      // delete attached files
+      const handleDeleteFiles = async (query = {}) => {
+        const chats = await ChatModel.find(
+          { _id: { $in: chatsId }, roomId, ...query },
+          { fileId: 1 },
+        );
+
+        const filesId = chats.filter((elem) => !!elem.fileId).map((elem) => elem.fileId);
+        await FileModel.deleteMany({ roomId, fileId: filesId });
+
+        await cloud.api.delete_resources(filesId);
+      };
+
       if (deleteForEveryone) {
+        await handleDeleteFiles({});
         await ChatModel.deleteMany({ roomId, _id: { $in: chatsId } });
+
         io.to(roomId).emit('chat/delete', chatsId);
       } else {
         await ChatModel.updateMany(
@@ -104,7 +146,8 @@ module.exports = (socket) => {
         // delete permanently if this message has been
         // deleted by all room participants
         const { ownersId } = await InboxModel.findOne({ roomId }, { _id: 0, ownersId: 1 });
-        console.log(ownersId);
+
+        await handleDeleteFiles({ deletedBy: { $size: ownersId.length } });
         await ChatModel.deleteMany({
           roomId,
           $expr: { $gte: [{ $size: '$deletedBy' }, ownersId.length] },

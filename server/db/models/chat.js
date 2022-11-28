@@ -26,6 +26,10 @@ const ChatSchema = new Schema({
     type: Schema.Types.Array, // -> userId
     default: [],
   },
+  fileId: {
+    type: Schema.Types.String,
+    default: null,
+  },
 }, {
   timestamps: true,
   versionKey: false,

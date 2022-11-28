@@ -23,9 +23,17 @@ const InboxSchema = new Schema({
     type: Schema.Types.Number,
     default: 0,
   },
+  fileId: {
+    type: Schema.Types.String,
+    default: null,
+  },
   content: {
     from: {
       type: Schema.Types.String, // -> the sender's userId
+      required: true,
+    },
+    senderName: {
+      type: Schema.Types.String,
       required: true,
     },
     text: {

@@ -28,6 +28,7 @@ function Chat() {
       { imageCropper && <modal.imageCropper /> }
       <modal.avatarFull />
       <modal.confirmDeleteChat />
+      <modal.sendFile />
 
       <cont.foreground />
       <cont.room />
