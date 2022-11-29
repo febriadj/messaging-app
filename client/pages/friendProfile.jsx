@@ -76,7 +76,7 @@ function FriendProfile() {
                 aria-hidden
                 onClick={(e) => {
                   e.stopPropagation();
-                  dispatch(setModal({ target: 'avatarFull', data: profile.avatar }));
+                  dispatch(setModal({ target: 'photoFull', data: profile.avatar }));
                 }}
               />
               <div className="w-full text-center mt-4 overflow-hidden">

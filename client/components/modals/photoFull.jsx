@@ -2,13 +2,13 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import * as bi from 'react-icons/bi';
 
-function AvatarFull() {
-  const avatar = useSelector((state) => state.modal.avatarFull);
+function PhotoFull() {
+  const photo = useSelector((state) => state.modal.photoFull);
 
   return (
     <div
       className={`
-        ${avatar ? 'z-50' : '-z-50 opacity-0 delay-300'}
+        ${photo ? 'z-50' : '-z-50 opacity-0 delay-300'}
         absolute w-full h-full grid grid-rows-[auto_1fr_auto]
         bg-spill-600/80 dark:bg-black/80
       `}
@@ -23,10 +23,10 @@ function AvatarFull() {
       </div>
       <div className="flex justify-center items-center">
         <img
-          src={avatar || ''}
+          src={photo || ''}
           alt=""
           aria-hidden
-          className={`${avatar ? 'scale-100' : 'scale-0'} transition w-[460px]`}
+          className={`${photo ? 'scale-100' : 'scale-0'} transition w-[460px]`}
           onClick={(e) => e.stopPropagation()}
         />
       </div>
@@ -35,4 +35,4 @@ function AvatarFull() {
   );
 }
 
-export default AvatarFull;
+export default PhotoFull;

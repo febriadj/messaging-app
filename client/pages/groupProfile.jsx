@@ -79,7 +79,7 @@ function GroupProfile() {
                 aria-hidden
                 onClick={(e) => {
                   e.stopPropagation();
-                  dispatch(setModal({ target: 'avatarFull', data: group.avatar }));
+                  dispatch(setModal({ target: 'photoFull', data: group.avatar }));
                 }}
               />
               <div className="w-full text-center mt-4 overflow-hidden">

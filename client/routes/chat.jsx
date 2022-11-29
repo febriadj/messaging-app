@@ -26,7 +26,7 @@ function Chat() {
       <modal.avatarUpload />
       <modal.webcam />
       { imageCropper && <modal.imageCropper /> }
-      <modal.avatarFull />
+      <modal.photoFull />
       <modal.confirmDeleteChat />
       <modal.sendFile />
 
