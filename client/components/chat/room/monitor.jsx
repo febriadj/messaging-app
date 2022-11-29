@@ -7,6 +7,7 @@ import Linkify from 'linkify-react';
 import socket from '../../../helpers/socket';
 import { setSelectedChats } from '../../../redux/features/chore';
 import { setPage } from '../../../redux/features/page';
+import { setModal } from '../../../redux/features/modal';
 
 function Monitor({ loaded, chats, setChats }) {
   const dispatch = useDispatch();
@@ -137,7 +138,18 @@ function Monitor({ loaded, chats, setChats }) {
                       {
                         elem.file && (
                           <div className="mb-2">
-                            { elem.file.type === 'image' && <img src={elem.file.url} alt="" className="w-full rounded-lg" /> }
+                            { elem.file.type === 'image' && (
+                              <img
+                                src={elem.file.url}
+                                alt=""
+                                className="w-full rounded-lg cursor-pointer hover:brightness-75"
+                                aria-hidden
+                                onClick={(e) => {
+                                  if (e.ctrlKey) return;
+                                  dispatch(setModal({ target: 'photoFull', data: elem.file.url }));
+                                }}
+                              />
+                            ) }
                             { elem.file.type !== 'image' && (
                               <span
                                 className={`
