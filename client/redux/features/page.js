@@ -9,6 +9,7 @@ const PageSlice = createSlice({
     selectParticipant: false,
     friendProfile: false,
     groupProfile: false,
+    groupParticipant: false,
   },
   reducers: {
     /* eslint-disable no-param-reassign */

@@ -52,14 +52,16 @@ exports.participantsName = async (req, res) => {
 
 exports.participants = async (req, res) => {
   try {
+    const { skip, limit } = req.query;
     // find group by groupId
     const group = await GroupModel.findOne({ _id: req.params.groupId });
     // find participants
     const participants = await ProfileModel.find({
       userId: { $in: group.participantsId },
-    }).sort({
-      updatedAt: -1,
-    });
+    })
+      .sort({ updatedAt: -1 })
+      .skip(skip)
+      .limit(limit);
 
     response({
       res,

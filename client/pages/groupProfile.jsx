@@ -7,10 +7,7 @@ import { setModal } from '../redux/features/modal';
 
 function GroupProfile() {
   const dispatch = useDispatch();
-  const {
-    page: { groupProfile }, // -> group _id
-    user: { master },
-  } = useSelector((state) => state);
+  const { user: { master }, page: { groupProfile } } = useSelector((state) => state);
 
   const [participants, setParticipants] = useState(null);
   const [group, setGroup] = useState(null);
@@ -19,25 +16,24 @@ function GroupProfile() {
     if (groupProfile) {
       axios.all([
         axios.get(`/groups/${groupProfile}`, { signal }),
-        axios.get(`/groups/${groupProfile}/participants`, { signal }),
+        axios.get(`/groups/${groupProfile}/participants`, { params: { skip: 0, limit: 10 }, signal }),
       ])
         .then(axios.spread(({ data: data1 }, { data: data2 }) => {
           setGroup(data1.payload);
           setParticipants(data2.payload);
         }))
-        .catch((error0) => {
-          console.error(error0);
-        });
+        .catch((error0) => console.error(error0.message));
     } else {
-      setTimeout(() => setGroup(null), 150);
+      setTimeout(() => {
+        setParticipants(null);
+        setGroup(null);
+      }, 150);
     }
   };
 
   useEffect(() => {
     const abortCtrl = new AbortController();
-    const { signal } = abortCtrl;
-
-    handleGetGroup(signal);
+    handleGetGroup(abortCtrl.signal);
 
     return () => {
       abortCtrl.abort();
@@ -106,7 +102,7 @@ function GroupProfile() {
             </div>
             <div>
               <div className="mt-6 px-4 flex gap-4 justify-between">
-                <p className="opacity-60">{`${participants?.length} participants`}</p>
+                <p className="opacity-60">{`${group.participantsId.length} participants`}</p>
                 <i><bi.BiSearchAlt /></i>
               </div>
               <div className="grid">
@@ -139,6 +135,27 @@ function GroupProfile() {
                       </span>
                     </div>
                   ))
+                }
+                {
+                  group.participantsId.length > participants.length && (
+                    <button
+                      type="button"
+                      className="mb-6 py-2 px-4 flex gap-4 hover:bg-spill-800"
+                      onClick={() => {
+                        dispatch(setPage({
+                          target: 'groupParticipant',
+                          data: {
+                            totalParticipants: group.participantsId.length,
+                            groupId: group._id,
+                            adminId: group.adminId,
+                          },
+                        }));
+                      }}
+                    >
+                      <i><bi.BiChevronDown /></i>
+                      <p>{`View all (${group.participantsId.length - participants.length} more)`}</p>
+                    </button>
+                  )
                 }
               </div>
             </div>
