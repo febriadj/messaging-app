@@ -111,7 +111,7 @@ function GroupProfile() {
                     <div
                       key={elem._id}
                       className={`
-                        p-4 grid grid-cols-[auto_1fr] gap-4 items-center cursor-pointer
+                        p-4 grid grid-cols-[auto_1fr_auto] gap-4 items-center cursor-pointer
                         border-0 border-b border-solid border-spill-200 dark:border-spill-800
                         hover:bg-spill-100/60 dark:hover:bg-spill-800/60
                       `}
@@ -133,6 +133,12 @@ function GroupProfile() {
                         </h1>
                         <p className="truncate mt-0.5 opacity-60">{elem.bio}</p>
                       </span>
+                      {/* admin tag */}
+                      { elem.userId === group.adminId && (
+                        <span className="h-full">
+                          <p className="font-bold text-xs py-0.5 px-2 rounded-full text-white bg-sky-600">Admin</p>
+                        </span>
+                      ) }
                     </div>
                   ))
                 }
