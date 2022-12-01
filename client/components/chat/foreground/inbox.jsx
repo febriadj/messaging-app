@@ -53,12 +53,20 @@ function Inbox() {
       setInboxs((prev) => [payload, ...prev]);
     });
 
+    socket.on('group/add-participants', (payload) => {
+      setInboxs((prev) => {
+        const olds = prev.filter((elem) => elem.roomId !== payload.roomId);
+        return [payload, ...olds];
+      });
+    });
+
     return () => {
       abortCtrl.abort();
 
       socket.off('group/create');
       socket.off('inbox/find');
       socket.off('inbox/read');
+      socket.off('group/add-participants');
     };
   }, []);
 

@@ -11,6 +11,7 @@ import * as comp from '../../components/chat/room';
 import FriendProfile from '../../pages/friendProfile';
 import GroupProfile from '../../pages/groupProfile';
 import GroupParticipant from '../../pages/groupParticipant';
+import AddParticipant from '../../pages/addParticipant';
 
 import { setPage } from '../../redux/features/page';
 
@@ -116,6 +117,7 @@ function Room() {
             <FriendProfile />
             <GroupProfile />
             <GroupParticipant />
+            <AddParticipant />
           </>
         )
       }

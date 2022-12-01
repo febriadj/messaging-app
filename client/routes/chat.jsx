@@ -29,6 +29,7 @@ function Chat() {
       <modal.photoFull />
       <modal.confirmDeleteChat />
       <modal.sendFile />
+      <modal.confirmAddParticipant />
 
       <cont.foreground />
       <cont.room />

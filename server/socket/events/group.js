@@ -4,6 +4,7 @@ const { v4: uuidv4 } = require('uuid');
 const ProfileModel = require('../../db/models/profile');
 const GroupModel = require('../../db/models/group');
 const InboxModel = require('../../db/models/inbox');
+const Inbox = require('../../helpers/models/inbox');
 
 const config = require('../../config');
 const uniqueId = require('../../helpers/uniqueId');
@@ -49,6 +50,38 @@ module.exports = (socket) => {
         success: false,
         message: error0.message,
       });
+    }
+  });
+
+  socket.on('group/add-participants', async (args) => {
+    try {
+      // get inviter fullname
+      const inviter = await ProfileModel.findOne({ userId: args.userId }, { fullname: 1 });
+      await GroupModel.updateOne(
+        { _id: args.groupId },
+        { $addToSet: { participantsId: { $each: args.friendsId } } },
+      );
+
+      await InboxModel.updateOne(
+        { roomId: args.roomId },
+        {
+          $addToSet: { ownersId: { $each: args.friendsId } },
+          $set: {
+            fileId: null,
+            'content.senderName': inviter.fullname,
+            'content.from': args.userId,
+            'content.text': `${args.friendsId.length} ${args.friendsId.length > 1 ? 'participants' : 'participant'} added`,
+            'content.time': new Date().toISOString(),
+          },
+        },
+      );
+
+      const inboxs = await Inbox.find({ roomId: args.roomId });
+
+      io.to(inboxs[0].ownersId).emit('group/add-participants', inboxs[0]);
+    }
+    catch (error0) {
+      console.log(error0.message);
     }
   });
 };

@@ -2,18 +2,23 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import * as bi from 'react-icons/bi';
+import * as ri from 'react-icons/ri';
+
 import { setPage } from '../redux/features/page';
 import { setModal } from '../redux/features/modal';
 
 function GroupProfile() {
   const dispatch = useDispatch();
-  const { user: { master }, page: { groupProfile } } = useSelector((state) => state);
+  const {
+    page: { groupProfile, addParticipant },
+    user: { master },
+  } = useSelector((state) => state);
 
   const [participants, setParticipants] = useState(null);
   const [group, setGroup] = useState(null);
 
   const handleGetGroup = (signal) => {
-    if (groupProfile) {
+    if (groupProfile && !addParticipant) {
       axios.all([
         axios.get(`/groups/${groupProfile}`, { signal }),
         axios.get(`/groups/${groupProfile}/participants`, { params: { skip: 0, limit: 10 }, signal }),
@@ -38,7 +43,7 @@ function GroupProfile() {
     return () => {
       abortCtrl.abort();
     };
-  }, [groupProfile]);
+  }, [groupProfile, addParticipant]);
 
   return (
     <div
@@ -103,7 +108,6 @@ function GroupProfile() {
             <div>
               <div className="mt-6 px-4 flex gap-4 justify-between">
                 <p className="opacity-60">{`${group.participantsId.length} participants`}</p>
-                <i><bi.BiSearchAlt /></i>
               </div>
               <div className="grid">
                 {
@@ -166,6 +170,31 @@ function GroupProfile() {
               </div>
             </div>
           </div>
+        )
+      }
+      {
+        group && (
+          <button
+            type="button"
+            className={`
+              ${addParticipant && 'scale-0 opacity-0'}
+              transition absolute z-10 bottom-0 right-0 -translate-x-6 -translate-y-6
+              w-16 h-16 rounded-full flex justify-center items-center shadow-xl text-white bg-sky-600
+              hover:brightness-110
+            `}
+            onClick={() => {
+              dispatch(setPage({
+                target: 'addParticipant',
+                data: {
+                  participantsId: group.participantsId,
+                  groupId: group._id,
+                  roomId: group.roomId,
+                },
+              }));
+            }}
+          >
+            <i><ri.RiUserAddFill size={28} /></i>
+          </button>
         )
       }
     </div>
