@@ -52,9 +52,9 @@ function Room() {
   };
 
   const [prevRoom, setPrevRoom] = useState(null);
-  const handleJoinRoom = () => {
+  const handleOpenRoom = () => {
     if (chatRoom.isOpen) {
-      socket.emit('room/join', {
+      socket.emit('room/open', {
         prevRoom,
         newRoom: chatRoom.data.roomId,
       });
@@ -67,7 +67,7 @@ function Room() {
   useEffect(() => {
     const abortCtrl = new AbortController();
 
-    handleJoinRoom();
+    handleOpenRoom();
     handleGetChats(abortCtrl.signal);
 
     return () => {
@@ -76,7 +76,7 @@ function Room() {
   }, [chatRoom.isOpen, chatRoom.refreshId]);
 
   useEffect(() => {
-    socket.on('room/join', (args) => setPrevRoom(args));
+    socket.on('room/open', (args) => setPrevRoom(args));
 
     socket.on('chat/delete', (chatsId) => {
       dispatch(setSelectedChats([]));
@@ -92,7 +92,7 @@ function Room() {
     });
 
     return () => {
-      socket.off('room/join');
+      socket.off('room/open');
       socket.off('chat/delete');
     };
   }, []);
