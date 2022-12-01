@@ -26,10 +26,11 @@ module.exports = (socket) => {
         ownersId: args.participantsId,
         roomId,
         roomType: 'group',
-        unreadMessage: 1,
         content: {
+          senderName: profile.fullname,
           from: args.adminId,
-          text: `${profile.fullname} create this group`,
+          text: 'Group created',
+          time: new Date().toISOString(),
         },
       }).save();
 
