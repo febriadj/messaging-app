@@ -108,7 +108,7 @@ function Header() {
   }, []);
 
   return (
-    <nav className="h-16 flex gap-4 justify-between items-center bg-white dark:bg-spill-900">
+    <nav className="h-16 grid grid-cols-[1fr_auto] gap-4 justify-between items-center bg-white dark:bg-spill-900">
       {
         selectedChats.length === 0 && (
           <>
@@ -125,7 +125,7 @@ function Header() {
                 <i><bi.BiArrowBack /></i>
               </button>
               <div
-                className="flex gap-4 items-center cursor-pointer"
+                className="grid grid-cols-[auto_1fr] gap-4 items-center cursor-pointer"
                 aria-hidden
                 onClick={() => {
                   if (!isGroup && chatRoom.data.profile.active && !page.friendProfile) {
@@ -145,7 +145,7 @@ function Header() {
                 }}
               >
                 <img src={isGroup ? chatRoom.data.group.avatar : chatRoom.data.profile.avatar} alt="" className="w-10 h-10 rounded-full" />
-                <span className="truncate">
+                <span className="overflow-hidden">
                   <p className="font-bold truncate">{isGroup ? chatRoom.data.group.name : chatRoom.data.profile.fullname}</p>
                   <p className="text-sm opacity-60 truncate">{subhead}</p>
                 </span>
@@ -165,7 +165,7 @@ function Header() {
       {
         selectedChats.length > 0 && (
           <>
-            <div className="pl-2 flex gap-4 items-center">
+            <div className="pl-2 grid grid-cols-[auto_1fr] gap-4 items-center">
               <button
                 type="button"
                 className="p-2 rounded-full hover:bg-spill-100 dark:hover:bg-spill-800"
