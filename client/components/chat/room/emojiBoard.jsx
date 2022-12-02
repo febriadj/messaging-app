@@ -26,14 +26,16 @@ function EmojiBoard({ setForm }) {
               type="button"
               className="w-9 h-9 text-2xl rounded-full hover:bg-spill-200 dark:hover:bg-spill-700"
               onClick={() => {
-                const { selectionStart } = document.querySelector('#new-message');
+                const input = document.querySelector('#new-message');
 
                 setForm((prev) => {
-                  const start = prev.text.slice(0, selectionStart);
-                  const end = prev.text.slice(selectionStart);
+                  const arr = prev.text.split('');
+                  arr.splice(input.selectionStart, 0, elem.emoji);
 
-                  return { ...prev, text: start + elem.emoji + end };
+                  return { ...prev, text: arr.join('') };
                 });
+
+                input.focus();
               }}
             >
               {elem.emoji}
