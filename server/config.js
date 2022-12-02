@@ -5,7 +5,7 @@ module.exports = {
   host: isDev ? 'http://localhost:8080' : 'https://www.spillgram.com',
   db: {
     uri: process.env.MONGO_URI,
-    name: 'spill',
+    name: 'spillgram',
   },
   cors: {
     origin: ['http://localhost:3000'],
