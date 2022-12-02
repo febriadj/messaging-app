@@ -23,15 +23,18 @@ exports.findById = async (req, res) => {
 
 exports.participantsName = async (req, res) => {
   try {
+    const { limit = 10 } = req.query;
+
     // find group by groupId
     const group = await GroupModel.findOne({ _id: req.params.groupId });
+
     // find participants
     const participants = await ProfileModel.find(
       { userId: { $in: group.participantsId } },
       { _id: 0, fullname: 1 },
-    ).sort({
-      updatedAt: -1,
-    });
+    )
+      .sort({ updatedAt: -1 })
+      .limit(limit);
 
     const names = participants.map(({ fullname }) => fullname);
 
