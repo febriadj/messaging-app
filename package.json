@@ -1,10 +1,10 @@
 {
-  "name": "spill",
+  "name": "spillgram",
   "version": "1.0.0",
-  "description": "Spill is a free & open source web-based instant messaging application",
+  "description": "Spillgram is a web-based real-time chat application built using mern, socket.io, and webrtc technologies",
   "main": "server",
   "engines": {
-    "vscode": "^1.22.0",
+    "vscode": "1.22.0",
     "npm": "8.19.2",
     "node": "16.17.1"
   },
@@ -17,19 +17,22 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/febriadj/spill.git"
+    "url": "git+https://github.com/febriadj/spillgram.git"
   },
   "keywords": [
-    "spill",
-    "realtime",
-    "chat"
+    "spillgram",
+    "chat",
+    "websockect",
+    "social-app",
+    "webrtc",
+    "socket.io"
   ],
   "author": "Febriadji",
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/febriadj/spill/issues"
+    "url": "https://github.com/febriadj/spillgram/issues"
   },
-  "homepage": "https://github.com/febriadj/spill#readme",
+  "homepage": "https://github.com/febriadj/spillgram#readme",
   "devDependencies": {
     "@babel/core": "^7.19.3",
     "@babel/plugin-transform-runtime": "^7.19.1",
