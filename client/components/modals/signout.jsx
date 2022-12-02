@@ -48,7 +48,7 @@ function Logout() {
               }, 500);
             }}
           >
-            <p className="font-bold">Sign out</p>
+            <p className="font-bold text-white">Sign out</p>
           </button>
         </span>
       </div>
