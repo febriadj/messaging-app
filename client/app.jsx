@@ -6,6 +6,7 @@ import './style.css';
 import * as route from './routes';
 import { setMaster } from './redux/features/user';
 import socket from './helpers/socket';
+import config from './config';
 
 function App() {
   const dispatch = useDispatch();
@@ -36,7 +37,7 @@ function App() {
   useEffect(() => {
     const abortCtrl = new AbortController();
     // set default base url
-    axios.defaults.baseURL = 'http://localhost:8080/api';
+    axios.defaults.baseURL = config.isDev ? 'http://localhost:8080/api' : '/api';
     handleGetMaster(abortCtrl.signal);
 
     socket.on('user/inactivate', () => {

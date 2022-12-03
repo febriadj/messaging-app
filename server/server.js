@@ -3,6 +3,7 @@ require('dotenv').config({ path: './.env' });
 const express = require('express');
 const { Server: SocketServer } = require('socket.io');
 const http = require('http');
+const path = require('path');
 const cors = require('cors');
 const routes = require('./routes');
 const config = require('./config');
@@ -25,6 +26,13 @@ cloudinary();
 db();
 
 app.use('/api', routes);
+
+if (!config.isDev) {
+  app.use(express.static('client/public'));
+  const client = path.join(__dirname, '..', 'client', 'public', 'index.html');
+
+  app.get('*', (req, res) => res.sendFile(client));
+}
 
 // store socket on global object
 global.io = new SocketServer(server, { cors: config.cors });

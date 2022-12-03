@@ -13,7 +13,8 @@
     "server-dev": "nodemon server",
     "server-start": "node server",
     "dev": "concurrently \"npm run client-dev\" \"npm run server-dev\"",
-    "start": "node server"
+    "start": "node server",
+    "client-build": "webpack --config ./webpack.prod.js"
   },
   "repository": {
     "type": "git",
