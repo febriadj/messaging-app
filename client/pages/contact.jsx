@@ -75,7 +75,7 @@ function Contact() {
             ].map((elem) => (
               <div
                 key={elem.target}
-                className="grid grid-cols-[auto_1fr_auto] gap-6 p-4 items-center cursor-default border-0 border-b border-solid border-spill-200 dark:border-spill-800 hover:bg-spill-100/60 dark:hover:bg-spill-800/60"
+                className="grid grid-cols-[auto_1fr_auto] gap-6 p-4 items-center cursor-pointer border-0 border-b border-solid border-spill-200 dark:border-spill-800 hover:bg-spill-100/60 dark:hover:bg-spill-800/60"
                 aria-hidden
                 onClick={(e) => {
                   e.stopPropagation();
@@ -115,7 +115,7 @@ function Contact() {
               <div
                 key={elem._id}
                 aria-hidden
-                className="grid grid-cols-[auto_1fr_auto] gap-4 p-4 pr-2 items-center cursor-default border-0 border-b border-solid border-spill-200 dark:border-spill-800 hover:bg-spill-100/60 dark:hover:bg-spill-800/60"
+                className="grid grid-cols-[auto_1fr_auto] gap-4 p-4 pr-2 items-center cursor-pointer border-0 border-b border-solid border-spill-200 dark:border-spill-800 hover:bg-spill-100/60 dark:hover:bg-spill-800/60"
                 onClick={(e) => {
                   e.stopPropagation();
 

@@ -156,7 +156,7 @@ function Setting() {
                   <div
                     key={child.target}
                     aria-hidden
-                    className="p-4 grid grid-cols-[auto_1fr_auto] items-start gap-6 cursor-default border-0 border-b border-solid border-spill-200 dark:border-spill-800 hover:bg-spill-100/60 dark:hover:bg-spill-800/60"
+                    className="p-4 grid grid-cols-[auto_1fr_auto] items-start gap-6 cursor-pointer border-0 border-b border-solid border-spill-200 dark:border-spill-800 hover:bg-spill-100/60 dark:hover:bg-spill-800/60"
                     onClick={(e) => {
                       e.stopPropagation();
                       dispatch(setModal({ target: child.target }));

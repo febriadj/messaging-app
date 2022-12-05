@@ -79,7 +79,7 @@ function Inbox() {
             aria-hidden
             className={`
               ${chatRoom.data?.roomId === elem.roomId && 'bg-spill-100/60 dark:bg-spill-800/60'}
-              p-4 grid grid-cols-[auto_1fr] gap-4 items-center cursor-default
+              p-4 grid grid-cols-[auto_1fr] gap-4 items-center cursor-pointer
               border-0 border-b border-solid border-spill-200 dark:border-spill-800
               hover:bg-spill-100/60 dark:hover:bg-spill-800/60
             `}
