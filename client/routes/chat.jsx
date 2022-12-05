@@ -1,12 +1,15 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Helmet } from 'react-helmet';
 import { setModal } from '../redux/features/modal';
 import * as cont from '../containers/chat';
 import * as modal from '../components/modals';
+import config from '../config';
 
 function Chat() {
   const dispatch = useDispatch();
   const imageCropper = useSelector((state) => state.modal.imageCropper);
+  const master = useSelector((state) => state.user.master);
 
   return (
     <div
@@ -17,6 +20,8 @@ function Chat() {
         dispatch(setModal({ target: '*' }));
       }}
     >
+      <Helmet><title>{`@${master.username} - ${config.brandName}`}</title></Helmet>
+
       <modal.signout />
       <modal.changePass />
       <modal.deleteAcc />
