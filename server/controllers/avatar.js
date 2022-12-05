@@ -1,15 +1,21 @@
 const { v2: cloud } = require('cloudinary');
 const ProfileModel = require('../db/models/profile');
+const GroupModel = require('../db/models/group');
 const response = require('../helpers/response');
 
 exports.upload = async (req, res) => {
   try {
-    const { avatar, crop, zoom } = req.body;
-    const userId = req.user._id;
+    const {
+      avatar,
+      crop,
+      zoom,
+      targetId = null,
+      isGroup = false,
+    } = req.body;
 
     const upload = await cloud.uploader.upload(avatar, {
       folder: 'avatars',
-      public_id: userId,
+      public_id: targetId || req.user._id,
       overwrite: true,
       transformation: [
         {
@@ -28,13 +34,19 @@ exports.upload = async (req, res) => {
       ],
     });
 
-    await ProfileModel.updateOne({ userId }, { $set: { avatar: upload.url } });
-    const profile = await ProfileModel.findOne({ userId });
+    if (isGroup) {
+      await GroupModel.updateOne({ _id: targetId }, { $set: { avatar: upload.url } });
+    } else {
+      await ProfileModel.updateOne(
+        { userId: targetId || req.user._id },
+        { $set: { avatar: upload.url } },
+      );
+    }
 
     response({
       res,
       message: 'Avatar uploaded successfully',
-      payload: profile.avatar,
+      payload: upload.url,
     });
   }
   catch (error0) {

@@ -5,6 +5,8 @@ const ChoreSlice = createSlice({
   initialState: {
     selectedParticipants: [],
     selectedChats: [],
+    refreshAvatar: null,
+    refreshGroupAvatar: null,
   },
   reducers: {
     /* eslint-disable no-param-reassign */
@@ -23,9 +25,21 @@ const ChoreSlice = createSlice({
         state.selectedChats = [];
       }
     },
+    setRefreshAvatar(state, action) {
+      state.refreshAvatar = action.payload;
+    },
+    setRefreshGroupAvatar(state, action) {
+      state.refreshGroupAvatar = action.payload;
+    },
     /* eslint-enable no-param-reassign */
   },
 });
 
-export const { setSelectedParticipants, setSelectedChats } = ChoreSlice.actions;
+export const {
+  setSelectedParticipants,
+  setSelectedChats,
+  setRefreshAvatar,
+  setRefreshGroupAvatar,
+} = ChoreSlice.actions;
+
 export default ChoreSlice.reducer;

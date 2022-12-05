@@ -5,7 +5,7 @@ import * as bi from 'react-icons/bi';
 import Cropper from 'react-easy-crop';
 
 import { setModal } from '../../redux/features/modal';
-import { setAvatar } from '../../redux/features/user';
+import { setRefreshAvatar, setRefreshGroupAvatar } from '../../redux/features/chore';
 
 function ImageCropper() {
   const dispatch = useDispatch();
@@ -20,8 +20,12 @@ function ImageCropper() {
     try {
       setUploading(true);
 
+      const { src: avatar, isGroup, targetId } = modal.imageCropper;
+
       const { data } = await axios.post('/avatars', {
-        avatar: modal.imageCropper.src,
+        avatar,
+        targetId,
+        isGroup,
         crop: croppedArea,
         zoom,
       });
@@ -30,10 +34,14 @@ function ImageCropper() {
       dispatch(setModal({ target: 'imageCropper' }));
       // uploaded
       setUploading(false);
-      dispatch(setAvatar(data.payload));
+
+      if (isGroup) {
+        dispatch(setRefreshGroupAvatar(data.payload));
+      } else {
+        dispatch(setRefreshAvatar(data.payload));
+      }
     }
     catch (error0) {
-      console.error(error0);
       setUploading(false);
     }
   };

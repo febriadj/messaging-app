@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import * as bi from 'react-icons/bi';
 import * as ri from 'react-icons/ri';
+import * as md from 'react-icons/md';
 
 import { setPage } from '../redux/features/page';
 import { setModal } from '../redux/features/modal';
@@ -10,6 +11,7 @@ import { setModal } from '../redux/features/modal';
 function GroupProfile() {
   const dispatch = useDispatch();
   const {
+    chore: { refreshGroupAvatar },
     page: { groupProfile, addParticipant },
     user: { master },
   } = useSelector((state) => state);
@@ -73,16 +75,30 @@ function GroupProfile() {
         group && (
           <div className="overflow-y-auto scrollbar-thin scrollbar-thumb-spill-200 hover:scrollbar-thumb-spill-300 dark:scrollbar-thumb-spill-700 dark:hover:scrollbar-thumb-spill-600">
             <div className="p-4 flex flex-col items-center">
-              <img
-                src={group.avatar}
-                alt=""
-                className="w-28 h-28 rounded-full cursor-pointer hover:brightness-75"
-                aria-hidden
+              <button
+                type="button"
+                className="group relative w-28 h-28 rounded-full overflow-hidden cursor-pointer"
                 onClick={(e) => {
                   e.stopPropagation();
-                  dispatch(setModal({ target: 'photoFull', data: group.avatar }));
+
+                  if (group.adminId !== master._id) {
+                    dispatch(setModal({ target: 'photoFull', data: group.avatar }));
+                  } else {
+                    dispatch(setModal({
+                      target: 'avatarUpload',
+                      data: {
+                        targetId: group._id,
+                        isGroup: true,
+                      },
+                    }));
+                  }
                 }}
-              />
+              >
+                <span className="group-hover:opacity-100 bg-black/40 absolute w-full h-full z-10 opacity-0 flex justify-center items-center">
+                  { group.adminId === master._id && <i className="text-white"><md.MdPhotoCamera size={40} /></i> }
+                </span>
+                <img src={refreshGroupAvatar || group.avatar} alt="" className="w-full h-full" />
+              </button>
               <div className="w-full text-center mt-4 overflow-hidden">
                 <h1 className="text-2xl font-bold break-all mb-1">{group.name}</h1>
                 <p className="text-sm opacity-60">Group</p>

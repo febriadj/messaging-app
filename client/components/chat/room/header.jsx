@@ -13,7 +13,7 @@ function Header() {
   const dispatch = useDispatch();
   const {
     room: { chat: chatRoom },
-    chore: { selectedChats },
+    chore: { selectedChats, refreshGroupAvatar },
     page,
   } = useSelector((state) => state);
 
@@ -144,7 +144,15 @@ function Header() {
                   }
                 }}
               >
-                <img src={isGroup ? chatRoom.data.group.avatar : chatRoom.data.profile.avatar} alt="" className="w-10 h-10 rounded-full" />
+                <img
+                  src={
+                    isGroup
+                      ? refreshGroupAvatar || chatRoom.data.group.avatar
+                      : chatRoom.data.profile.avatar
+                  }
+                  alt=""
+                  className="w-10 h-10 rounded-full"
+                />
                 <span className="overflow-hidden">
                   <p className="font-bold truncate">{isGroup ? chatRoom.data.group.name : chatRoom.data.profile.fullname}</p>
                   <p className="text-sm opacity-60 truncate">{subhead}</p>

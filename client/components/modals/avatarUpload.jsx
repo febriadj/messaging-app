@@ -28,6 +28,8 @@ function AvatarUpload() {
       dispatch(setModal({
         target: 'imageCropper',
         data: {
+          targetId: modal.avatarUpload.targetId,
+          isGroup: modal.avatarUpload.isGroup,
           src: base64,
           back: 'avatarUpload',
         },
@@ -58,7 +60,7 @@ function AvatarUpload() {
       >
         {/* header */}
         <div>
-          <h1 className="text-2xl font-bold">Profile Photo</h1>
+          <h1 className="text-2xl font-bold">{modal.avatarUpload.isGroup ? 'Group Photo' : 'Profile Photo'}</h1>
           { respond.message && (
             <p className={`mt-1 text-sm ${!respond.success && 'text-rose-600 dark:text-rose-400'}`}>
               {respond.message}

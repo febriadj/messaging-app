@@ -3,14 +3,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import * as bi from 'react-icons/bi';
 import * as md from 'react-icons/md';
-import { setAvatar } from '../redux/features/user';
 import { setPage } from '../redux/features/page';
 import { setModal } from '../redux/features/modal';
 
 function Profile() {
   const dispatch = useDispatch();
+
+  const master = useSelector((state) => state.user.master);
   const page = useSelector((state) => state.page);
-  const avatar = useSelector((state) => state.user.avatar);
+  const refreshAvatar = useSelector((state) => state.chore.refreshAvatar);
 
   const [profile, setProfile] = useState(null);
   const [form, setForm] = useState({
@@ -31,7 +32,6 @@ function Profile() {
         });
 
         setProfile(data.payload);
-        dispatch(setAvatar(data.payload.avatar));
       } else {
         // destroy when profile page is closed after 150ms
         setTimeout(() => setProfile(null), 150);
@@ -137,14 +137,21 @@ function Profile() {
                 className="group relative w-28 h-28 rounded-full overflow-hidden cursor-pointer"
                 onClick={(e) => {
                   e.stopPropagation();
-                  dispatch(setModal({ target: 'avatarUpload' }));
+
+                  dispatch(setModal({
+                    target: 'avatarUpload',
+                    data: {
+                      targetId: master._id,
+                      isGroup: false,
+                    },
+                  }));
                 }}
               >
                 <span className="group-hover:opacity-100 bg-black/40 absolute w-full h-full z-10 opacity-0 flex justify-center items-center">
                   <i className="text-white"><md.MdPhotoCamera size={40} /></i>
                 </span>
                 <img
-                  src={avatar}
+                  src={refreshAvatar || profile.avatar}
                   alt=""
                   className="w-full h-full"
                 />
