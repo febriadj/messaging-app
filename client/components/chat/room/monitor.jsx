@@ -180,10 +180,11 @@ function Monitor({ loaded, chats, setChats }) {
                           <span
                             className="truncate grid grid-cols-[auto_1fr] gap-2 items-start cursor-pointer"
                             aria-hidden
-                            onClick={() => {
+                            onClick={(e) => {
                               if (
                                 master._id !== elem.userId
                                 && page.friendProfile !== elem.userId
+                                && !e.ctrlKey
                               ) {
                                 dispatch(setPage({
                                   target: 'friendProfile',
