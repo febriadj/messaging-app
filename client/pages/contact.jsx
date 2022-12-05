@@ -115,7 +115,7 @@ function Contact() {
               <div
                 key={elem._id}
                 aria-hidden
-                className="grid grid-cols-[auto_1fr_auto] gap-4 p-4 pr-2 items-center cursor-pointer border-0 border-b border-solid border-spill-200 dark:border-spill-800 hover:bg-spill-100/60 dark:hover:bg-spill-800/60"
+                className="grid grid-cols-[auto_1fr] gap-4 p-4 items-center cursor-pointer border-0 border-b border-solid border-spill-200 dark:border-spill-800 hover:bg-spill-100/60 dark:hover:bg-spill-800/60"
                 onClick={(e) => {
                   e.stopPropagation();
 
@@ -152,15 +152,6 @@ function Contact() {
                     <p className="truncate opacity-60 mt-0.5">{elem.profile.bio}</p>
                   ) }
                 </span>
-                <button
-                  type="button"
-                  className="p-2 rounded-full hover:bg-spill-200 dark:hover:bg-spill-700"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                  }}
-                >
-                  <i><bi.BiDotsVerticalRounded /></i>
-                </button>
               </div>
             ))
           }
