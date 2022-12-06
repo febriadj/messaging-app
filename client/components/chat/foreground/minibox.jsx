@@ -14,7 +14,7 @@ function Minibox() {
       className={`
         ${modal.minibox ? 'opacity-100 z-10' : 'opacity-0 -z-50 scale-50'}
         transition duration-75 absolute right-0 translate-y-12 -translate-x-6 shadow-xl rounded-md
-        bg-white dark:bg-spill-800 dark:text-white/90
+        bg-white dark:bg-spill-700 dark:text-white/90
       `}
       onClick={(e) => e.stopPropagation()}
     >
@@ -25,16 +25,16 @@ function Minibox() {
               target: 'profile',
               data: user.master._id,
               html: 'Profile',
-              icon: <bi.BiUser size={20} />,
+              icon: <bi.BiUserCircle />,
             },
-            { target: 'starred', html: 'Starred Messages', icon: <bi.BiStar size={20} /> },
-            { target: 'setting', html: 'Settings', icon: <bi.BiCog size={20} /> },
-            { target: 'signout', html: 'Sign out', icon: <bi.BiLogOutCircle size={20} /> },
+            { target: 'savedMessage', html: 'Saved messages', icon: <bi.BiBookmark /> },
+            { target: 'setting', html: 'Settings', icon: <bi.BiCog /> },
+            { target: 'signout', html: 'Sign out', icon: <bi.BiLogOutCircle /> },
           ].map((elem) => (
             <button
               type="button"
               key={elem.target}
-              className="py-2 px-4 flex gap-2 items-center hover:bg-spill-100 dark:hover:bg-spill-700"
+              className="py-2 px-4 flex gap-4 items-center hover:bg-spill-100 dark:hover:bg-spill-600"
               onClick={() => {
                 // close minibox
                 dispatch(setModal({ target: 'minibox' }));
