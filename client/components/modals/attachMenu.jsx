@@ -10,7 +10,7 @@ function AttachMenu() {
 
   return (
     <div
-      className={`${modal.attachMenu ? 'z-10' : 'scale-0 -z-10'} transition absolute left-0 bottom-0 w-40 py-2 rounded-md shadow-xl translate-x-12 -translate-y-14 bg-white dark:bg-spill-800`}
+      className={`${modal.attachMenu ? 'z-10' : 'scale-0 -z-10'} transition absolute left-0 bottom-0 w-40 py-2 rounded-md shadow-xl translate-x-12 -translate-y-14 bg-white dark:bg-spill-700`}
       aria-hidden
       onClick={(e) => e.stopPropagation()}
     >
@@ -20,8 +20,8 @@ function AttachMenu() {
             { target: 'photo', icon: <bi.BiImageAlt />, accept: 'image/png, image/jpg, image/jpeg, image/webp' },
             { target: 'file', icon: <bi.BiFile />, accept: '' },
           ].map((elem) => (
-            <label htmlFor={`attach-${elem.target}`} key={elem.target} className="py-2 px-4 flex gap-4 items-center cursor-pointer hover:bg-spill-200 dark:hover:bg-spill-700">
-              <i>{elem.icon}</i>
+            <label htmlFor={`attach-${elem.target}`} key={elem.target} className="py-2 px-4 flex gap-4 items-center cursor-pointer hover:bg-spill-200 dark:hover:bg-spill-600">
+              <i className="opacity-40">{elem.icon}</i>
               <p className="font-bold capitalize">{elem.target}</p>
               <input
                 type="file"
@@ -49,9 +49,9 @@ function AttachMenu() {
         }
         <button
           type="button"
-          className="py-2 px-4 flex gap-4 items-center cursor-pointer hover:bg-spill-200 dark:hover:bg-spill-700"
+          className="py-2 px-4 flex gap-4 items-center cursor-pointer hover:bg-spill-200 dark:hover:bg-spill-600"
         >
-          <i><bi.BiBarChartSquare /></i>
+          <i className="opacity-40"><bi.BiBarChartSquare /></i>
           <p className="font-bold">Poll</p>
         </button>
       </div>
