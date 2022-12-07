@@ -8,6 +8,7 @@ import { setPage } from '../../../redux/features/page';
 import { setSelectedChats } from '../../../redux/features/chore';
 import { setModal } from '../../../redux/features/modal';
 import socket from '../../../helpers/socket';
+import RoomHeaderMenu from '../../modals/roomHeaderMenu';
 
 function Header() {
   const dispatch = useDispatch();
@@ -109,6 +110,7 @@ function Header() {
 
   return (
     <nav className="h-16 grid grid-cols-[1fr_auto] gap-4 justify-between items-center bg-white dark:bg-spill-900">
+      <RoomHeaderMenu />
       {
         selectedChats.length === 0 && (
           <>
@@ -163,6 +165,10 @@ function Header() {
               <button
                 type="button"
                 className="p-2 rounded-full hover:bg-spill-100 dark:hover:bg-spill-800"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  dispatch(setModal({ target: 'roomHeaderMenu' }));
+                }}
               >
                 <i><bi.BiDotsVerticalRounded /></i>
               </button>
