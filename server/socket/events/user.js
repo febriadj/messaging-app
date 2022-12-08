@@ -16,10 +16,15 @@ module.exports = (socket) => {
     socket.broadcast.emit('user/connect', userId);
   });
 
-  // user disconnect
   socket.on('disconnect', async () => {
     const { userId } = socket;
+    await ProfileModel.updateOne({ userId }, { $set: { online: false } });
 
+    socket.broadcast.emit('user/disconnect', userId);
+  });
+
+  socket.on('user/disconnect', async () => {
+    const { userId } = socket;
     await ProfileModel.updateOne({ userId }, { $set: { online: false } });
 
     socket.broadcast.emit('user/disconnect', userId);

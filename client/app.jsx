@@ -51,6 +51,18 @@ function App() {
     };
   }, []);
 
+  useEffect(() => {
+    document.onvisibilitychange = (e) => {
+      if (master) {
+        const active = e.target.visibilityState === 'visible';
+        socket.emit(
+          active ? 'user/connect' : 'user/disconnect',
+          master._id,
+        );
+      }
+    };
+  }, [!!master]);
+
   return (
     <BrowserRouter>
       <Routes>
