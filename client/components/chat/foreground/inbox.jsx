@@ -5,6 +5,7 @@ import axios from 'axios';
 import * as ri from 'react-icons/ri';
 import socket from '../../../helpers/socket';
 import { setChatRoom } from '../../../redux/features/room';
+import notification from '../../../helpers/notification';
 
 function Inbox() {
   const dispatch = useDispatch();
@@ -25,7 +26,7 @@ function Inbox() {
     const abortCtrl = new AbortController();
     handleGetInboxs(abortCtrl.signal);
 
-    socket.on('inbox/find', (payload) => {
+    socket.on('inbox/find', async (payload) => {
       // concat old inboxs data with new data
       setInboxs((prev) => {
         const olds = prev.filter((elem) => elem._id !== payload._id);
@@ -37,6 +38,16 @@ function Inbox() {
         audio.volume = 1;
 
         audio.play();
+
+        const isGroup = payload.roomType === 'group';
+        const sender = payload.owners.find((elem) => elem.userId === payload.content.from);
+
+        // browser notification
+        notification({
+          title: `${isGroup ? payload.group.name : sender.fullname} (@${sender.username})`,
+          body: payload.content.text,
+          icon: isGroup ? payload.group.avatar : sender.avatar,
+        });
       }
     });
 
