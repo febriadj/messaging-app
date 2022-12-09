@@ -35,6 +35,7 @@ function Chat() {
       <modal.confirmDeleteChat />
       <modal.sendFile />
       <modal.confirmAddParticipant />
+      <modal.editGroup />
 
       <cont.foreground />
       <cont.room />

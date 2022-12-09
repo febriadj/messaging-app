@@ -19,6 +19,7 @@ const ModalSlice = createSlice({
     attachMenu: false,
     confirmAddParticipant: false,
     roomHeaderMenu: false,
+    editGroup: false,
   },
   reducers: {
     /* eslint-disable no-param-reassign */

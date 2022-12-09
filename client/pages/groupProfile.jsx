@@ -5,13 +5,17 @@ import * as bi from 'react-icons/bi';
 import * as ri from 'react-icons/ri';
 import * as md from 'react-icons/md';
 
+import { setChatRoom } from '../redux/features/room';
 import { setPage } from '../redux/features/page';
 import { setModal } from '../redux/features/modal';
+
+import socket from '../helpers/socket';
 
 function GroupProfile() {
   const dispatch = useDispatch();
   const {
     chore: { refreshGroupAvatar },
+    room: { chat: chatRoom },
     page: { groupProfile, addParticipant },
     user: { master },
   } = useSelector((state) => state);
@@ -47,6 +51,27 @@ function GroupProfile() {
     };
   }, [groupProfile, addParticipant]);
 
+  useEffect(() => {
+    socket.on('group/edit', (payload) => {
+      setGroup((prev) => ({ ...prev, ...payload }));
+
+      dispatch(setChatRoom({
+        ...chatRoom,
+        data: {
+          ...chatRoom.data,
+          group: {
+            ...chatRoom.data.group,
+            ...payload,
+          },
+        },
+      }));
+    });
+
+    return () => {
+      socket.off('group/edit');
+    };
+  }, []);
+
   return (
     <div
       className={`
@@ -70,6 +95,22 @@ function GroupProfile() {
           </button>
           <h1 className="text-2xl font-bold">Group Info</h1>
         </div>
+        { group && group.adminId === master._id && (
+          <button
+            type="button"
+            className="p-2 rounded-full hover:bg-spill-100 dark:hover:bg-spill-800"
+            onClick={(e) => {
+              e.stopPropagation();
+              // data: _id, name, and desc
+              dispatch(setModal({
+                target: 'editGroup',
+                data: group,
+              }));
+            }}
+          >
+            <i><bi.BiPencil /></i>
+          </button>
+        ) }
       </div>
       {
         group && (

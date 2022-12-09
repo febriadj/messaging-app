@@ -84,4 +84,26 @@ module.exports = (socket) => {
       console.log(error0.message);
     }
   });
+
+  socket.on('group/edit', async ({ groupId, name, desc }, cb) => {
+    try {
+      const errData = {};
+
+      if (name.length < 1 || desc.length > 300) {
+        errData.message = name.length < 1 ? 'Group name is required!' : 'Description too long (max. 300)';
+        throw errData;
+      }
+
+      const group = await GroupModel.findOneAndUpdate({ _id: groupId }, { $set: { name, desc } });
+      // refresh group name & desc in client
+      io.to(group.participantsId).emit('group/edit', { name, desc });
+
+      // success callback
+      cb({ success: true, message: 'Group edited successfully' });
+    }
+    catch ({ message }) {
+      // error callback
+      cb({ success: false, message });
+    }
+  });
 };
