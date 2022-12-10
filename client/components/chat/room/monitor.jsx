@@ -40,8 +40,11 @@ function Monitor({ loaded, chats, setChats }) {
 
   useEffect(() => {
     if (chats) {
-      if (master._id !== chats[chats.length - 1]?.userId) {
+      const last = chats[chats.length - 1];
+
+      if (master._id !== last?.userId && !last?.readed) {
         const { roomId, ownersId } = chatRoom.data;
+
         socket.emit('chat/read', { roomId, ownersId });
       }
     }
