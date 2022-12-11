@@ -60,9 +60,7 @@ function Inbox() {
       });
     });
 
-    socket.on('group/create', (payload) => {
-      setInboxs((prev) => [payload, ...prev]);
-    });
+    socket.on('group/create', (payload) => setInboxs((prev) => [payload, ...prev]));
 
     socket.on('group/add-participants', (payload) => {
       setInboxs((prev) => {
@@ -71,13 +69,26 @@ function Inbox() {
       });
     });
 
+    socket.on('inbox/delete', (roomsId) => {
+      setInboxs((prev) => prev.filter((elem) => !roomsId.includes(elem.roomId)));
+    });
+
+    socket.on('group/exit', (payload) => {
+      setInboxs((prev) => [
+        payload.inbox,
+        ...prev.filter((elem) => elem.roomId !== payload.inbox.roomId),
+      ]);
+    });
+
     return () => {
       abortCtrl.abort();
 
       socket.off('group/create');
+      socket.off('group/add-participants');
+      socket.off('group/exit');
       socket.off('inbox/find');
       socket.off('inbox/read');
-      socket.off('group/add-participants');
+      socket.off('inbox/delete');
     };
   }, []);
 

@@ -4,10 +4,12 @@ const { v4: uuidv4 } = require('uuid');
 const ProfileModel = require('../../db/models/profile');
 const GroupModel = require('../../db/models/group');
 const InboxModel = require('../../db/models/inbox');
+const ChatModel = require('../../db/models/chat');
+
 const Inbox = require('../../helpers/models/inbox');
 
-const config = require('../../config');
 const uniqueId = require('../../helpers/uniqueId');
+const config = require('../../config');
 
 module.exports = (socket) => {
   socket.on('group/create', async (args, cb) => {
@@ -100,6 +102,64 @@ module.exports = (socket) => {
 
       // success callback
       cb({ success: true, message: 'Group edited successfully' });
+    }
+    catch ({ message }) {
+      // error callback
+      cb({ success: false, message });
+    }
+  });
+
+  socket.on('group/exit', async ({ userId, groupId }, cb) => {
+    try {
+      const group = await GroupModel.findOneAndUpdate(
+        { _id: groupId },
+        { $pull: { participantsId: userId } },
+      );
+
+      // updated participantsId
+      const participantsId = group.participantsId.filter((elem) => elem !== userId);
+
+      // if you're the last participant in the group
+      if (participantsId.length === 0) {
+        // permanently delete data (inbox, group, and chats) related to the group
+        await InboxModel.deleteOne({ roomId: group.roomId });
+        await GroupModel.deleteOne({ _id: groupId });
+        await ChatModel.deleteOne({ roomId: group.roomId });
+      } else {
+        // if you're admin
+        if (group.adminId === userId) {
+          // give admin status to other participants in the group
+          const adminId = participantsId[0];
+          await GroupModel.updateOne({ _id: groupId }, { $set: { adminId } });
+        }
+
+        const profile = await ProfileModel.findOne({ userId }, { fullname: 1 });
+
+        await InboxModel.updateOne(
+          { roomId: group.roomId },
+          {
+            $pull: { ownersId: userId },
+            $set: {
+              'content.senderName': profile.fullname,
+              'content.from': userId,
+              'content.text': 'left the group',
+              'content.time': new Date().toISOString(),
+            },
+          },
+        );
+
+        const inboxs = await Inbox.find({ roomId: group.roomId });
+        // update data in broadcast client
+        socket.broadcast.to(participantsId).emit('group/exit', {
+          groupId,
+          userId,
+          inbox: inboxs[0],
+        });
+      }
+
+      socket.emit('inbox/delete', [group.roomId]);
+      // success callback
+      cb({ success: true, message: 'Successfully exit the group' });
     }
     catch ({ message }) {
       // error callback

@@ -65,9 +65,14 @@ function RoomHeaderMenu() {
             },
             {
               _key: 'k-05',
-              html: 'Leave group',
+              html: 'Exit group',
               icon: <bi.BiExit />,
-              action() {},
+              action() {
+                dispatch(setModal({
+                  target: 'confirmExitGroup',
+                  data: { groupId: group._id, name: group.name },
+                }));
+              },
               style: isGroup ? 'block text-rose-600 dark:text-rose-400' : 'hidden',
             },
           ].map((elem) => (
