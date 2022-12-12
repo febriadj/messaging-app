@@ -16,11 +16,7 @@ function FriendProfile() {
     try {
       // get profile if profile page is opened
       if (friendProfile) {
-        const { data } = await axios.get('/profiles', {
-          params: { userId: friendProfile },
-          signal,
-        });
-
+        const { data } = await axios.get(`/profiles/${friendProfile}`, { signal });
         setProfile(data.payload);
       } else {
         // reset when profile page is closed after 150ms

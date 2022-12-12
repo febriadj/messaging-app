@@ -26,11 +26,7 @@ function Profile() {
     try {
       // get profile if profile page is opened
       if (page.profile) {
-        const { data } = await axios.get('/profiles', {
-          params: { userId: page.profile },
-          signal,
-        });
-
+        const { data } = await axios.get(`/profiles/${page.profile}`, { signal });
         setProfile(data.payload);
       } else {
         // destroy when profile page is closed after 150ms

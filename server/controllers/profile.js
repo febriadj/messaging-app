@@ -1,9 +1,9 @@
 const ProfileModel = require('../db/models/profile');
 const response = require('../helpers/response');
 
-exports.find = async (req, res) => {
+exports.findById = async (req, res) => {
   try {
-    const profile = await ProfileModel.findOne({ $or: [req.query] });
+    const profile = await ProfileModel.findOne({ userId: req.params.userId });
 
     response({
       res,
