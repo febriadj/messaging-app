@@ -3,12 +3,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import axios from 'axios';
 import * as bi from 'react-icons/bi';
-import { setPage } from '../redux/features/page';
+import * as ri from 'react-icons/ri';
+
 import { setModal } from '../redux/features/modal';
+import { setPage } from '../redux/features/page';
 
 function FriendProfile() {
   const dispatch = useDispatch();
-  const { page: { friendProfile } } = useSelector((state) => state);
+  const {
+    chore: { refreshFriendProfile },
+    page: { friendProfile },
+  } = useSelector((state) => state);
 
   const [profile, setProfile] = useState(null);
 
@@ -35,7 +40,7 @@ function FriendProfile() {
     return () => {
       abortCtrl.abort();
     };
-  }, [friendProfile]);
+  }, [friendProfile, refreshFriendProfile]);
 
   return (
     <div
@@ -60,6 +65,22 @@ function FriendProfile() {
           </button>
           <h1 className="text-2xl font-bold">Profile</h1>
         </div>
+        { profile && !profile.saved && (
+          <button
+            type="button"
+            className="p-2 rounded-full hover:bg-spill-200 dark:hover:bg-spill-800"
+            onClick={(e) => {
+              e.stopPropagation();
+
+              dispatch(setModal({
+                target: 'newcontact',
+                data: { username: profile.username },
+              }));
+            }}
+          >
+            <i><ri.RiUserAddLine /></i>
+          </button>
+        ) }
       </div>
       {
         profile && (

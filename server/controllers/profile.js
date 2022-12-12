@@ -1,13 +1,24 @@
 const ProfileModel = require('../db/models/profile');
+const ContactModel = require('../db/models/contact');
 const response = require('../helpers/response');
 
 exports.findById = async (req, res) => {
   try {
-    const profile = await ProfileModel.findOne({ userId: req.params.userId });
+    const targetId = req.params.userId;
+    const friendProfile = targetId !== req.user._id;
+
+    const profile = await ProfileModel.findOne({ userId: targetId });
+
+    const contact = friendProfile
+      ? await ContactModel.findOne({
+        userId: req.user._id,
+        friendId: targetId,
+      })
+      : false;
 
     response({
       res,
-      payload: profile,
+      payload: { ...profile._doc, saved: !!contact },
     });
   }
   catch (error0) {

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import * as bi from 'react-icons/bi';
 import { setModal } from '../../redux/features/modal';
+import { setRefreshFriendProfile } from '../../redux/features/chore';
 
 function NewContact() {
   const dispatch = useDispatch();
@@ -23,28 +24,37 @@ function NewContact() {
       e.preventDefault();
       const { data } = await axios.post('/contacts', form);
 
-      // reset form state
-      setForm({ username: '', fullname: '' });
+      // reset states
       setRespond({ success: true, message: data.message });
+      setForm({ username: '', fullname: '' });
+      // refresh friend profile
+      dispatch(setRefreshFriendProfile(data.payload._id));
 
       setTimeout(() => {
+        // close new-contact modal after 1s
         dispatch(setModal({
           target: 'newcontact',
+          data: false,
         }));
       }, 1000);
     }
     catch (error0) {
+      const { message } = error0.response.data;
       setRespond({
         success: false,
-        message: error0.response.data.message,
+        message,
       });
     }
   };
 
   useEffect(() => {
-    setRespond((prev) => ({ ...prev, message: null }));
-    setForm({ username: '', fullname: '' });
-  }, [modal.newcontact]);
+    if (modal.newcontact) {
+      setForm((prev) => ({
+        ...prev,
+        username: modal.newcontact?.username ?? '',
+      }));
+    }
+  }, [!!modal.newcontact]);
 
   return (
     <div
@@ -53,6 +63,11 @@ function NewContact() {
         absolute w-full h-full flex justify-center items-center
         bg-spill-600/40 dark:bg-black/60
       `}
+      aria-hidden
+      onClick={() => {
+        setRespond((prev) => ({ ...prev, message: null }));
+        setForm({ username: '', fullname: '' });
+      }}
     >
       <div
         aria-hidden

@@ -81,7 +81,7 @@ function Contact() {
                   e.stopPropagation();
 
                   if (elem.target === 'newcontact') {
-                    dispatch(setModal({ target: elem.target }));
+                    dispatch(setModal({ target: elem.target, data: { username: '' } }));
                   } else {
                     dispatch(setPage({ target: elem.target }));
                   }

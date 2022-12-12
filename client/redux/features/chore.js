@@ -5,6 +5,7 @@ const ChoreSlice = createSlice({
   initialState: {
     selectedParticipants: [],
     selectedChats: [],
+    refreshFriendProfile: null,
     refreshAvatar: null,
     refreshGroupAvatar: null,
   },
@@ -25,6 +26,9 @@ const ChoreSlice = createSlice({
         state.selectedChats = [];
       }
     },
+    setRefreshFriendProfile(state, action) {
+      state.refreshFriendProfile = action.payload;
+    },
     setRefreshAvatar(state, action) {
       state.refreshAvatar = action.payload;
     },
@@ -38,6 +42,7 @@ const ChoreSlice = createSlice({
 export const {
   setSelectedParticipants,
   setSelectedChats,
+  setRefreshFriendProfile,
   setRefreshAvatar,
   setRefreshGroupAvatar,
 } = ChoreSlice.actions;
