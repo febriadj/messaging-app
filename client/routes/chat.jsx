@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { setModal } from '../redux/features/modal';
@@ -10,6 +10,16 @@ function Chat() {
   const dispatch = useDispatch();
   const imageCropper = useSelector((state) => state.modal.imageCropper);
   const master = useSelector((state) => state.user.master);
+
+  useEffect(() => {
+    window.addEventListener('popstate', () => {
+      window.history.pushState(
+        null,
+        '',
+        window.location.href,
+      );
+    });
+  }, []);
 
   return (
     <div
