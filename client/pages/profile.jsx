@@ -126,7 +126,7 @@ function Profile() {
       </div>
       {
         profile && (
-          <div className="select-text overflow-y-auto scrollbar-thin scrollbar-thumb-spill-200 hover:scrollbar-thumb-spill-300 dark:scrollbar-thumb-spill-700 dark:hover:scrollbar-thumb-spill-600">
+          <div className="pb-16 overflow-y-auto scrollbar-thin scrollbar-thumb-spill-200 hover:scrollbar-thumb-spill-300 dark:scrollbar-thumb-spill-700 dark:hover:scrollbar-thumb-spill-600">
             <div className="p-4 flex flex-col items-center">
               <button
                 type="button"
@@ -152,7 +152,7 @@ function Profile() {
                   className="w-full h-full"
                 />
               </button>
-              <label htmlFor="profile-edit-control" className="relative flex items-start mt-4 px-10 cursor-text">
+              <label htmlFor="profile-edit-control" className="relative flex items-start mt-4 px-10 select-text cursor-text">
                 <h1
                   id="profile-edit-control"
                   suppressContentEditableWarning
@@ -197,7 +197,7 @@ function Profile() {
                         <p className="text-sm opacity-60 capitalize">{elem.label}</p>
                         <p
                           id="profile-edit-control"
-                          className="mt-1 w-full"
+                          className="mt-1 w-full select-text"
                           suppressContentEditableWarning
                           aria-hidden
                           onKeyPress={(e) => {
