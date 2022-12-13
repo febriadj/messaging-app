@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios';
 import * as bi from 'react-icons/bi';
 import { setModal } from '../../redux/features/modal';
-import { setRefreshFriendProfile } from '../../redux/features/chore';
+import { setRefreshContact, setRefreshFriendProfile } from '../../redux/features/chore';
 
 function NewContact() {
   const dispatch = useDispatch();
@@ -24,14 +25,17 @@ function NewContact() {
       e.preventDefault();
       const { data } = await axios.post('/contacts', form);
 
-      // reset states
       setRespond({ success: true, message: data.message });
       setForm({ username: '', fullname: '' });
-      // refresh friend profile
-      dispatch(setRefreshFriendProfile(data.payload._id));
+
+      // refresh contact and friend's profile page
+      dispatch(setRefreshContact(uuidv4()));
+      dispatch(setRefreshFriendProfile(uuidv4()));
 
       setTimeout(() => {
-        // close new-contact modal after 1s
+        // reset response dialog
+        setRespond({ success: true, message: '' });
+        // and close new-contact modal after 1s
         dispatch(setModal({
           target: 'newcontact',
           data: false,

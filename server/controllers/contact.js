@@ -84,3 +84,23 @@ exports.find = async (req, res) => {
     });
   }
 };
+
+exports.deleteByFriendId = async (req, res) => {
+  try {
+    const { friendId } = req.params;
+    await ContactModel.deleteOne({ userId: req.user._id, friendId });
+
+    response({
+      res,
+      message: 'Contact deleted successfully',
+    });
+  }
+  catch (error0) {
+    response({
+      res,
+      statusCode: error0.statusCode || 500,
+      success: false,
+      message: error0.message,
+    });
+  }
+};

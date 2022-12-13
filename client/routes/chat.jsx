@@ -37,6 +37,7 @@ function Chat() {
       <modal.confirmAddParticipant />
       <modal.editGroup />
       <modal.confirmExitGroup />
+      <modal.confirmDeleteContact />
 
       <cont.foreground />
       <cont.room />

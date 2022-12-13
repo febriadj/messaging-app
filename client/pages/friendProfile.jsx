@@ -46,7 +46,7 @@ function FriendProfile() {
     <div
       className={`
         ${!friendProfile && 'translate-x-full'}
-        transition absolute w-full sm:w-[380px] h-full right-0 z-10 grid grid-rows-[auto_1fr] overflow-hidden
+        transition absolute w-full sm:w-[380px] h-full right-0 z-20 grid grid-rows-[auto_1fr] overflow-hidden
         bg-white dark:bg-spill-900
       `}
     >
@@ -84,7 +84,7 @@ function FriendProfile() {
       </div>
       {
         profile && (
-          <div className="overflow-y-auto scrollbar-thin scrollbar-thumb-spill-200 hover:scrollbar-thumb-spill-300 dark:scrollbar-thumb-spill-700 dark:hover:scrollbar-thumb-spill-600">
+          <div className="pb-16 overflow-y-auto scrollbar-thin scrollbar-thumb-spill-200 hover:scrollbar-thumb-spill-300 dark:scrollbar-thumb-spill-700 dark:hover:scrollbar-thumb-spill-600">
             <div className="p-4 flex flex-col items-center">
               <img
                 src={profile.avatar}
@@ -120,6 +120,27 @@ function FriendProfile() {
                   ))
               }
             </div>
+            {
+              profile.saved && (
+                <div className="mt-6 grid">
+                  <button
+                    type="button"
+                    className="py-2 px-4 grid grid-cols-[auto_1fr] gap-4 text-left text-rose-600 dark:text-rose-400 bg-rose-600/10 hover:bg-rose-600/20 dark:bg-rose-400/10 dark:hover:bg-rose-400/20"
+                    onClick={(e) => {
+                      e.stopPropagation();
+
+                      dispatch(setModal({
+                        target: 'confirmDeleteContact',
+                        data: profile.userId,
+                      }));
+                    }}
+                  >
+                    <i><bi.BiTrashAlt /></i>
+                    <p className="font-bold">Delete Contact</p>
+                  </button>
+                </div>
+              )
+            }
           </div>
         )
       }
