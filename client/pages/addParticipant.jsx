@@ -45,7 +45,7 @@ function AddParticipant() {
       id="select-participant"
       className={`
         ${page.addParticipant ? 'delay-75' : 'translate-x-full'}
-        transition absolute w-full sm:w-[380px] h-full right-0 grid grid-rows-[auto_auto_1fr] overflow-hidden
+        transition absolute w-full sm:w-[380px] h-full right-0 z-20 grid grid-rows-[auto_auto_1fr] overflow-hidden
         bg-white dark:bg-spill-900
       `}
     >

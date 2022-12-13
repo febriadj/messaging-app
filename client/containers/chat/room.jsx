@@ -114,8 +114,8 @@ function Room() {
               <comp.monitor loaded={loaded} chats={chats} setChats={setChats} />
               <comp.send setChats={setChats} />
             </div>
-            <FriendProfile />
             <GroupProfile />
+            <FriendProfile />
             <GroupParticipant />
             <AddParticipant />
           </>

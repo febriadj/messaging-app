@@ -46,7 +46,7 @@ function FriendProfile() {
     <div
       className={`
         ${!friendProfile && 'translate-x-full'}
-        transition absolute w-full sm:w-[380px] h-full right-0 z-20 grid grid-rows-[auto_1fr] overflow-hidden
+        transition absolute w-full sm:w-[380px] h-full right-0 z-10 grid grid-rows-[auto_1fr] overflow-hidden
         bg-white dark:bg-spill-900
       `}
     >
