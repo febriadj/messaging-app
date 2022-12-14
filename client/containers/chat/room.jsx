@@ -21,6 +21,7 @@ function Room() {
 
   const [loaded, setLoaded] = useState(false);
   const [chats, setChats] = useState(null);
+  const [newMessage, setNewMessage] = useState(0);
 
   const handleGetChats = async (signal) => {
     try {
@@ -111,8 +112,17 @@ function Room() {
           <>
             <div className={`${(page.groupProfile || page.friendProfile) && '-translate-x-full sm:translate-x-0 xl:mr-[380px]'} transition-all w-full h-full grid grid-rows-[auto_1fr_auto] overflow-hidden`}>
               <comp.header />
-              <comp.monitor loaded={loaded} chats={chats} setChats={setChats} />
-              <comp.send setChats={setChats} />
+              <comp.monitor
+                loaded={loaded}
+                newMessage={newMessage}
+                setNewMessage={setNewMessage}
+                chats={chats}
+                setChats={setChats}
+              />
+              <comp.send
+                setNewMessage={setNewMessage}
+                setChats={setChats}
+              />
             </div>
             <GroupProfile />
             <FriendProfile />

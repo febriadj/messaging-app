@@ -9,7 +9,9 @@ import { setSelectedChats } from '../../../redux/features/chore';
 import { setPage } from '../../../redux/features/page';
 import { setModal } from '../../../redux/features/modal';
 
-function Monitor({ loaded, chats, setChats }) {
+function Monitor({
+  loaded, setNewMessage, newMessage, chats, setChats,
+}) {
   const dispatch = useDispatch();
   const {
     chore: { selectedChats },
@@ -238,6 +240,26 @@ function Monitor({ loaded, chats, setChats }) {
                 <p className="text-rose-900 dark:text-rose-100">This account has been deleted by the owner, you no longer have access to send messages to this account.</p>
               </div>
             </div>
+          )
+        }
+        {
+          newMessage > 0 && (
+            <button
+              type="button"
+              className="group fixed z-10 bottom-0 right-0 w-12 h-12 flex justify-center items-center rounded-full -translate-y-20 -translate-x-4 bg-white dark:bg-spill-800 hover:bg-sky-600 dark:hover:bg-sky-600"
+              onClick={() => {
+                const monitor = document.querySelector('#monitor');
+                monitor.scrollTo({
+                  top: monitor.scrollHeight,
+                  behavior: 'smooth',
+                });
+
+                setTimeout(() => setNewMessage(0), 150);
+              }}
+            >
+              <span className="font-bold absolute top-0 px-2 -translate-y-2/3 rounded-full text-white bg-sky-600">{newMessage}</span>
+              <i className="group-hover:text-white"><bi.BiChevronDown size={28} /></i>
+            </button>
           )
         }
       </div>

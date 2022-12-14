@@ -7,7 +7,7 @@ import { setModal } from '../../../redux/features/modal';
 
 import AttachMenu from '../../modals/attachMenu';
 
-function Send({ setChats }) {
+function Send({ setChats, setNewMessage }) {
   const dispatch = useDispatch();
   const { user: { master }, room: { chat: chatRoom } } = useSelector((state) => state);
 
@@ -67,10 +67,27 @@ function Send({ setChats }) {
 
       setTimeout(() => {
         const monitor = document.querySelector('#monitor');
-        monitor.scrollTo({
-          top: monitor.scrollHeight,
-          behavior: 'smooth',
-        });
+
+        if (payload.userId === master._id) {
+          monitor.scrollTo({
+            top: monitor.scrollHeight,
+            behavior: 'smooth',
+          });
+
+          return;
+        }
+
+        if (
+          (monitor.scrollHeight - monitor.clientHeight)
+          >= (monitor.scrollTop + monitor.clientHeight / 2)
+        ) {
+          setNewMessage((prev) => prev + 1);
+        } else {
+          monitor.scrollTo({
+            top: monitor.scrollHeight,
+            behavior: 'smooth',
+          });
+        }
       }, 150);
     });
 
