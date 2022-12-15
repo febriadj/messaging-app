@@ -11,7 +11,7 @@ const ProfileSchema = new Schema({
     trim: true,
     required: true,
     minLength: 3,
-    maxLength: 12,
+    maxLength: 24,
   },
   email: {
     type: Schema.Types.String,
