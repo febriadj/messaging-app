@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import * as bi from 'react-icons/bi';
+
+import { setSetting } from '../redux/features/user';
 import { setPage } from '../redux/features/page';
 import { setModal } from '../redux/features/modal';
 
 function Setting() {
   const dispatch = useDispatch();
-  const page = useSelector((state) => state.page);
 
-  const [setting, setSetting] = useState(null);
+  const setting = useSelector((state) => state.user.setting);
+  const page = useSelector((state) => state.page);
 
   const structure = [
     {
@@ -114,7 +116,7 @@ function Setting() {
       const { data } = await axios.get('/settings');
 
       document.body.classList[data.payload.dark ? 'add' : 'remove']('dark');
-      setSetting(data.payload);
+      dispatch(setSetting(data.payload));
     }
     catch (error0) {
       console.error(error0.message);
