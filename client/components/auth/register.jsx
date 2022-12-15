@@ -57,18 +57,21 @@ function Register({ setRespond }) {
             type: 'text',
             placeholder: 'Username',
             icon: <bi.BiAt size={20} />,
+            pattern: '[a-z0-9_-]{3,24}',
           },
           {
             target: 'email',
             type: 'email',
             placeholder: 'Email address',
             icon: <bi.BiEnvelope size={20} />,
+            pattern: null,
           },
           {
             target: 'password',
             type: 'password',
             placeholder: 'Password',
             icon: <bi.BiLockOpenAlt size={20} />,
+            pattern: null,
           },
         ].map((elem) => (
           <label key={elem.target} htmlFor="username" className="relative flex items-center">
@@ -78,8 +81,8 @@ function Register({ setRespond }) {
               name={elem.target}
               id={elem.target}
               placeholder={elem.placeholder}
-              minLength={3}
               className={`${form[elem.target].length > 0 ? 'peer valid:bg-gray-50' : ''} w-full py-2 px-12 border border-solid border-gray-300 rounded-md focus:border-gray-900`}
+              pattern={elem.pattern}
               value={form[elem.target]}
               onChange={handleChange}
               required

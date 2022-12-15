@@ -44,20 +44,33 @@ function Profile() {
     const editable = ctrl.hasAttribute('contentEditable');
 
     if (editable) {
-      // remove contentEditable attr
-      ctrl.removeAttribute('contentEditable');
+      const respond = parent.querySelector('#error-respond');
 
       if (form[elem.label] !== profile[elem.label]) {
         try {
+          // if username not valid
+          if (!/^[a-z0-9_-]{3,24}$/.test(form.username)) {
+            const errData = {
+              message: 'Username is invalid',
+            };
+            throw errData;
+          }
+
           await axios.put('/profiles', { [elem.label]: form[elem.label] });
         }
-        catch (error0) {
-          const errRespond = parent.querySelector('#error-respond');
-          errRespond.classList.remove('hidden');
-          errRespond.innerHTML = error0.response.data.message;
-
+        catch ({ message }) {
+          if (respond) {
+            respond.classList.remove('hidden');
+            respond.innerHTML = message;
+          }
           return;
         }
+      }
+      // remove contentEditable attr
+      ctrl.removeAttribute('contentEditable');
+
+      if (respond) {
+        respond.classList.add('hidden');
       }
     } else {
       // set contentEditable attr
@@ -74,9 +87,7 @@ function Profile() {
     // change border color
     parent.classList[!editable ? 'add' : 'remove']('border-sky-600', 'dark:border-sky-400');
     // edit-btn icon
-    [...e.target.children].forEach((c) => {
-      c.classList.toggle('hidden');
-    });
+    [...e.target.children].forEach((c) => c.classList.toggle('hidden'));
   };
 
   useEffect(() => {
