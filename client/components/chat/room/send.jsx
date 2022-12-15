@@ -9,7 +9,7 @@ import AttachMenu from '../../modals/attachMenu';
 
 function Send({ setChats, setNewMessage }) {
   const dispatch = useDispatch();
-  const { user: { master }, room: { chat: chatRoom } } = useSelector((state) => state);
+  const { user: { master, setting }, room: { chat: chatRoom } } = useSelector((state) => state);
 
   const isGroup = chatRoom.data.roomType === 'group';
 
@@ -32,9 +32,7 @@ function Send({ setChats, setNewMessage }) {
     });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
+  const handleSubmit = () => {
     if (form.text.length > 0 || form.file) {
       if (isGroup || (!isGroup && chatRoom.data.profile.active)) {
         socket.emit('chat/insert', {
@@ -129,6 +127,11 @@ function Send({ setChats, setNewMessage }) {
           className="py-4 w-full h-full placeholder:opacity-60"
           onChange={handleChange}
           value={form.text}
+          onKeyPress={(e) => {
+            if (setting.enterToSend && e.key === 'Enter') {
+              handleSubmit();
+            }
+          }}
         />
         <button
           type="submit"
