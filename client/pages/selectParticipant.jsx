@@ -63,11 +63,10 @@ function SelectParticipant() {
           </button>
           <h1 className="text-2xl font-bold">New Group</h1>
         </div>
-        <i className="p-2 rounded-full"><bi.BiSearchAlt /></i>
       </div>
       {/* participants */}
       <div className="overflow-hidden bg-spill-100/60 dark:bg-black/20">
-        <p className="text-sm px-4 py-2 opacity-80">Select participants</p>
+        <p className="text-sm px-4 py-2 opacity-80">{contacts ? 'Select participants' : 'Loading...'}</p>
         {
           selectedParticipants.length > 0 && (
             <div className="relative flex items-center">

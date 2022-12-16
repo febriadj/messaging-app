@@ -58,7 +58,7 @@ function Setting() {
         {
           target: 'enterToSend',
           title: 'Enter to send message',
-          desc: 'Enter key will send your message',
+          desc: 'Enter key will send your message.',
           toggle: true,
           icon: <bi.BiPaperPlane />,
         },
@@ -134,6 +134,7 @@ function Setting() {
         transition duration-200 absolute w-full h-full z-10 select-none grid grid-rows-[auto_1fr] overflow-hidden
         bg-white dark:bg-spill-900 dark:text-white/90
       `}
+      id="setting"
     >
       {/* header */}
       <div className="h-16 px-2 flex gap-4 items-center">
@@ -169,31 +170,42 @@ function Setting() {
                       <p>{child.title}</p>
                       { child.desc && <p className="mt-1 text-sm opacity-60">{child.desc}</p> }
                     </span>
-                    {
-                      child.toggle && (
-                        <button
-                          type="button"
-                          className={`
-                            ${setting[child.target] ? 'bg-sky-200 dark:bg-sky-400' : 'bg-spill-200 dark:bg-spill-700'}
-                            flex relative p-1 w-10 rounded-full
-                          `}
-                          onClick={async (e) => {
-                            e.stopPropagation();
-
-                            await axios.put('/settings', { [child.target]: !setting[child.target] });
-                            handleGetSetting();
-                          }}
-                        >
-                          <span
+                    <span className="grid grid-cols-[auto_auto] gap-2 items-center">
+                      <i id="spinner" className="animate-spin invisible"><bi.BiLoaderAlt size={18} /></i>
+                      {
+                        child.toggle && (
+                          <button
+                            type="button"
                             className={`
-                              ${setting[child.target] ? 'bg-sky-600 dark:bg-sky-900 translate-x-4' : 'bg-spill-600 dark:bg-spill-300'}
-                              transition block w-4 h-4 rounded-full
+                              ${setting[child.target] ? 'bg-sky-200 dark:bg-sky-400' : 'bg-spill-200 dark:bg-spill-700'}
+                              flex relative p-1 w-10 rounded-full
                             `}
+                            onClick={async (e) => {
+                              const spinner = e.target.parentElement.querySelector('#spinner');
+                              spinner.classList.remove('invisible');
+
+                              dispatch(setSetting({
+                                ...setting,
+                                [child.target]: !setting[child.target],
+                              }));
+
+                              await axios.put('/settings', { [child.target]: !setting[child.target] });
+                              await handleGetSetting();
+
+                              spinner.classList.add('invisible');
+                            }}
                           >
-                          </span>
-                        </button>
-                      )
-                    }
+                            <span
+                              className={`
+                                ${setting[child.target] ? 'bg-sky-600 dark:bg-sky-900 translate-x-4' : 'bg-spill-600 dark:bg-spill-300'}
+                                transition block w-4 h-4 rounded-full pointer-events-none
+                              `}
+                            >
+                            </span>
+                          </button>
+                        )
+                      }
+                    </span>
                   </div>
                 ))
               }

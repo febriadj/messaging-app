@@ -107,8 +107,19 @@ function Profile() {
         bg-white dark:bg-spill-900 dark:text-white/90
       `}
     >
+      {
+        // loading animation
+        !profile && (
+          <div className="absolute w-full h-full flex justify-center items-center bg-white dark:bg-spill-900">
+            <span className="flex gap-2 items-center">
+              <i className="animate-spin"><bi.BiLoaderAlt size={18} /></i>
+              <p>Loading</p>
+            </span>
+          </div>
+        )
+      }
       {/* header */}
-      <div className="h-16 px-2 flex gap-6 justify-between items-center">
+      <div className="h-16 px-2 z-10 flex gap-6 justify-between items-center">
         <div className="flex gap-4 items-center">
           <button
             type="button"
