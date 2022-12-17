@@ -128,6 +128,10 @@ function Monitor({
                           dispatch(setSelectedChats(elem._id));
                         }
                       }}
+                      onContextMenu={(e) => {
+                        e.preventDefault();
+                        dispatch(setSelectedChats(elem._id));
+                      }}
                     >
                       {
                         elem.replyTo && (
