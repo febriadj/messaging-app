@@ -6,10 +6,12 @@ import * as ri from 'react-icons/ri';
 import socket from '../../../helpers/socket';
 import { setChatRoom } from '../../../redux/features/room';
 import notification from '../../../helpers/notification';
+import InboxMenu from '../../modals/inboxMenu';
+import { setModal } from '../../../redux/features/modal';
 
 function Inbox() {
   const dispatch = useDispatch();
-  const { user: { master }, room: { chat: chatRoom } } = useSelector((state) => state);
+  const { user: { master }, room: { chat: chatRoom }, modal } = useSelector((state) => state);
   const [inboxs, setInboxs] = useState(null);
 
   const handleGetInboxs = async (signal) => {
@@ -93,14 +95,17 @@ function Inbox() {
   }, []);
 
   return (
-    <div className="-z-10 flex flex-col overflow-y-auto dark:bg-spill-900 scrollbar-thin scrollbar-thumb-spill-200 hover:scrollbar-thumb-spill-300 dark:scrollbar-thumb-spill-700 dark:hover:scrollbar-thumb-spill-600">
+    <div id="inbox" className="-z-10 flex flex-col overflow-y-auto dark:bg-spill-900 scrollbar-thin scrollbar-thumb-spill-200 hover:scrollbar-thumb-spill-300 dark:scrollbar-thumb-spill-700 dark:hover:scrollbar-thumb-spill-600">
+      { modal.inboxMenu && (
+        <InboxMenu />
+      ) }
       {
         inboxs && inboxs.map((elem) => (
           <div
             key={elem._id}
             aria-hidden
             className={`
-              ${chatRoom.data?.roomId === elem.roomId && 'bg-spill-100/60 dark:bg-spill-800/60'}
+              ${(chatRoom.data?.roomId === elem.roomId || modal.inboxMenu?.inboxId === elem._id) && 'bg-spill-100/60 dark:bg-spill-800/60'}
               p-4 grid grid-cols-[auto_1fr] gap-4 items-center cursor-pointer
               border-0 border-b border-solid border-spill-200 dark:border-spill-800
               hover:bg-spill-100/60 dark:hover:bg-spill-800/60
@@ -136,6 +141,22 @@ function Inbox() {
                   }));
                 }
               }
+            }}
+            onContextMenu={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+
+              const inbox = document.querySelector('#inbox');
+              const x = e.clientX > inbox.clientWidth / 2;
+
+              dispatch(setModal({
+                target: 'inboxMenu',
+                data: {
+                  inboxId: elem._id,
+                  x: x ? e.clientX - 160 : e.clientX,
+                  y: e.clientY,
+                },
+              }));
             }}
           >
             <img

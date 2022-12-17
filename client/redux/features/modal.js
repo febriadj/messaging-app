@@ -22,6 +22,7 @@ const ModalSlice = createSlice({
     editGroup: false,
     confirmExitGroup: false,
     confirmDeleteContact: false,
+    inboxMenu: false,
   },
   reducers: {
     /* eslint-disable no-param-reassign */
