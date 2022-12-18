@@ -11,7 +11,13 @@ import { setModal } from '../../../redux/features/modal';
 
 function Inbox() {
   const dispatch = useDispatch();
-  const { user: { master }, room: { chat: chatRoom }, modal } = useSelector((state) => state);
+  const {
+    chore: { refreshInbox },
+    user: { master },
+    room: { chat: chatRoom },
+    modal,
+  } = useSelector((state) => state);
+
   const [inboxs, setInboxs] = useState(null);
 
   const handleGetInboxs = async (signal) => {
@@ -28,6 +34,12 @@ function Inbox() {
     const abortCtrl = new AbortController();
     handleGetInboxs(abortCtrl.signal);
 
+    return () => {
+      abortCtrl.abort();
+    };
+  }, [refreshInbox]);
+
+  useEffect(() => {
     socket.on('inbox/find', async (payload) => {
       // concat old inboxs data with new data
       setInboxs((prev) => {
@@ -83,8 +95,6 @@ function Inbox() {
     });
 
     return () => {
-      abortCtrl.abort();
-
       socket.off('group/create');
       socket.off('group/add-participants');
       socket.off('group/exit');
@@ -100,7 +110,7 @@ function Inbox() {
         <InboxMenu />
       ) }
       {
-        inboxs && inboxs.map((elem) => (
+        inboxs && inboxs.filter((elem) => !elem.deletedBy.includes(master._id)).map((elem) => (
           <div
             key={elem._id}
             aria-hidden
@@ -149,10 +159,14 @@ function Inbox() {
               const inbox = document.querySelector('#inbox');
               const x = e.clientX > inbox.clientWidth / 2;
 
+              const { inboxId, roomId, roomType } = elem;
+
               dispatch(setModal({
                 target: 'inboxMenu',
                 data: {
-                  inboxId: elem._id,
+                  inboxId,
+                  roomId,
+                  roomType,
                   x: x ? e.clientX - 160 : e.clientX,
                   y: e.clientY,
                 },

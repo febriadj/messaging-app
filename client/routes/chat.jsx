@@ -48,6 +48,7 @@ function Chat() {
       <modal.editGroup />
       <modal.confirmExitGroup />
       <modal.confirmDeleteContact />
+      <modal.confirmDeleteChatAndInbox />
 
       <cont.foreground />
       <cont.room />

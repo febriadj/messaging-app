@@ -1,9 +1,13 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as bi from 'react-icons/bi';
+import { setModal } from '../../redux/features/modal';
 
 function InboxMenu() {
+  const dispatch = useDispatch();
   const inboxMenu = useSelector((state) => state.modal.inboxMenu);
+
+  const isGroup = inboxMenu.roomType === 'group';
 
   return (
     <div
@@ -20,12 +24,30 @@ function InboxMenu() {
           [
             { target: 'Mute', icon: <bi.BiBellOff /> },
             { target: 'Archive', icon: <bi.BiArchive /> },
-            { target: 'Delete', icon: <bi.BiTrashAlt /> },
+            {
+              target: isGroup ? 'Exit group' : 'Delete',
+              icon: isGroup ? <bi.BiExit /> : <bi.BiTrashAlt />,
+              action() {
+                if (!isGroup) {
+                  dispatch(setModal({
+                    target: 'confirmDeleteChatAndInbox',
+                    data: {
+                      inboxId: inboxMenu.inboxId,
+                      roomId: inboxMenu.roomId,
+                    },
+                  }));
+                }
+              },
+            },
           ].map((elem) => (
             <button
               key={elem.target}
               type="button"
               className="py-2 px-4 flex gap-4 items-center cursor-pointer hover:bg-spill-200 dark:hover:bg-spill-600"
+              onClick={(e) => {
+                e.stopPropagation();
+                elem.action();
+              }}
             >
               <i className="opacity-80">{elem.icon}</i>
               <p>{elem.target}</p>

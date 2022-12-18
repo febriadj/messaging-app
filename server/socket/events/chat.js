@@ -54,6 +54,7 @@ module.exports = (socket) => {
             roomId: args.roomId,
             ownersId: args.ownersId,
             fileId,
+            deletedBy: [],
             content: {
               from: args.userId,
               senderName: profile.fullname,

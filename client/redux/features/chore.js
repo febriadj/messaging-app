@@ -9,6 +9,7 @@ const ChoreSlice = createSlice({
     refreshAvatar: null,
     refreshGroupAvatar: null,
     refreshContact: null,
+    refreshInbox: null,
   },
   reducers: {
     /* eslint-disable no-param-reassign */
@@ -39,6 +40,9 @@ const ChoreSlice = createSlice({
     setRefreshContact(state, action) {
       state.refreshContact = action.payload;
     },
+    setRefreshInbox(state, action) {
+      state.refreshInbox = action.payload;
+    },
     /* eslint-enable no-param-reassign */
   },
 });
@@ -50,6 +54,7 @@ export const {
   setRefreshAvatar,
   setRefreshGroupAvatar,
   setRefreshContact,
+  setRefreshInbox,
 } = ChoreSlice.actions;
 
 export default ChoreSlice.reducer;

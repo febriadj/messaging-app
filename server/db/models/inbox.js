@@ -27,6 +27,10 @@ const InboxSchema = new Schema({
     type: Schema.Types.String,
     default: null,
   },
+  deletedBy: {
+    type: Schema.Types.Array,
+    default: [],
+  },
   content: {
     from: {
       type: Schema.Types.String, // -> the sender's userId

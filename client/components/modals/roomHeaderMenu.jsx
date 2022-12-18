@@ -8,8 +8,14 @@ import { setChatRoom } from '../../redux/features/room';
 function RoomHeaderMenu() {
   const dispatch = useDispatch();
 
-  const { roomType, profile, group } = useSelector((state) => state.room.chat.data);
   const modal = useSelector((state) => state.modal);
+  const {
+    _id: inboxId,
+    roomId,
+    profile,
+    group,
+    roomType,
+  } = useSelector((state) => state.room.chat.data);
 
   const isGroup = roomType === 'group';
 
@@ -60,7 +66,12 @@ function RoomHeaderMenu() {
               _key: 'k-04',
               html: 'Delete chat',
               icon: <bi.BiTrashAlt />,
-              action() {},
+              action() {
+                dispatch(setModal({
+                  target: 'confirmDeleteChatAndInbox',
+                  data: { inboxId, roomId },
+                }));
+              },
               style: isGroup ? 'hidden' : 'block text-rose-600 dark:text-rose-400',
             },
             {
@@ -85,7 +96,7 @@ function RoomHeaderMenu() {
                 setTimeout(() => elem.action(), 150);
               }}
             >
-              <i className="opacity-40">{elem.icon}</i>
+              <i className="opacity-80">{elem.icon}</i>
               <p>{elem.html}</p>
             </button>
           ))
