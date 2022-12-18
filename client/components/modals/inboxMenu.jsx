@@ -20,48 +20,34 @@ function InboxMenu() {
       }}
     >
       <div className="grid">
-        {
-          [
-            { target: 'Mute', icon: <bi.BiBellOff /> },
-            { target: 'Archive', icon: <bi.BiArchive /> },
-            {
-              target: isGroup ? 'Exit group' : 'Delete',
-              icon: isGroup ? <bi.BiExit /> : <bi.BiTrashAlt />,
-              action() {
-                if (!isGroup) {
-                  dispatch(setModal({
-                    target: 'confirmDeleteChatAndInbox',
-                    data: {
-                      inboxId: inboxMenu.inboxId,
-                      roomId: inboxMenu.roomId,
-                    },
-                  }));
-                } else {
-                  dispatch(setModal({
-                    target: 'confirmExitGroup',
-                    data: {
-                      groupId: inboxMenu.group._id,
-                      name: inboxMenu.group.name,
-                    },
-                  }));
-                }
-              },
-            },
-          ].map((elem) => (
-            <button
-              key={elem.target}
-              type="button"
-              className="py-2 px-4 flex gap-4 items-center cursor-pointer hover:bg-spill-200 dark:hover:bg-spill-600"
-              onClick={(e) => {
-                e.stopPropagation();
-                elem.action();
-              }}
-            >
-              <i className="opacity-80">{elem.icon}</i>
-              <p>{elem.target}</p>
-            </button>
-          ))
-        }
+        <button
+          type="button"
+          className="py-2 px-4 flex gap-4 items-center cursor-pointer hover:bg-spill-200 dark:hover:bg-spill-600"
+          onClick={(e) => {
+            e.stopPropagation();
+
+            if (!isGroup) {
+              dispatch(setModal({
+                target: 'confirmDeleteChatAndInbox',
+                data: {
+                  inboxId: inboxMenu.inboxId,
+                  roomId: inboxMenu.roomId,
+                },
+              }));
+            } else {
+              dispatch(setModal({
+                target: 'confirmExitGroup',
+                data: {
+                  groupId: inboxMenu.group._id,
+                  name: inboxMenu.group.name,
+                },
+              }));
+            }
+          }}
+        >
+          <i className="opacity-80">{isGroup ? <bi.BiExit /> : <bi.BiTrashAlt />}</i>
+          <p>{isGroup ? 'Exit group' : 'Delete'}</p>
+        </button>
       </div>
     </div>
   );
