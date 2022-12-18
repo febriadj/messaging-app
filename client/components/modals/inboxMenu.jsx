@@ -36,6 +36,14 @@ function InboxMenu() {
                       roomId: inboxMenu.roomId,
                     },
                   }));
+                } else {
+                  dispatch(setModal({
+                    target: 'confirmExitGroup',
+                    data: {
+                      groupId: inboxMenu.group._id,
+                      name: inboxMenu.group.name,
+                    },
+                  }));
                 }
               },
             },

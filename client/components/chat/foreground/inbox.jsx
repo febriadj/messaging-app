@@ -44,16 +44,15 @@ function Inbox() {
         const inbox = document.querySelector('#inbox');
         const x = e.clientX > inbox.clientWidth / 2;
 
-        const { inboxId, roomId, roomType } = elem;
-
         dispatch(setModal({
           target: 'inboxMenu',
           data: {
-            inboxId,
-            roomId,
-            roomType,
             x: x ? e.clientX - 160 : e.clientX,
             y: e.clientY,
+            inboxId: elem.inboxId,
+            roomId: elem.roomId,
+            roomType: elem.roomType,
+            group: elem.group,
           },
         }));
 
@@ -193,16 +192,15 @@ function Inbox() {
               const inbox = document.querySelector('#inbox');
               const x = e.clientX > inbox.clientWidth / 2;
 
-              const { inboxId, roomId, roomType } = elem;
-
               dispatch(setModal({
                 target: 'inboxMenu',
                 data: {
-                  inboxId,
-                  roomId,
-                  roomType,
                   x: x ? e.clientX - 160 : e.clientX,
                   y: e.clientY,
+                  inboxId: elem.inboxId,
+                  roomId: elem.roomId,
+                  roomType: elem.roomType,
+                  group: elem.group,
                 },
               }));
             }}
