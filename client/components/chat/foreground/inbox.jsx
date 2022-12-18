@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import axios from 'axios';
@@ -28,6 +28,40 @@ function Inbox() {
     catch (error0) {
       console.error(error0.response.data.message);
     }
+  };
+
+  const longclickval = useRef(0);
+
+  const handleLongClickMove = () => clearInterval(longclickval.current);
+  const handleLongClickEnd = () => clearInterval(longclickval.current);
+  const handleLongClickStart = (e, elem) => {
+    let i = 1;
+
+    longclickval.current = setInterval(() => {
+      if (i >= 3) {
+        clearInterval(longclickval.current);
+
+        const inbox = document.querySelector('#inbox');
+        const x = e.clientX > inbox.clientWidth / 2;
+
+        const { inboxId, roomId, roomType } = elem;
+
+        dispatch(setModal({
+          target: 'inboxMenu',
+          data: {
+            inboxId,
+            roomId,
+            roomType,
+            x: x ? e.clientX - 160 : e.clientX,
+            y: e.clientY,
+          },
+        }));
+
+        return;
+      }
+
+      i += 1;
+    }, 200);
   };
 
   useEffect(() => {
@@ -172,6 +206,9 @@ function Inbox() {
                 },
               }));
             }}
+            onTouchStart={(e) => handleLongClickStart(e, elem)}
+            onTouchEnd={() => handleLongClickEnd()}
+            onTouchMove={() => handleLongClickMove()}
           >
             <img
               src={
