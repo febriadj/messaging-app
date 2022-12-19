@@ -1,42 +1,52 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import * as bi from 'react-icons/bi';
-import config from '../../../config';
+import { v4 as uuidv4 } from 'uuid';
 import { setModal } from '../../../redux/features/modal';
 import { setPage } from '../../../redux/features/page';
+import { setRefreshInbox } from '../../../redux/features/chore';
+
+import config from '../../../config';
 
 function Header() {
   const dispatch = useDispatch();
 
   return (
-    <div className="grid items-center bg-white dark:bg-spill-900 dark:text-white/90">
+    <div className="grid items-center z-10 bg-white dark:bg-spill-900 dark:text-white/90">
       <div className="h-16 pl-4 pr-2 flex gap-5 justify-between items-center">
         {/* brand name */}
         <h1 className="text-2xl font-bold font-display">{config.brandName}</h1>
         <div className="flex">
           {
             [
-              { target: 'status', icon: <bi.BiRotateLeft /> },
-              { target: 'contact', icon: <bi.BiMessageSquareDots /> },
-              { target: 'minibox', icon: <bi.BiDotsVerticalRounded /> },
+              {
+                target: 'refresh-inbox',
+                icon: <bi.BiRotateRight />,
+                action() {
+                  dispatch(setRefreshInbox(uuidv4()));
+                },
+              },
+              {
+                target: 'contact',
+                icon: <bi.BiMessageSquareDots />,
+                action() {
+                  dispatch(setPage({ target: 'contact' }));
+                },
+              },
+              {
+                target: 'minibox',
+                icon: <bi.BiDotsVerticalRounded />,
+                action(e) {
+                  e.stopPropagation();
+                  dispatch(setModal({ target: 'minibox' }));
+                },
+              },
             ].map((elem) => (
               <button
                 type="button"
                 key={elem.target}
                 className="p-2 rounded-full hover:bg-spill-100 dark:hover:bg-spill-800"
-                onClick={(e) => {
-                  e.stopPropagation();
-
-                  if (elem.target !== 'minibox') {
-                    dispatch(setPage({ target: elem.target }));
-                    dispatch(setModal({
-                      target: 'minibox',
-                      data: false,
-                    }));
-                  } else {
-                    dispatch(setModal({ target: elem.target }));
-                  }
-                }}
+                onClick={elem.action}
               >
                 {elem.icon}
               </button>

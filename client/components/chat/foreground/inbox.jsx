@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import axios from 'axios';
@@ -9,7 +9,7 @@ import notification from '../../../helpers/notification';
 import InboxMenu from '../../modals/inboxMenu';
 import { setModal } from '../../../redux/features/modal';
 
-function Inbox() {
+function Inbox({ inboxs, setInboxs }) {
   const dispatch = useDispatch();
   const {
     chore: { refreshInbox },
@@ -18,10 +18,10 @@ function Inbox() {
     modal,
   } = useSelector((state) => state);
 
-  const [inboxs, setInboxs] = useState(null);
-
   const handleGetInboxs = async (signal) => {
     try {
+      setInboxs(null);
+
       const { data } = await axios.get('/inboxs', { signal });
       setInboxs(data.payload);
     }
