@@ -142,11 +142,7 @@ function Send({ setChats, setNewMessage }) {
             }
           }}
         >
-          {
-            form.text.length > 0
-              ? <i><bi.BiSend /></i>
-              : <i><bi.BiMicrophone /></i>
-          }
+          <i><bi.BiSend /></i>
         </button>
       </div>
       {
