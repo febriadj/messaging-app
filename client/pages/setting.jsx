@@ -131,7 +131,7 @@ function Setting() {
     <div
       className={`
         ${page.setting ? 'delay-75' : '-translate-x-full'}
-        transition duration-200 absolute w-full h-full z-10 select-none grid grid-rows-[auto_1fr] overflow-hidden
+        transition duration-200 absolute w-full h-full z-20 select-none grid grid-rows-[auto_1fr] overflow-hidden
         bg-white dark:bg-spill-900 dark:text-white/90
       `}
       id="setting"

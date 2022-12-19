@@ -12,7 +12,7 @@ function Minibox() {
     <div
       aria-hidden
       className={`
-        ${modal.minibox ? 'opacity-100 z-10' : 'opacity-0 -z-50 scale-50'}
+        ${modal.minibox ? 'opacity-100 z-20' : 'opacity-0 -z-50 scale-50'}
         transition duration-75 absolute right-0 translate-y-12 -translate-x-6 shadow-xl rounded-md
         bg-white dark:bg-spill-700 dark:text-white/90
       `}
@@ -49,7 +49,7 @@ function Minibox() {
                 );
               }}
             >
-              <i className="opacity-40">{elem.icon}</i>
+              <i className="opacity-80">{elem.icon}</i>
               <p>{elem.html}</p>
             </button>
           ))
