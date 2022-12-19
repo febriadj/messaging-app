@@ -21,7 +21,7 @@ function AttachMenu() {
             { target: 'file', icon: <bi.BiFile />, accept: '' },
           ].map((elem) => (
             <label htmlFor={`attach-${elem.target}`} key={elem.target} className="py-2 px-4 flex gap-4 items-center cursor-pointer hover:bg-spill-200 dark:hover:bg-spill-600">
-              <i className="opacity-40">{elem.icon}</i>
+              <i className="opacity-80">{elem.icon}</i>
               <p className="font-bold capitalize">{elem.target}</p>
               <input
                 type="file"
@@ -47,13 +47,6 @@ function AttachMenu() {
             </label>
           ))
         }
-        <button
-          type="button"
-          className="py-2 px-4 flex gap-4 items-center cursor-pointer hover:bg-spill-200 dark:hover:bg-spill-600"
-        >
-          <i className="opacity-40"><bi.BiBarChartSquare /></i>
-          <p className="font-bold">Poll</p>
-        </button>
       </div>
     </div>
   );
