@@ -1,8 +1,8 @@
 const InboxModel = require('../../db/models/inbox');
 
-exports.find = async (query) => {
+exports.find = async ({ ownersId }, search = '') => {
   const inboxs = await InboxModel.aggregate([
-    { $match: query },
+    { $match: { ownersId } },
     {
       $lookup: {
         from: 'profiles',
@@ -37,6 +37,20 @@ exports.find = async (query) => {
       $unwind: {
         path: '$file',
         preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $match: {
+        $or: [
+          {
+            roomType: 'private',
+            owners: { $elemMatch: { fullname: { $regex: new RegExp(search), $options: 'i' } } },
+          },
+          {
+            roomType: 'group',
+            'group.name': { $regex: new RegExp(search), $options: 'i' },
+          },
+        ],
       },
     },
   ]).sort({ 'content.time': -1 });

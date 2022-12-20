@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import * as bi from 'react-icons/bi';
 import { v4 as uuidv4 } from 'uuid';
@@ -8,8 +8,9 @@ import { setRefreshInbox } from '../../../redux/features/chore';
 
 import config from '../../../config';
 
-function Header() {
+function Header({ setSearch }) {
   const dispatch = useDispatch();
+  const inputTimeout = useRef(null);
 
   return (
     <div className="grid items-center z-10 bg-white dark:bg-spill-900 dark:text-white/90">
@@ -64,6 +65,17 @@ function Header() {
             id="search"
             className="w-full placeholder:opacity-80"
             placeholder="Search chat or group in inbox"
+            onChange={(e) => {
+              clearTimeout(inputTimeout.current);
+
+              inputTimeout.current = setTimeout(() => {
+                if (e.target.value.length < 3) {
+                  setSearch('');
+                } else {
+                  setSearch(e.target.value);
+                }
+              }, 1000);
+            }}
           />
         </label>
       </div>

@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
-import axios from 'axios';
 import * as ri from 'react-icons/ri';
 import socket from '../../../helpers/socket';
 import { setChatRoom } from '../../../redux/features/room';
@@ -12,23 +11,10 @@ import { setModal } from '../../../redux/features/modal';
 function Inbox({ inboxs, setInboxs }) {
   const dispatch = useDispatch();
   const {
-    chore: { refreshInbox },
     user: { master },
     room: { chat: chatRoom },
     modal,
   } = useSelector((state) => state);
-
-  const handleGetInboxs = async (signal) => {
-    try {
-      setInboxs(null);
-
-      const { data } = await axios.get('/inboxs', { signal });
-      setInboxs(data.payload);
-    }
-    catch (error0) {
-      console.error(error0.response.data.message);
-    }
-  };
 
   const longclickval = useRef(0);
 
@@ -62,15 +48,6 @@ function Inbox({ inboxs, setInboxs }) {
       i += 1;
     }, 200);
   };
-
-  useEffect(() => {
-    const abortCtrl = new AbortController();
-    handleGetInboxs(abortCtrl.signal);
-
-    return () => {
-      abortCtrl.abort();
-    };
-  }, [refreshInbox]);
 
   useEffect(() => {
     socket.on('inbox/find', async (payload) => {
