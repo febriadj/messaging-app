@@ -49,7 +49,7 @@ function Profile() {
       if (form[elem.label] !== profile[elem.label]) {
         try {
           // if username not valid
-          if (!/^[a-z0-9_-]{3,24}$/.test(form.username)) {
+          if (elem.label === 'username' && !/^[a-z0-9_-]{3,24}$/.test(form.username)) {
             const errData = {
               message: 'Username is invalid',
             };
