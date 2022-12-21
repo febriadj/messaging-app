@@ -72,20 +72,6 @@ function QR() {
               </div>
               <div className="group relative p-2 flex justify-center items-center bg-spill-100 dark:bg-spill-700">
                 <div id="canvas-wrap"></div>
-                <span className="absolute bottom-0 right-0 p-4 grid gap-2">
-                  {
-                    [{ target: 'qrScan', icon: <bi.BiScan /> }, { target: 'reset', icon: <bi.BiReset /> }]
-                      .map((elem) => (
-                        <button
-                          key={elem.target}
-                          type="button"
-                          className="p-2 rounded-full shadow-xl bg-white dark:bg-spill-600"
-                        >
-                          <i>{elem.icon}</i>
-                        </button>
-                      ))
-                  }
-                </span>
               </div>
               <p className="p-4 text-sm">Your QR code is private, if you share it with someone, they can scan it with their Spillgram camera to add you as a contact.</p>
             </>
