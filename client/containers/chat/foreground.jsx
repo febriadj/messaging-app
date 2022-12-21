@@ -9,15 +9,15 @@ function ForeGround() {
   const chatRoom = useSelector((state) => state.room.chat);
   const refreshInbox = useSelector((state) => state.chore.refreshInbox);
 
-  const [inboxs, setInboxs] = useState(null);
+  const [inboxes, setInboxes] = useState(null);
   const [search, setSearch] = useState('');
 
-  const handleGetInboxs = async (signal) => {
+  const handleGetInboxes = async (signal) => {
     try {
-      setInboxs(null);
+      setInboxes(null);
 
-      const { data } = await axios.get('/inboxs', { params: { search }, signal });
-      setInboxs(data.payload);
+      const { data } = await axios.get('/inboxes', { params: { search }, signal });
+      setInboxes(data.payload);
     }
     catch (error0) {
       console.error(error0.response.data.message);
@@ -26,7 +26,7 @@ function ForeGround() {
 
   useEffect(() => {
     const abortCtrl = new AbortController();
-    handleGetInboxs(abortCtrl.signal);
+    handleGetInboxes(abortCtrl.signal);
 
     return () => {
       abortCtrl.abort();
@@ -37,7 +37,7 @@ function ForeGround() {
     <div className={`${chatRoom.isOpen && '-translate-x-full md:translate-x-0'} transition w-full h-full relative z-10 grid grid-rows-[auto_1fr] overflow-hidden`}>
       {
         // loading animation
-        !inboxs && (
+        !inboxes && (
           <div className="absolute w-full h-full z-0 flex justify-center items-center bg-white dark:bg-spill-900">
             <span className="flex gap-2 items-center">
               <i className="animate-spin"><bi.BiLoaderAlt size={18} /></i>
@@ -54,7 +54,7 @@ function ForeGround() {
       <fg.minibox />
       <fg.openContact />
       <fg.header setSearch={setSearch} />
-      <fg.inbox inboxs={inboxs} setInboxs={setInboxs} />
+      <fg.inbox inboxes={inboxes} setInboxes={setInboxes} />
     </div>
   );
 }

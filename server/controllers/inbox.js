@@ -3,11 +3,11 @@ const response = require('../helpers/response');
 
 exports.find = async (req, res) => {
   try {
-    const inboxs = await Inbox.find({ ownersId: req.user._id }, req.query.search);
+    const inboxes = await Inbox.find({ ownersId: req.user._id }, req.query.search);
 
     response({
       res,
-      payload: inboxs,
+      payload: inboxes,
     });
   }
   catch (error0) {

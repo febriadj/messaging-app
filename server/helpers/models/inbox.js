@@ -1,7 +1,7 @@
 const InboxModel = require('../../db/models/inbox');
 
 exports.find = async ({ ownersId }, search = '') => {
-  const inboxs = await InboxModel.aggregate([
+  const inboxes = await InboxModel.aggregate([
     { $match: { ownersId } },
     {
       $lookup: {
@@ -55,5 +55,5 @@ exports.find = async ({ ownersId }, search = '') => {
     },
   ]).sort({ 'content.time': -1 });
 
-  return inboxs;
+  return inboxes;
 };

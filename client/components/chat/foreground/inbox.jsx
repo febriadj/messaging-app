@@ -8,7 +8,7 @@ import notification from '../../../helpers/notification';
 import InboxMenu from '../../modals/inboxMenu';
 import { setModal } from '../../../redux/features/modal';
 
-function Inbox({ inboxs, setInboxs }) {
+function Inbox({ inboxes, setInboxes }) {
   const dispatch = useDispatch();
   const {
     user: { master },
@@ -51,8 +51,8 @@ function Inbox({ inboxs, setInboxs }) {
 
   useEffect(() => {
     socket.on('inbox/find', async (payload) => {
-      // concat old inboxs data with new data
-      setInboxs((prev) => {
+      // concat old inboxes data with new data
+      setInboxes((prev) => {
         const olds = prev.filter((elem) => elem._id !== payload._id);
         return [payload, ...olds];
       });
@@ -76,7 +76,7 @@ function Inbox({ inboxs, setInboxs }) {
     });
 
     socket.on('inbox/read', (payload) => {
-      setInboxs((prev) => {
+      setInboxes((prev) => {
         const index = prev.findIndex((elem) => elem._id === payload._id);
         prev.splice(index, 1, payload);
 
@@ -84,21 +84,21 @@ function Inbox({ inboxs, setInboxs }) {
       });
     });
 
-    socket.on('group/create', (payload) => setInboxs((prev) => [payload, ...prev]));
+    socket.on('group/create', (payload) => setInboxes((prev) => [payload, ...prev]));
 
     socket.on('group/add-participants', (payload) => {
-      setInboxs((prev) => {
+      setInboxes((prev) => {
         const olds = prev.filter((elem) => elem.roomId !== payload.roomId);
         return [payload, ...olds];
       });
     });
 
     socket.on('inbox/delete', (roomsId) => {
-      setInboxs((prev) => prev.filter((elem) => !roomsId.includes(elem.roomId)));
+      setInboxes((prev) => prev.filter((elem) => !roomsId.includes(elem.roomId)));
     });
 
     socket.on('group/exit', (payload) => {
-      setInboxs((prev) => [
+      setInboxes((prev) => [
         payload.inbox,
         ...prev.filter((elem) => elem.roomId !== payload.inbox.roomId),
       ]);
@@ -120,7 +120,7 @@ function Inbox({ inboxs, setInboxs }) {
         <InboxMenu />
       ) }
       {
-        inboxs && inboxs.filter((elem) => !elem.deletedBy.includes(master._id)).map((elem) => (
+        inboxes && inboxes.filter((elem) => !elem.deletedBy.includes(master._id)).map((elem) => (
           <div
             key={elem._id}
             aria-hidden

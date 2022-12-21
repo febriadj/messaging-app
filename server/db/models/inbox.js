@@ -54,4 +54,4 @@ const InboxSchema = new Schema({
   versionKey: false,
 });
 
-module.exports = model('inboxs', InboxSchema);
+module.exports = model('inboxes', InboxSchema);

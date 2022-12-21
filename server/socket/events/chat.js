@@ -66,11 +66,11 @@ module.exports = (socket) => {
         { new: true, upsert: true },
       );
 
-      const inboxs = await Inbox.find({ ownersId: { $all: args.ownersId } });
+      const inboxes = await Inbox.find({ ownersId: { $all: args.ownersId } });
 
       io.to(args.roomId).emit('chat/insert', { ...chat._doc, profile, file });
       // send the latest inbox data to be merge with old inbox data
-      io.to(args.ownersId).emit('inbox/find', inboxs[0]);
+      io.to(args.ownersId).emit('inbox/find', inboxes[0]);
     }
     catch (error0) {
       console.log(error0.message);
@@ -89,10 +89,10 @@ module.exports = (socket) => {
         { $set: { readed: true } },
       );
 
-      const inboxs = await Inbox.find({ ownersId: { $all: args.ownersId } });
+      const inboxes = await Inbox.find({ ownersId: { $all: args.ownersId } });
       const chats = await Chat.find({ roomId: args.roomId });
 
-      io.to(args.ownersId).emit('inbox/read', inboxs[0]);
+      io.to(args.ownersId).emit('inbox/read', inboxes[0]);
       io.to(args.roomId).emit('chat/read', chats);
     }
     catch (error0) {
