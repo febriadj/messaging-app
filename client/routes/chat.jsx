@@ -12,6 +12,7 @@ function Chat() {
   const master = useSelector((state) => state.user.master);
 
   useEffect(() => {
+    window.history.pushState(null, '', window.location.href);
     window.addEventListener('popstate', () => {
       window.history.pushState(
         null,
