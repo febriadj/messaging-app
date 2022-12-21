@@ -125,7 +125,7 @@ function SelectParticipant() {
         }
       </div>
       {/* content */}
-      <div className="">
+      <div className="pb-16 md:pb-0 overflow-y-auto dark:bg-spill-900 scrollbar-thin scrollbar-thumb-spill-200 hover:scrollbar-thumb-spill-300 dark:scrollbar-thumb-spill-700 dark:hover:scrollbar-thumb-spill-600">
         {
           contacts && contacts.map((elem) => (
             <div
