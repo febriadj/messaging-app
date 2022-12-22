@@ -66,7 +66,7 @@ function GroupParticipant() {
           <h1 className="text-2xl font-bold">Participants</h1>
         </div>
       </div>
-      <div className="flex flex-col overflow-y-auto scrollbar-thin scrollbar-thumb-spill-200 hover:scrollbar-thumb-spill-300 dark:scrollbar-thumb-spill-700 dark:hover:scrollbar-thumb-spill-600">
+      <div className="pb-16 md:pb-0 flex flex-col overflow-y-auto scrollbar-thin scrollbar-thumb-spill-200 hover:scrollbar-thumb-spill-300 dark:scrollbar-thumb-spill-700 dark:hover:scrollbar-thumb-spill-600">
         {
           participants && participants.map((elem) => (
             <div

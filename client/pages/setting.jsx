@@ -149,7 +149,7 @@ function Setting() {
         </button>
         <h1 className="text-2xl font-bold">Settings</h1>
       </div>
-      <div className="grid gap-6 overflow-y-auto scrollbar-thin scrollbar-thumb-spill-200 hover:scrollbar-thumb-spill-300 dark:scrollbar-thumb-spill-700 dark:hover:scrollbar-thumb-spill-600">
+      <div className="pb-16 md:pb-0 grid gap-6 overflow-y-auto scrollbar-thin scrollbar-thumb-spill-200 hover:scrollbar-thumb-spill-300 dark:scrollbar-thumb-spill-700 dark:hover:scrollbar-thumb-spill-600">
         {
           setting && structure.map((struct) => (
             <div key={struct.section} className="grid">

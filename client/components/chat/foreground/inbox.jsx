@@ -115,7 +115,7 @@ function Inbox({ inboxes, setInboxes }) {
   }, []);
 
   return (
-    <div id="inbox" className="-z-10 flex flex-col overflow-y-auto dark:bg-spill-900 scrollbar-thin scrollbar-thumb-spill-200 hover:scrollbar-thumb-spill-300 dark:scrollbar-thumb-spill-700 dark:hover:scrollbar-thumb-spill-600">
+    <div id="inbox" className="pb-16 md:pb-0 -z-10 flex flex-col overflow-y-auto dark:bg-spill-900 scrollbar-thin scrollbar-thumb-spill-200 hover:scrollbar-thumb-spill-300 dark:scrollbar-thumb-spill-700 dark:hover:scrollbar-thumb-spill-600">
       { modal.inboxMenu && (
         <InboxMenu />
       ) }

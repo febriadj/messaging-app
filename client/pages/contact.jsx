@@ -104,7 +104,7 @@ function Contact() {
             ))
           }
         </div>
-        <div className="grid">
+        <div className="pb-16 md:pb-0 grid">
           <span className="py-2 px-4 text-sm bg-spill-100/60 dark:bg-black/20">
             <p className="opacity-80">
               { contacts ? `Contacts on ${config.brandName}: ${contacts.length}` : 'Loading...' }

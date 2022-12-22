@@ -125,7 +125,7 @@ function GroupProfile() {
       </div>
       {
         group && (
-          <div className="overflow-y-auto scrollbar-thin scrollbar-thumb-spill-200 hover:scrollbar-thumb-spill-300 dark:scrollbar-thumb-spill-700 dark:hover:scrollbar-thumb-spill-600">
+          <div className="pb-16 md:pb-0 overflow-y-auto scrollbar-thin scrollbar-thumb-spill-200 hover:scrollbar-thumb-spill-300 dark:scrollbar-thumb-spill-700 dark:hover:scrollbar-thumb-spill-600">
             <div className="p-4 flex flex-col items-center">
               <button
                 type="button"
@@ -218,7 +218,7 @@ function GroupProfile() {
                   group.participantsId.length > participants.length && (
                     <button
                       type="button"
-                      className="mb-6 py-2 px-4 flex gap-4 hover:bg-spill-800"
+                      className="py-2 px-4 flex gap-4 hover:bg-spill-800"
                       onClick={() => {
                         dispatch(setPage({
                           target: 'groupParticipant',
