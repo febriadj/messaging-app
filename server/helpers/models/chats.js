@@ -1,8 +1,8 @@
 const ChatModel = require('../../db/models/chat');
 
-exports.find = async (query) => {
+exports.find = async (roomId, { skip = 0, limit = 20 }) => {
   const chats = await ChatModel.aggregate([
-    { $match: { $or: [query] } },
+    { $match: { roomId } },
     {
       $lookup: {
         from: 'profiles',
@@ -43,11 +43,10 @@ exports.find = async (query) => {
         'profile.updatedAt': 0,
       },
     },
-    {
-      $sort: {
-        createdAt: 1,
-      },
-    },
+    { $sort: { createdAt: -1 } },
+    { $skip: Number(skip) },
+    { $limit: Number(limit) },
+    { $sort: { createdAt: 1 } },
   ]);
 
   return chats;

@@ -7,7 +7,6 @@ const FileModel = require('../../db/models/file');
 const ProfileModel = require('../../db/models/profile');
 
 const Inbox = require('../../helpers/models/inbox');
-const Chat = require('../../helpers/models/chats');
 const uniqueId = require('../../helpers/uniqueId');
 
 module.exports = (socket) => {
@@ -90,10 +89,9 @@ module.exports = (socket) => {
       );
 
       const inboxes = await Inbox.find({ ownersId: { $all: args.ownersId } });
-      const chats = await Chat.find({ roomId: args.roomId });
 
       io.to(args.ownersId).emit('inbox/read', inboxes[0]);
-      io.to(args.roomId).emit('chat/read', chats);
+      io.to(args.roomId).emit('chat/read', true);
     }
     catch (error0) {
       console.log(error0.message);

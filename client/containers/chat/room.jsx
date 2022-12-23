@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import * as md from 'react-icons/md';
 
-import { setModal } from '../../redux/features/modal';
 import { setSelectedChats } from '../../redux/features/chore';
 import socket from '../../helpers/socket';
 
@@ -19,58 +18,51 @@ function Room() {
   const dispatch = useDispatch();
   const { room: { chat: chatRoom }, page } = useSelector((state) => state);
 
+  const [prevRoom, setPrevRoom] = useState(null);
   const [loaded, setLoaded] = useState(false);
   const [chats, setChats] = useState(null);
   const [newMessage, setNewMessage] = useState(0);
+  const [control, setControl] = useState({ skip: 0, limit: 20 });
 
   const handleGetChats = async (signal) => {
     try {
-      setLoaded(false);
-      setChats(null);
-      dispatch(setSelectedChats([]));
+      const { data } = await axios.get(`/chats/${chatRoom.data.roomId}`, {
+        params: { skip: 0, limit: control.limit },
+        signal,
+      });
 
-      // get chats if room is opened
-      if (chatRoom.isOpen) {
-        const { data } = await axios.get('/chats', {
-          params: { roomId: chatRoom.data.roomId },
-          signal,
-        });
+      if (data.payload.length > 0) setChats(data.payload);
 
-        if (data.payload.length > 0) {
-          setChats(data.payload);
-        }
+      setTimeout(() => {
+        const monitor = document.querySelector('#monitor');
+        monitor.scrollTop = monitor.scrollHeight;
 
-        setTimeout(() => {
-          const monitor = document.querySelector('#monitor');
-          monitor.scrollTop = monitor.scrollHeight;
-
-          setLoaded(true);
-        }, 150);
-      }
+        setLoaded(true);
+      }, 150);
     }
     catch (error0) {
       console.error(error0.response.data.message);
     }
   };
 
-  const [prevRoom, setPrevRoom] = useState(null);
-  const handleOpenRoom = () => {
-    if (chatRoom.isOpen) {
-      socket.emit('room/open', {
-        prevRoom,
-        newRoom: chatRoom.data.roomId,
-      });
-    }
-
+  const handleOpenRoom = async (signal) => {
+    setLoaded(false);
+    setControl({ skip: 0, limit: 20 });
+    setChats(null);
+    dispatch(setSelectedChats([]));
     dispatch(setPage({ target: 'friendProfile', data: false }));
     dispatch(setPage({ target: 'groupProfile', data: false }));
+
+    if (chatRoom.isOpen) {
+      socket.emit('room/open', { prevRoom, newRoom: chatRoom.data.roomId });
+      // get messages
+      await handleGetChats(signal);
+    }
   };
 
   useEffect(() => {
     const abortCtrl = new AbortController();
-
-    handleOpenRoom();
-    handleGetChats(abortCtrl.signal);
+    handleOpenRoom(abortCtrl.signal);
 
     return () => {
       abortCtrl.abort();
@@ -80,22 +72,8 @@ function Room() {
   useEffect(() => {
     socket.on('room/open', (args) => setPrevRoom(args));
 
-    socket.on('chat/delete', (chatsId) => {
-      dispatch(setSelectedChats([]));
-      // close confirmDeleteChat modal
-      dispatch(setModal({
-        target: 'confirmDeleteChat',
-        data: false,
-      }));
-
-      setTimeout(() => {
-        setChats((prev) => prev.filter(({ _id }) => !chatsId.includes(_id)));
-      }, 300);
-    });
-
     return () => {
       socket.off('room/open');
-      socket.off('chat/delete');
     };
   }, []);
 
@@ -113,11 +91,13 @@ function Room() {
             <div className={`${(page.groupProfile || page.friendProfile) && '-translate-x-full sm:translate-x-0 xl:mr-[380px]'} transition-all w-full h-full grid grid-rows-[auto_1fr_auto] overflow-hidden`}>
               <comp.header />
               <comp.monitor
-                loaded={loaded}
                 newMessage={newMessage}
                 setNewMessage={setNewMessage}
                 chats={chats}
                 setChats={setChats}
+                control={control}
+                setControl={setControl}
+                loaded={loaded}
               />
               <comp.send
                 setNewMessage={setNewMessage}

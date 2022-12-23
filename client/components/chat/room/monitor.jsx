@@ -1,8 +1,9 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import * as ri from 'react-icons/ri';
 import * as bi from 'react-icons/bi';
+import axios from 'axios';
 import Linkify from 'linkify-react';
 import socket from '../../../helpers/socket';
 import { setSelectedChats } from '../../../redux/features/chore';
@@ -10,7 +11,13 @@ import { setPage } from '../../../redux/features/page';
 import { setModal } from '../../../redux/features/modal';
 
 function Monitor({
-  loaded, setNewMessage, newMessage, chats, setChats,
+  newMessage,
+  setNewMessage,
+  chats,
+  setChats,
+  control,
+  setControl,
+  loaded,
 }) {
   const dispatch = useDispatch();
   const {
@@ -22,6 +29,8 @@ function Monitor({
 
   const isGroup = chatRoom.data.roomType === 'group';
   const longclickval = useRef(0);
+  const isScrolled = useRef(false);
+  const [loadingScroll, setLoadingScroll] = useState(false);
 
   const handleLongClickMove = () => clearInterval(longclickval.current);
   const handleLongClickEnd = () => clearInterval(longclickval.current);
@@ -50,15 +59,70 @@ function Monitor({
         socket.emit('chat/read', { roomId, ownersId });
       }
     }
-  }, [chats ? chats.length : !!chats]);
+  }, [chats ? chats[chats.length - 1] : !!chats]);
 
   useEffect(() => {
-    socket.on('chat/read', (payload) => setChats(payload));
+    socket.on('chat/read', () => {
+      setChats((prev) => {
+        prev.filter((elem) => !elem.readed).map((elem) => Object.assign(elem, { readed: true }));
+
+        return prev;
+      });
+    });
+
+    socket.on('chat/delete', (chatsId) => {
+      if (chatRoom.isOpen) {
+        dispatch(setSelectedChats([]));
+        // close confirmDeleteChat modal
+        dispatch(setModal({
+          target: 'confirmDeleteChat',
+          data: false,
+        }));
+
+        setTimeout(() => {
+          setChats((prev) => prev.filter((elem) => !chatsId.includes(elem._id)));
+        }, 300);
+      }
+    });
 
     return () => {
       socket.off('chat/read');
+      socket.off('chat/delete');
     };
   }, []);
+
+  const handleInfiniteScroll = async (e) => {
+    const { scrollTop } = e.target;
+    const { skip, limit } = control;
+
+    if (scrollTop === 0) {
+      e.target.scrollTop = 1;
+    }
+
+    if (scrollTop < 128 && chats?.length >= skip + limit && !isScrolled.current) {
+      isScrolled.current = true;
+      setLoadingScroll(true);
+
+      const { data } = await axios.get(`/chats/${chatRoom.data.roomId}`, {
+        params: {
+          skip: skip + limit,
+          limit,
+        },
+      });
+
+      setChats((prev) => [...data.payload, ...prev]);
+      setControl((prev) => ({
+        ...prev,
+        skip: prev.skip + prev.limit,
+      }));
+
+      setLoadingScroll(false);
+
+      setTimeout(() => {
+        isScrolled.current = false;
+      }, 1000);
+    }
+  };
 
   return (
     <div
@@ -68,9 +132,8 @@ function Monitor({
         ${loaded ? 'scrollbar-thin' : 'scrollbar-none'} scrollbar-thumb-spill-300 hover:scrollbar-thumb-spill-400 dark:scrollbar-thumb-spill-800 dark:hover:scrollbar-thumb-spill-700
         select-text relative overflow-y-auto bg-spill-100 dark:bg-spill-950
       `}
-      onClick={() => {
-        dispatch(setSelectedChats([]));
-      }}
+      onClick={() => dispatch(setSelectedChats([]))}
+      onScroll={handleInfiniteScroll}
     >
       { !loaded && (
         <div className="absolute w-full h-full z-10 flex justify-center items-center bg-spill-100 dark:bg-spill-950">
@@ -81,6 +144,11 @@ function Monitor({
         </div>
       ) }
       <div className="relative py-4 flex flex-col">
+        { loadingScroll && (
+          <div className="mb-2 flex justify-center">
+            <i className="animate-spin"><bi.BiLoaderAlt size={32} /></i>
+          </div>
+        ) }
         {
           chats && chats
             .filter((elem) => !elem.deletedBy.includes(master._id))

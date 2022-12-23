@@ -57,6 +57,7 @@ function Send({ setChats, setNewMessage }) {
         // push new chat to state.chats
         setChats((prev) => {
           if (prev) {
+            prev.shift();
             return [...prev, payload];
           }
           return [payload];

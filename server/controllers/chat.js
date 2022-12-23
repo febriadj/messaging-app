@@ -7,9 +7,11 @@ const FileModel = require('../db/models/file');
 const response = require('../helpers/response');
 const Chat = require('../helpers/models/chats');
 
-exports.find = async (req, res) => {
+exports.findByRoomId = async (req, res) => {
   try {
-    const chats = await Chat.find(req.query);
+    const { skip, limit } = req.query;
+
+    const chats = await Chat.find(req.params.roomId, { skip, limit });
 
     response({
       res,
