@@ -31,14 +31,27 @@ function Room() {
         signal,
       });
 
-      if (data.payload.length > 0) setChats(data.payload);
+      if (data.payload.length > 0) {
+        setChats(data.payload);
 
-      setTimeout(() => {
-        const monitor = document.querySelector('#monitor');
-        monitor.scrollTop = monitor.scrollHeight;
+        const callback = (mutationlist, observer) => {
+          const monitor = document.querySelector('#monitor');
+          monitor.scrollTop = monitor.scrollHeight;
 
-        setLoaded(true);
-      }, 150);
+          setLoaded(true);
+
+          observer.disconnect();
+        };
+
+        const observer = new MutationObserver(callback);
+
+        const elem = document.querySelector('#monitor-content');
+        observer.observe(elem, { childList: true });
+
+        return;
+      }
+
+      setLoaded(true);
     }
     catch (error0) {
       console.error(error0.response.data.message);

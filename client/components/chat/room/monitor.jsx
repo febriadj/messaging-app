@@ -143,7 +143,7 @@ function Monitor({
           </span>
         </div>
       ) }
-      <div className="relative py-4 flex flex-col">
+      <div id="monitor-content" className="relative py-4 flex flex-col">
         { loadingScroll && (
           <div className="mb-2 flex justify-center">
             <i className="animate-spin"><bi.BiLoaderAlt size={32} /></i>
