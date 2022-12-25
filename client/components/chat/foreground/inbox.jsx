@@ -35,7 +35,7 @@ function Inbox({ inboxes, setInboxes }) {
           data: {
             x: x ? e.clientX - 160 : e.clientX,
             y: e.clientY,
-            inboxId: elem.inboxId,
+            inboxId: elem._id,
             roomId: elem.roomId,
             roomType: elem.roomType,
             group: elem.group,
@@ -174,7 +174,7 @@ function Inbox({ inboxes, setInboxes }) {
                 data: {
                   x: x ? e.clientX - 160 : e.clientX,
                   y: e.clientY,
-                  inboxId: elem.inboxId,
+                  inboxId: elem._id,
                   roomId: elem.roomId,
                   roomType: elem.roomType,
                   group: elem.group,
