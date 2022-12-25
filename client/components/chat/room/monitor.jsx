@@ -66,7 +66,7 @@ function Monitor({
       setChats((prev) => {
         prev.filter((elem) => !elem.readed).map((elem) => Object.assign(elem, { readed: true }));
 
-        return prev;
+        return [...prev];
       });
     });
 
