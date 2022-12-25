@@ -1,8 +1,8 @@
 const InboxModel = require('../../db/models/inbox');
 
-exports.find = async ({ ownersId }, search = '') => {
+exports.find = async (queries, search = '') => {
   const inboxes = await InboxModel.aggregate([
-    { $match: { ownersId } },
+    { $match: queries },
     {
       $lookup: {
         from: 'profiles',
