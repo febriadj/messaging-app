@@ -113,8 +113,9 @@ function Room() {
                 loaded={loaded}
               />
               <comp.send
-                setNewMessage={setNewMessage}
                 setChats={setChats}
+                setNewMessage={setNewMessage}
+                control={control}
               />
             </div>
             <GroupProfile />

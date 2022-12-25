@@ -7,7 +7,7 @@ import { setModal } from '../../../redux/features/modal';
 
 import AttachMenu from '../../modals/attachMenu';
 
-function Send({ setChats, setNewMessage }) {
+function Send({ setChats, setNewMessage, control }) {
   const dispatch = useDispatch();
   const { user: { master, setting }, room: { chat: chatRoom } } = useSelector((state) => state);
 
@@ -57,7 +57,9 @@ function Send({ setChats, setNewMessage }) {
         // push new chat to state.chats
         setChats((prev) => {
           if (prev) {
-            prev.shift();
+            if (prev.length >= control.limit) {
+              prev.shift();
+            }
             return [...prev, payload];
           }
           return [payload];
