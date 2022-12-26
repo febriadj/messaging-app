@@ -4,7 +4,7 @@ const ChoreSlice = createSlice({
   name: 'chore',
   initialState: {
     selectedParticipants: [],
-    selectedChats: [],
+    selectedChats: null,
     refreshFriendProfile: null,
     refreshAvatar: null,
     refreshGroupAvatar: null,
@@ -18,14 +18,15 @@ const ChoreSlice = createSlice({
     },
     setSelectedChats(state, action) {
       const str = typeof action.payload === 'string';
-      const chats = state.selectedChats;
 
       if (str) {
+        const chats = state.selectedChats ?? [];
+
         state.selectedChats = !chats.includes(action.payload)
           ? [...chats, action.payload]
           : chats.filter((el) => el !== action.payload);
       } else {
-        state.selectedChats = [];
+        state.selectedChats = action.payload;
       }
     },
     setRefreshFriendProfile(state, action) {

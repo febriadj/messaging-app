@@ -4,6 +4,7 @@ import * as bi from 'react-icons/bi';
 import { setModal } from '../../redux/features/modal';
 import { setPage } from '../../redux/features/page';
 import { setChatRoom } from '../../redux/features/room';
+import { setSelectedChats } from '../../redux/features/chore';
 
 function RoomHeaderMenu() {
   const dispatch = useDispatch();
@@ -59,7 +60,9 @@ function RoomHeaderMenu() {
               _key: 'k-03',
               html: 'Select messages',
               icon: <bi.BiCheckCircle />,
-              action() {},
+              action() {
+                dispatch(setSelectedChats([]));
+              },
               style: '',
             },
             {

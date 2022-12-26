@@ -132,7 +132,6 @@ function Monitor({
         ${loaded ? 'scrollbar-thin' : 'scrollbar-none'} scrollbar-thumb-spill-300 hover:scrollbar-thumb-spill-400 dark:scrollbar-thumb-spill-800 dark:hover:scrollbar-thumb-spill-700
         select-text relative overflow-y-auto bg-spill-100 dark:bg-spill-950
       `}
-      onClick={() => dispatch(setSelectedChats([]))}
       onScroll={handleInfiniteScroll}
     >
       { !loaded && (
@@ -168,13 +167,22 @@ function Monitor({
                 <div
                   className={`
                     ${elem.userId !== arr[i + 1]?.userId && 'mb-2'}
-                    ${selectedChats.includes(elem._id) && 'bg-spill-200 dark:bg-black/20'}
+                    ${selectedChats ? 'cursor-pointer' : ''}
+                    ${selectedChats && selectedChats.includes(elem._id) && 'bg-spill-200 dark:bg-black/20'}
                     w-full py-0.5 px-4 flex gap-4 justify-center items-center
                   `}
+                  aria-hidden
+                  onClick={() => {
+                    if (selectedChats) {
+                      dispatch(setSelectedChats(elem._id));
+                    }
+                  }}
                 >
-                  { selectedChats.includes(elem._id) && (
-                    <span className="p-0.5 rounded-full bg-sky-200 dark:bg-sky-600">
-                      <bi.BiCheck size={18} />
+                  { selectedChats && (
+                    <span className={`${selectedChats.includes(elem._id) ? 'bg-sky-400 dark:bg-sky-600' : 'transparent'} w-6 h-6 flex flex-none justify-center items-center rounded-full border-2 border-solid border-spill-900/60 dark:border-spill-100/60`}>
+                      {
+                        selectedChats.includes(elem._id) && <bi.BiCheck size={18} />
+                      }
                     </span>
                   ) }
                   <div className={`${elem.userId === master._id && 'justify-end'} w-[560px] flex`}>
@@ -189,13 +197,6 @@ function Monitor({
                       onTouchStart={() => handleLongClickStart(elem._id)}
                       onTouchEnd={() => handleLongClickEnd()}
                       onTouchMove={() => handleLongClickMove()}
-                      onClick={(e) => {
-                        e.stopPropagation();
-
-                        if (e.ctrlKey) {
-                          dispatch(setSelectedChats(elem._id));
-                        }
-                      }}
                       onContextMenu={(e) => {
                         e.preventDefault();
                         dispatch(setSelectedChats(elem._id));
@@ -257,11 +258,11 @@ function Monitor({
                           <span
                             className="truncate grid grid-cols-[auto_1fr] gap-2 items-start cursor-pointer"
                             aria-hidden
-                            onClick={(e) => {
+                            onClick={() => {
                               if (
                                 master._id !== elem.userId
                                 && page.friendProfile !== elem.userId
-                                && !e.ctrlKey
+                                && !selectedChats
                               ) {
                                 dispatch(setPage({
                                   target: 'friendProfile',

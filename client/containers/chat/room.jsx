@@ -62,7 +62,7 @@ function Room() {
     setLoaded(false);
     setControl({ skip: 0, limit: 20 });
     setChats(null);
-    dispatch(setSelectedChats([]));
+    dispatch(setSelectedChats(null));
     dispatch(setPage({ target: 'friendProfile', data: false }));
     dispatch(setPage({ target: 'groupProfile', data: false }));
 
