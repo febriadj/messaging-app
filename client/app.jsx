@@ -4,9 +4,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import './style.css';
 import * as route from './routes';
-import { setMaster } from './redux/features/user';
+import { setMaster, setSetting } from './redux/features/user';
 import socket from './helpers/socket';
 import config from './config';
+import { getSetting } from './api/services/setting.api';
 
 function App() {
   const dispatch = useDispatch();
@@ -22,15 +23,21 @@ function App() {
       if (token) {
         // set default authorization
         axios.defaults.headers.Authorization = `Bearer ${token}`;
+        // get account setting
+        const setting = await getSetting({ signal });
 
-        const { data } = await axios.get('/users', { signal });
-        // set master
-        dispatch(setMaster(data.payload));
-        socket.emit('user/connect', data.payload._id);
+        if (setting) {
+          dispatch(setSetting(setting));
+
+          const { data } = await axios.get('/users', { signal });
+          // set master
+          dispatch(setMaster(data.payload));
+          socket.emit('user/connect', data.payload._id);
+        }
       }
     }
     catch (error0) {
-      console.error(error0.response.data.message);
+      console.error(error0.message);
     }
   };
 

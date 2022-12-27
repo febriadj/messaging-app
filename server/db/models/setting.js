@@ -13,9 +13,9 @@ const SettingSchema = new Schema({
     type: Schema.Types.Boolean,
     default: true,
   },
-  ringtone: {
+  mute: {
     type: Schema.Types.Boolean,
-    default: true,
+    default: false,
   },
   sortContactByName: {
     type: Schema.Types.Boolean,

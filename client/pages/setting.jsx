@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import * as bi from 'react-icons/bi';
@@ -6,6 +6,7 @@ import * as bi from 'react-icons/bi';
 import { setSetting } from '../redux/features/user';
 import { setPage } from '../redux/features/page';
 import { setModal } from '../redux/features/modal';
+import { getSetting } from '../api/services/setting.api';
 
 function Setting() {
   const dispatch = useDispatch();
@@ -68,11 +69,11 @@ function Setting() {
       section: 'Notification',
       child: [
         {
-          target: 'ringtone',
-          title: 'Ringtone',
-          desc: null,
+          target: 'mute',
+          title: 'Mute',
+          desc: 'Turn off notifications for everyone',
           toggle: true,
-          icon: <bi.BiBell />,
+          icon: <bi.BiBellOff />,
         },
       ],
     },
@@ -103,22 +104,6 @@ function Setting() {
       ],
     },
   ];
-
-  const handleGetSetting = async () => {
-    try {
-      const { data } = await axios.get('/settings');
-
-      document.body.classList[data.payload.dark ? 'add' : 'remove']('dark');
-      dispatch(setSetting(data.payload));
-    }
-    catch (error0) {
-      console.error(error0.message);
-    }
-  };
-
-  useEffect(() => {
-    handleGetSetting();
-  }, []);
 
   return (
     <div
@@ -174,18 +159,24 @@ function Setting() {
                               flex relative p-1 w-10 rounded-full
                             `}
                             onClick={async (e) => {
-                              const spinner = e.target.parentElement.querySelector('#spinner');
-                              spinner.classList.remove('invisible');
+                              try {
+                                const spinner = e.target.parentElement.querySelector('#spinner');
+                                spinner.classList.remove('invisible');
 
-                              dispatch(setSetting({
-                                ...setting,
-                                [child.target]: !setting[child.target],
-                              }));
+                                const update = { [child.target]: !setting[child.target] };
 
-                              await axios.put('/settings', { [child.target]: !setting[child.target] });
-                              await handleGetSetting();
+                                dispatch(setSetting({ ...setting, ...update }));
 
-                              spinner.classList.add('invisible');
+                                await axios.put('/settings', update);
+
+                                const refresh = await getSetting();
+                                dispatch(setSetting(refresh ?? { ...setting, ...update }));
+
+                                spinner.classList.add('invisible');
+                              }
+                              catch (error0) {
+                                console.log(error0.message);
+                              }
                             }}
                           >
                             <span

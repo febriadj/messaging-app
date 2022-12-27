@@ -11,7 +11,7 @@ import { setModal } from '../../../redux/features/modal';
 function Inbox({ inboxes, setInboxes }) {
   const dispatch = useDispatch();
   const {
-    user: { master },
+    user: { master, setting },
     room: { chat: chatRoom },
     modal,
   } = useSelector((state) => state);
@@ -50,31 +50,6 @@ function Inbox({ inboxes, setInboxes }) {
   };
 
   useEffect(() => {
-    socket.on('inbox/find', async (payload) => {
-      // concat old inboxes data with new data
-      setInboxes((prev) => {
-        const olds = prev.filter((elem) => elem._id !== payload._id);
-        return [payload, ...olds];
-      });
-
-      if (payload.content.from !== master._id) {
-        const audio = new Audio('assets/sound/default-ringtone.mp3');
-        audio.volume = 1;
-
-        audio.play();
-
-        const isGroup = payload.roomType === 'group';
-        const sender = payload.owners.find((elem) => elem.userId === payload.content.from);
-
-        // browser notification
-        notification({
-          title: `${isGroup ? payload.group.name : sender.fullname} (@${sender.username})`,
-          body: payload.content.text,
-          icon: isGroup ? payload.group.avatar : sender.avatar,
-        });
-      }
-    });
-
     socket.on('inbox/read', (payload) => {
       setInboxes((prev) => {
         const index = prev.findIndex((elem) => elem._id === payload._id);
@@ -108,11 +83,43 @@ function Inbox({ inboxes, setInboxes }) {
       socket.off('group/create');
       socket.off('group/add-participants');
       socket.off('group/exit');
-      socket.off('inbox/find');
       socket.off('inbox/read');
       socket.off('inbox/delete');
     };
-  }, []);
+  }, [setting]);
+
+  useEffect(() => {
+    socket.on('inbox/find', async (payload) => {
+      // concat old inboxes data with new data
+      setInboxes((prev) => {
+        const olds = prev.filter((elem) => elem._id !== payload._id);
+        return [payload, ...olds];
+      });
+
+      const isNotSender = payload.content.from !== master._id;
+
+      if (isNotSender && !setting.mute) {
+        const audio = new Audio('assets/sound/default-ringtone.mp3');
+        audio.volume = 1;
+
+        audio.play();
+
+        const isGroup = payload.roomType === 'group';
+        const sender = payload.owners.find((elem) => elem.userId === payload.content.from);
+
+        // browser notification
+        notification({
+          title: `${isGroup ? payload.group.name : sender.fullname} (@${sender.username})`,
+          body: payload.content.text,
+          icon: isGroup ? payload.group.avatar : sender.avatar,
+        });
+      }
+    });
+
+    return () => {
+      socket.off('inbox/find');
+    };
+  }, [setting.mute]);
 
   return (
     <div id="inbox" className="pb-16 md:pb-0 -z-10 flex flex-col overflow-y-auto dark:bg-spill-900 scrollbar-thin scrollbar-thumb-spill-200 hover:scrollbar-thumb-spill-300 dark:scrollbar-thumb-spill-700 dark:hover:scrollbar-thumb-spill-600">
