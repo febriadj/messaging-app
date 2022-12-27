@@ -13,9 +13,10 @@ import { setSetting } from '../redux/features/user';
 
 function Contact() {
   const dispatch = useDispatch();
+  const setting = useSelector((state) => state.user.setting);
   const page = useSelector((state) => state.page);
   const refreshContact = useSelector((state) => state.chore.refreshContact);
-  const setting = useSelector((state) => state.user.setting);
+  const chatRoom = useSelector((state) => state.room.chat);
 
   const [contacts, setContacts] = useState(null);
 
@@ -158,7 +159,7 @@ function Contact() {
               <div
                 key={elem._id}
                 aria-hidden
-                className="grid grid-cols-[auto_auto_1fr] gap-4 p-4 items-center cursor-pointer border-0 border-b border-solid border-spill-200 dark:border-spill-800 hover:bg-spill-100/60 dark:hover:bg-spill-800/60"
+                className={`${chatRoom.data?.roomId === elem.roomId && 'bg-spill-100/60 dark:bg-spill-800/60'} grid grid-cols-[auto_auto_1fr] gap-4 p-4 items-center cursor-pointer border-0 border-b border-solid border-spill-200 dark:border-spill-800 hover:bg-spill-100/60 dark:hover:bg-spill-800/60`}
                 onClick={(e) => {
                   e.stopPropagation();
 
