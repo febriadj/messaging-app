@@ -1,6 +1,7 @@
 const { v4: uuidv4 } = require('uuid');
 const ProfileModel = require('../db/models/profile');
 const ContactModel = require('../db/models/contact');
+const SettingModel = require('../db/models/setting');
 
 const response = require('../helpers/response');
 
@@ -57,6 +58,8 @@ exports.insert = async (req, res) => {
 
 exports.find = async (req, res) => {
   try {
+    const setting = await SettingModel.findOne({ userId: req.user._id }, { sortContactByName: 1 });
+
     const contacts = await ContactModel.aggregate([
       { $match: { userId: req.user._id } },
       {
@@ -68,7 +71,8 @@ exports.find = async (req, res) => {
         },
       },
       { $unwind: '$profile' },
-    ]).sort({ 'profile.fullname': 1 });
+      { $sort: setting.sortContactByName ? { 'profile.fullname': 1 } : { 'profile.updatedAt': -1 } },
+    ]).collation({ locale: 'en' });
 
     response({
       res,

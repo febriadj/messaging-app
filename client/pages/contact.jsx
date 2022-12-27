@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import moment from 'moment';
 import axios from 'axios';
 import * as bi from 'react-icons/bi';
 import * as ri from 'react-icons/ri';
@@ -8,12 +9,13 @@ import { setPage } from '../redux/features/page';
 import { setModal } from '../redux/features/modal';
 import { setChatRoom } from '../redux/features/room';
 
-import config from '../config';
+import { setSetting } from '../redux/features/user';
 
 function Contact() {
   const dispatch = useDispatch();
   const page = useSelector((state) => state.page);
   const refreshContact = useSelector((state) => state.chore.refreshContact);
+  const setting = useSelector((state) => state.user.setting);
 
   const [contacts, setContacts] = useState(null);
 
@@ -31,6 +33,38 @@ function Contact() {
     catch (error0) {
       console.error(error0.message);
     }
+  };
+
+  const handleSortToggle = async () => {
+    try {
+      setContacts(null);
+      await axios.put('/settings', { sortContactByName: !setting.sortContactByName });
+
+      dispatch(setSetting({
+        ...setting,
+        sortContactByName: !setting.sortContactByName,
+      }));
+
+      await handleGetContacts();
+    }
+    catch (error0) {
+      console.error(error0.message);
+    }
+  };
+
+  const charTag = (name, prev = null) => {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const upper = name[0].toUpperCase();
+
+    if (chars.includes(upper) && (!prev || upper !== prev[0].toUpperCase())) {
+      return upper;
+    }
+
+    if (!chars.includes(upper) && !prev) {
+      return '#';
+    }
+
+    return null;
   };
 
   useEffect(() => {
@@ -51,7 +85,7 @@ function Contact() {
       `}
     >
       {/* header */}
-      <div className="h-16 px-2 grid gap-4">
+      <div className="h-16 px-2 grid grid-cols-[1fr_auto] gap-4">
         <div className="flex gap-4 items-center">
           <button
             type="button"
@@ -64,6 +98,19 @@ function Contact() {
           </button>
           <h1 className="text-2xl font-bold">Contacts</h1>
         </div>
+        <div className="flex items-center">
+          {
+            page.contact && (
+              <button
+                type="button"
+                className="p-2 rounded-full hover:bg-spill-100 dark:hover:bg-spill-800"
+                onClick={handleSortToggle}
+              >
+                <i className="text-2xl">{setting && setting.sortContactByName ? <bi.BiSortDown /> : <bi.BiSortAZ />}</i>
+              </button>
+            )
+          }
+        </div>
       </div>
       {/* content */}
       <div className="overflow-y-auto scrollbar-thin scrollbar-thumb-spill-200 hover:scrollbar-thumb-spill-300 dark:scrollbar-thumb-spill-700 dark:hover:scrollbar-thumb-spill-600">
@@ -75,7 +122,7 @@ function Contact() {
             ].map((elem) => (
               <div
                 key={elem.target}
-                className="grid grid-cols-[auto_1fr_auto] gap-6 p-4 items-center cursor-pointer border-0 border-b border-solid border-spill-200 dark:border-spill-800 hover:bg-spill-100/60 dark:hover:bg-spill-800/60"
+                className="grid grid-cols-[auto_1fr] gap-6 p-4 items-center cursor-pointer border-0 border-b border-solid border-spill-200 dark:border-spill-800 hover:bg-spill-100/60 dark:hover:bg-spill-800/60"
                 aria-hidden
                 onClick={(e) => {
                   e.stopPropagation();
@@ -89,33 +136,29 @@ function Contact() {
               >
                 <i>{elem.icon}</i>
                 <p className="font-bold">{elem.text}</p>
-                { elem.target === 'newcontact' && (
-                  <button
-                    type="button"
-                    className="opacity-60 hover:opacity-100"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                    }}
-                  >
-                    <i><bi.BiQr /></i>
-                  </button>
-                ) }
               </div>
             ))
           }
         </div>
         <div className="pb-16 md:pb-0 grid">
-          <span className="py-2 px-4 text-sm bg-spill-100/60 dark:bg-black/20">
-            <p className="opacity-80">
-              { contacts ? `Contacts on ${config.brandName}: ${contacts.length}` : 'Loading...' }
-            </p>
-          </span>
+          <div className="py-2 px-4 text-sm bg-spill-100/60 dark:bg-black/20">
+            {
+              contacts
+                ? (
+                  <div className="pr-2 opacity-80 flex justify-between">
+                    <p>{setting?.sortContactByName ? 'Sorted by name' : 'Sorted by last seen time' }</p>
+                    <p className="font-bold">{contacts.length}</p>
+                  </div>
+                )
+                : <p className="opacity-80">Loading...</p>
+            }
+          </div>
           {
-            contacts && contacts.map((elem) => (
+            contacts && contacts.map((elem, i, arr) => (
               <div
                 key={elem._id}
                 aria-hidden
-                className="grid grid-cols-[auto_1fr] gap-4 p-4 items-center cursor-pointer border-0 border-b border-solid border-spill-200 dark:border-spill-800 hover:bg-spill-100/60 dark:hover:bg-spill-800/60"
+                className="grid grid-cols-[auto_auto_1fr] gap-4 p-4 items-center cursor-pointer border-0 border-b border-solid border-spill-200 dark:border-spill-800 hover:bg-spill-100/60 dark:hover:bg-spill-800/60"
                 onClick={(e) => {
                   e.stopPropagation();
 
@@ -141,6 +184,17 @@ function Contact() {
                   }));
                 }}
               >
+                {
+                  setting && setting.sortContactByName && (
+                    <span className="flex justify-center">
+                      {
+                        charTag(elem.profile.fullname, arr[i - 1]?.profile.fullname)
+                          ? <h1 className="font-bold text-lg">{charTag(elem.profile.fullname, arr[i - 1]?.profile.fullname) ?? ''}</h1>
+                          : <h1 className="invisible">$</h1>
+                      }
+                    </span>
+                  )
+                }
                 <img
                   src={elem.profile?.avatar}
                   alt=""
@@ -148,9 +202,11 @@ function Contact() {
                 />
                 <span className="overflow-hidden">
                   <h1 className="truncate text-lg font-bold">{elem.profile?.fullname ?? '[inactive]'}</h1>
-                  { elem.profile.bio.length > 0 && (
-                    <p className="truncate opacity-60 mt-0.5">{elem.profile.bio}</p>
-                  ) }
+                  {
+                    !setting.sortContactByName
+                      ? <p className="truncate opacity-60 mt-0.5">{`Last seen ${moment(elem.profile.updatedAt).fromNow()}`}</p>
+                      : <p className="truncate opacity-60 mt-0.5">{elem.profile.bio}</p>
+                  }
                 </span>
               </div>
             ))

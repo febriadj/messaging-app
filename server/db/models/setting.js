@@ -17,6 +17,10 @@ const SettingSchema = new Schema({
     type: Schema.Types.Boolean,
     default: true,
   },
+  sortContactByName: {
+    type: Schema.Types.Boolean,
+    default: false,
+  },
 });
 
 module.exports = model('settings', SettingSchema);
