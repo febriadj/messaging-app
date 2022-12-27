@@ -30,13 +30,6 @@ function Setting() {
       section: 'Account',
       child: [
         {
-          target: 'lock',
-          title: 'Lock',
-          desc: 'Other people can\'t add your contact.',
-          toggle: true,
-          icon: <bi.BiLockOpenAlt />,
-        },
-        {
           target: 'changePass',
           title: 'Change password',
           desc: null,
