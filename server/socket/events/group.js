@@ -32,7 +32,7 @@ module.exports = (socket) => {
         content: {
           senderName: profile.fullname,
           from: args.adminId,
-          text: 'Group created',
+          text: 'group created',
           time: new Date().toISOString(),
         },
       }).save();
