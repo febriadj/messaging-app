@@ -11,7 +11,16 @@ function Chat() {
   const imageCropper = useSelector((state) => state.modal.imageCropper);
   const master = useSelector((state) => state.user.master);
 
+  const requestNotification = async () => {
+    if (Notification.permission !== 'granted') {
+      // ask the user for permission
+      await Notification.requestPermission();
+    }
+  };
+
   useEffect(() => {
+    requestNotification();
+
     window.history.pushState(null, '', window.location.href);
     window.addEventListener('popstate', () => {
       window.history.pushState(
