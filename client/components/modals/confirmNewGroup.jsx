@@ -5,7 +5,7 @@ import { setModal } from '../../redux/features/modal';
 import socket from '../../helpers/socket';
 import { setSelectedParticipants } from '../../redux/features/chore';
 
-function NewGroup() {
+function ConfirmNewGroup() {
   const dispatch = useDispatch();
   const {
     user: { master },
@@ -213,4 +213,4 @@ function NewGroup() {
   );
 }
 
-export default NewGroup;
+export default ConfirmNewGroup;

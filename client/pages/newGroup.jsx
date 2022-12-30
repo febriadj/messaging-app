@@ -7,7 +7,7 @@ import { setModal } from '../redux/features/modal';
 import { setPage } from '../redux/features/page';
 import { setSelectedParticipants } from '../redux/features/chore';
 
-function SelectParticipant() {
+function NewGroup() {
   const dispatch = useDispatch();
   const { modal, page, chore: { selectedParticipants } } = useSelector((state) => state);
   const [contacts, setContacts] = useState(null);
@@ -197,4 +197,4 @@ function SelectParticipant() {
   );
 }
 
-export default SelectParticipant;
+export default NewGroup;

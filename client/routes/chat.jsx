@@ -47,7 +47,7 @@ function Chat() {
       <modal.deleteAcc />
       <modal.qr />
       <modal.newContact />
-      <modal.newGroup />
+      <modal.confirmNewGroup />
       <modal.avatarUpload />
       <modal.webcam />
       { imageCropper && <modal.imageCropper /> }

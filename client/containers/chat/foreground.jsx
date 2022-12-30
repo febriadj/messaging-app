@@ -49,7 +49,7 @@ function ForeGround() {
       <page.setting />
       <page.contact />
       <page.profile />
-      <page.selectParticipant />
+      <page.newGroup />
 
       <fg.minibox />
       <fg.openContact />
