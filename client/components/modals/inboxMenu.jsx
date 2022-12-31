@@ -5,9 +5,9 @@ import { setModal } from '../../redux/features/modal';
 
 function InboxMenu() {
   const dispatch = useDispatch();
-  const inboxMenu = useSelector((state) => state.modal.inboxMenu);
+  const menu = useSelector((state) => state.modal.inboxMenu);
 
-  const isGroup = inboxMenu.roomType === 'group';
+  const isGroup = menu.inbox.roomType === 'group';
 
   return (
     <div
@@ -16,7 +16,7 @@ function InboxMenu() {
       aria-hidden
       onClick={(e) => e.stopPropagation()}
       style={{
-        transform: `translate(${inboxMenu.x}px, ${inboxMenu.y}px)`,
+        transform: `translate(${menu.x}px, ${menu.y}px)`,
       }}
     >
       <div className="grid">
@@ -30,16 +30,16 @@ function InboxMenu() {
               dispatch(setModal({
                 target: 'confirmDeleteChatAndInbox',
                 data: {
-                  inboxId: inboxMenu.inboxId,
-                  roomId: inboxMenu.roomId,
+                  inboxId: menu.inbox._id,
+                  roomId: menu.inbox.roomId,
                 },
               }));
             } else {
               dispatch(setModal({
                 target: 'confirmExitGroup',
                 data: {
-                  groupId: inboxMenu.group._id,
-                  name: inboxMenu.group.name,
+                  groupId: menu.inbox.group._id,
+                  name: menu.inbox.group.name,
                 },
               }));
             }

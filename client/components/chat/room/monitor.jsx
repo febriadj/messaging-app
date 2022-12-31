@@ -6,6 +6,7 @@ import * as bi from 'react-icons/bi';
 import axios from 'axios';
 import Linkify from 'linkify-react';
 import socket from '../../../helpers/socket';
+import { touchAndHoldStart, touchAndHoldEnd } from '../../../helpers/touchAndHold';
 import { setSelectedChats } from '../../../redux/features/chore';
 import { setPage } from '../../../redux/features/page';
 import { setModal } from '../../../redux/features/modal';
@@ -28,26 +29,8 @@ function Monitor({
   } = useSelector((state) => state);
 
   const isGroup = chatRoom.data.roomType === 'group';
-  const longclickval = useRef(0);
   const isScrolled = useRef(false);
   const [loadingScroll, setLoadingScroll] = useState(false);
-
-  const handleLongClickMove = () => clearInterval(longclickval.current);
-  const handleLongClickEnd = () => clearInterval(longclickval.current);
-  const handleLongClickStart = (chatId) => {
-    let i = 1;
-
-    longclickval.current = setInterval(() => {
-      if (i >= 3) {
-        clearInterval(longclickval.current);
-        dispatch(setSelectedChats(chatId));
-
-        return;
-      }
-
-      i += 1;
-    }, 200);
-  };
 
   useEffect(() => {
     if (chats) {
@@ -194,13 +177,15 @@ function Monitor({
                         group relative p-2 rounded-b-xl overflow-hidden
                       `}
                       aria-hidden
-                      onTouchStart={() => handleLongClickStart(elem._id)}
-                      onTouchEnd={() => handleLongClickEnd()}
-                      onTouchMove={() => handleLongClickMove()}
                       onContextMenu={(e) => {
                         e.preventDefault();
                         dispatch(setSelectedChats(elem._id));
                       }}
+                      onTouchStart={() => {
+                        touchAndHoldStart(() => dispatch(setSelectedChats(elem._id)));
+                      }}
+                      onTouchMove={() => touchAndHoldEnd()}
+                      onTouchEnd={() => touchAndHoldEnd()}
                     >
                       {
                         elem.replyTo && (

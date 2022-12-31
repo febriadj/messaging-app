@@ -1,12 +1,14 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import * as ri from 'react-icons/ri';
 import socket from '../../../helpers/socket';
 import { setChatRoom } from '../../../redux/features/room';
-import notification from '../../../helpers/notification';
 import InboxMenu from '../../modals/inboxMenu';
 import { setModal } from '../../../redux/features/modal';
+
+import { touchAndHoldStart, touchAndHoldEnd } from '../../../helpers/touchAndHold';
+import notification from '../../../helpers/notification';
 
 function Inbox({ inboxes, setInboxes }) {
   const dispatch = useDispatch();
@@ -16,37 +18,20 @@ function Inbox({ inboxes, setInboxes }) {
     modal,
   } = useSelector((state) => state);
 
-  const longclickval = useRef(0);
+  const handleContextMenu = (e, elem) => {
+    const inbox = document.querySelector('#inbox');
 
-  const handleLongClickMove = () => clearInterval(longclickval.current);
-  const handleLongClickEnd = () => clearInterval(longclickval.current);
-  const handleLongClickStart = (e, elem) => {
-    let i = 1;
+    const x = e.clientX > inbox.clientWidth / 2 ? e.clientX - 160 : e.clientX;
+    const y = e.clientY > inbox.clientHeight / 2 ? e.clientY - 56 : e.clientY;
 
-    longclickval.current = setInterval(() => {
-      if (i >= 3) {
-        clearInterval(longclickval.current);
-
-        const inbox = document.querySelector('#inbox');
-        const x = e.clientX > inbox.clientWidth / 2;
-
-        dispatch(setModal({
-          target: 'inboxMenu',
-          data: {
-            x: x ? e.clientX - 160 : e.clientX,
-            y: e.clientY,
-            inboxId: elem._id,
-            roomId: elem.roomId,
-            roomType: elem.roomType,
-            group: elem.group,
-          },
-        }));
-
-        return;
-      }
-
-      i += 1;
-    }, 200);
+    dispatch(setModal({
+      target: 'inboxMenu',
+      data: {
+        inbox: elem,
+        x,
+        y,
+      },
+    }));
   };
 
   useEffect(() => {
@@ -173,24 +158,13 @@ function Inbox({ inboxes, setInboxes }) {
               e.stopPropagation();
               e.preventDefault();
 
-              const inbox = document.querySelector('#inbox');
-              const x = e.clientX > inbox.clientWidth / 2;
-
-              dispatch(setModal({
-                target: 'inboxMenu',
-                data: {
-                  x: x ? e.clientX - 160 : e.clientX,
-                  y: e.clientY,
-                  inboxId: elem._id,
-                  roomId: elem.roomId,
-                  roomType: elem.roomType,
-                  group: elem.group,
-                },
-              }));
+              handleContextMenu(e, elem);
             }}
-            onTouchStart={(e) => handleLongClickStart(e, elem)}
-            onTouchEnd={() => handleLongClickEnd()}
-            onTouchMove={() => handleLongClickMove()}
+            onTouchStart={(e) => {
+              touchAndHoldStart(() => handleContextMenu(e, elem));
+            }}
+            onTouchMove={() => touchAndHoldEnd()}
+            onTouchEnd={() => touchAndHoldEnd()}
           >
             <img
               src={
