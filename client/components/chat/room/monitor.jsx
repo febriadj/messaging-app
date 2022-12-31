@@ -208,7 +208,7 @@ function Monitor({
                                 className="w-full rounded-lg cursor-pointer hover:brightness-75"
                                 aria-hidden
                                 onClick={(e) => {
-                                  if (e.ctrlKey) return;
+                                  e.stopPropagation();
                                   dispatch(setModal({ target: 'photoFull', data: elem.file.url }));
                                 }}
                               />
