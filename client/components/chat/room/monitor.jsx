@@ -256,8 +256,8 @@ function Monitor({
                               }
                             }}
                           >
-                            <img src={elem.profile.avatar} alt="" className="w-5 h-5 rounded-full" />
-                            <p className="font-bold truncate text-sky-800 dark:text-sky-200">{elem.profile.fullname}</p>
+                            <img src={elem.profile?.avatar ?? 'assets/images/default-avatar.png'} alt="" className="w-5 h-5 rounded-full" />
+                            <p className="font-bold truncate text-sky-800 dark:text-sky-200">{elem.profile?.fullname ?? '[inactive]'}</p>
                           </span>
                         ) }
                         <p
