@@ -5,6 +5,8 @@ const jwt = require('jsonwebtoken');
 const UserModel = require('../db/models/user');
 const ProfileModel = require('../db/models/profile');
 const SettingModel = require('../db/models/setting');
+const GroupModel = require('../db/models/group');
+const ContactModel = require('../db/models/contact');
 
 const response = require('../helpers/response');
 const mailer = require('../helpers/mailer');
@@ -175,10 +177,13 @@ exports.delete = async (req, res) => {
       throw errData;
     }
 
-    // delete user, profile & setting
+    // delete permanently user, profile, setting, and contact
     await UserModel.deleteOne({ _id: userId });
     await ProfileModel.deleteOne({ userId });
     await SettingModel.deleteOne({ userId });
+    await ContactModel.deleteMany({ userId });
+
+    await GroupModel.updateMany({ participantsId: userId }, { $pull: { participantsId: userId } });
 
     response({
       res,
