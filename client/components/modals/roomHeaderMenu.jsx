@@ -36,6 +36,10 @@ function RoomHeaderMenu() {
               action() {
                 const query = {};
 
+                if (!isGroup && !profile.active) {
+                  return;
+                }
+
                 query.target = isGroup ? 'groupProfile' : 'friendProfile';
                 query.data = isGroup ? group._id : profile.userId;
 
