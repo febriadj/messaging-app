@@ -27,7 +27,7 @@ function GroupProfile() {
   const [group, setGroup] = useState(null);
 
   const handleGetGroup = (signal) => {
-    if (groupProfile && !addParticipant) {
+    if (groupProfile && !addParticipant && !groupParticipant) {
       axios.all([
         axios.get(`/groups/${groupProfile}`, { signal }),
         axios.get(`/groups/${groupProfile}/participants`, { params: { skip: 0, limit: 10 }, signal }),
@@ -55,8 +55,8 @@ function GroupProfile() {
       dispatch(setModal({
         target: 'groupContextMenu',
         data: {
-          currentAdminId: group.adminId,
           user: elem,
+          group,
           x: x > parent.clientWidth / 2 ? x - 160 : x,
           y,
         },
@@ -71,7 +71,7 @@ function GroupProfile() {
     return () => {
       abortCtrl.abort();
     };
-  }, [groupProfile, addParticipant]);
+  }, [groupProfile, addParticipant, !!groupParticipant]);
 
   useEffect(() => {
     socket.on('group/edit', (payload) => {
@@ -93,6 +93,28 @@ function GroupProfile() {
       socket.off('group/edit');
     };
   }, []);
+
+  useEffect(() => {
+    socket.on('group/add-admin', ({ adminId }) => {
+      if (!groupParticipant) {
+        // update group
+        setGroup((prev) => ({ ...prev, adminId }));
+        return;
+      }
+      // update group participant
+      dispatch(setPage({
+        target: 'groupParticipant',
+        data: {
+          ...groupParticipant,
+          adminId,
+        },
+      }));
+    });
+
+    return () => {
+      socket.off('group/add-admin');
+    };
+  }, [!!groupParticipant]);
 
   return (
     <div
@@ -257,11 +279,7 @@ function GroupProfile() {
                       onClick={() => {
                         dispatch(setPage({
                           target: 'groupParticipant',
-                          data: {
-                            totalParticipants: group.participantsId.length,
-                            groupId: group._id,
-                            adminId: group.adminId,
-                          },
+                          data: group,
                         }));
                       }}
                     >

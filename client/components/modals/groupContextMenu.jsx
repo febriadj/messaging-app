@@ -2,10 +2,13 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setPage } from '../../redux/features/page';
 import { setModal } from '../../redux/features/modal';
+import socket from '../../helpers/socket';
 
 function GroupContextMenu() {
   const dispatch = useDispatch();
+
   const menu = useSelector((state) => state.modal.groupContextMenu);
+  const master = useSelector((state) => state.user.master);
 
   return (
     <div
@@ -30,8 +33,14 @@ function GroupContextMenu() {
             },
             {
               _key: 'B-02',
-              html: menu.currentAdminId === menu.user.userId ? 'Dismiss as admin' : 'Set as admin',
-              func: null,
+              html: menu.group.adminId === menu.user.userId ? 'Dismiss as admin' : 'Set as admin',
+              func() {
+                socket.emit('group/add-admin', {
+                  participantId: menu.user.userId,
+                  userId: master._id,
+                  groupId: menu.group._id,
+                });
+              },
             },
             {
               _key: 'B-03',

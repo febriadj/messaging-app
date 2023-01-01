@@ -19,7 +19,7 @@ function GroupParticipant() {
     try {
       if (groupParticipant) {
         // get participants with pagination control
-        const { data } = await axios.get(`/groups/${groupParticipant.groupId}/participants`, { params: control, signal });
+        const { data } = await axios.get(`/groups/${groupParticipant._id}/participants`, { params: control, signal });
 
         setParticipants((prev) => {
           // merge new participants data
@@ -46,7 +46,7 @@ function GroupParticipant() {
       dispatch(setModal({
         target: 'groupContextMenu',
         data: {
-          currentAdminId: groupParticipant.adminId,
+          group: groupParticipant,
           user: elem,
           x: x > parent.clientWidth / 2 ? x - 160 : x,
           y,
@@ -62,7 +62,7 @@ function GroupParticipant() {
     return () => {
       abortCtrl.abort();
     };
-  }, [groupParticipant, control]);
+  }, [!!groupParticipant, control]);
 
   return (
     <div
@@ -83,7 +83,7 @@ function GroupParticipant() {
             className="p-2 rounded-full hover:bg-spill-100 dark:hover:bg-spill-800"
             onClick={() => {
               setControl({ skip: 0, limit: 20 });
-              dispatch(setPage({ target: 'groupParticipant' }));
+              dispatch(setPage({ target: 'groupParticipant', data: false }));
             }}
           >
             <bi.BiArrowBack className="block md:hidden" />
@@ -142,7 +142,10 @@ function GroupParticipant() {
           ))
         }
         {
-          participants && participants.length < groupParticipant.totalParticipants && (
+          groupParticipant
+          && participants
+          && participants.length < groupParticipant.participantsId.length
+          && (
             <button
               type="button"
               className="mt-2 md:mb-4 py-2 px-4 flex gap-4 hover:bg-spill-100 dark:hover:bg-spill-800"
@@ -154,7 +157,7 @@ function GroupParticipant() {
               }}
             >
               <i><bi.BiChevronDown /></i>
-              <p>{`${groupParticipant.totalParticipants - participants.length} more`}</p>
+              <p>{`${groupParticipant.participantsId.length - participants.length} more`}</p>
             </button>
           )
         }

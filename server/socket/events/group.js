@@ -166,4 +166,43 @@ module.exports = (socket) => {
       cb({ success: false, message });
     }
   });
+
+  socket.on('group/add-admin', async (args) => {
+    try {
+      const { groupId, userId, participantId } = args;
+
+      const master = await ProfileModel.findOne({ userId }, { fullname: 1 });
+      const friend = await ProfileModel.findOne({ userId: participantId }, { fullname: 1 });
+
+      const group = await GroupModel.findOneAndUpdate(
+        { _id: groupId },
+        { $set: { adminId: participantId } },
+      );
+
+      const name = friend.fullname.split(' ');
+
+      await InboxModel.updateOne(
+        { roomId: group.roomId },
+        {
+          $set: {
+            'content.senderName': master.fullname,
+            'content.from': userId,
+            'content.text': `add ${name.length > 1 ? name[0] : name} as admin`,
+            'content.time': new Date().toISOString(),
+          },
+        },
+      );
+
+      const inboxes = await Inbox.find({ roomId: group.roomId });
+
+      io.to(group.participantsId).emit('inbox/find', inboxes[0]);
+      io.to(group.roomId).emit('group/add-admin', {
+        ...group._doc,
+        adminId: participantId,
+      });
+    }
+    catch (error0) {
+      console.error(error0.message);
+    }
+  });
 };
