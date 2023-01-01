@@ -5,10 +5,12 @@ import * as bi from 'react-icons/bi';
 import * as ri from 'react-icons/ri';
 import * as md from 'react-icons/md';
 
+import { touchAndHoldStart, touchAndHoldEnd } from '../helpers/touchAndHold';
 import { setChatRoom } from '../redux/features/room';
 import { setPage } from '../redux/features/page';
 import { setModal } from '../redux/features/modal';
 
+import GroupContextMenu from '../components/modals/groupContextMenu';
 import socket from '../helpers/socket';
 
 function GroupProfile() {
@@ -16,8 +18,9 @@ function GroupProfile() {
   const {
     chore: { refreshGroupAvatar },
     room: { chat: chatRoom },
-    page: { groupProfile, addParticipant },
+    page: { groupProfile, addParticipant, groupParticipant },
     user: { master },
+    modal,
   } = useSelector((state) => state);
 
   const [participants, setParticipants] = useState(null);
@@ -39,6 +42,25 @@ function GroupProfile() {
         setParticipants(null);
         setGroup(null);
       }, 150);
+    }
+  };
+
+  const handleContextMenu = (e, elem) => {
+    if (elem.userId !== master._id && group.adminId === master._id) {
+      const parent = document.querySelector('#group-profile');
+
+      const y = e.clientY > (window.innerHeight / 2) ? e.clientY - 136 : e.clientY;
+      const x = e.clientX - (window.innerWidth - parent.clientWidth);
+
+      dispatch(setModal({
+        target: 'groupContextMenu',
+        data: {
+          currentAdminId: group.adminId,
+          user: elem,
+          x: x > parent.clientWidth / 2 ? x - 160 : x,
+          y,
+        },
+      }));
     }
   };
 
@@ -79,6 +101,7 @@ function GroupProfile() {
         transition absolute w-full sm:w-[380px] h-full right-0 z-0 grid grid-rows-[auto_1fr] overflow-hidden
         bg-white dark:bg-spill-900
       `}
+      id="group-profile"
     >
       {
         // loading animation
@@ -91,6 +114,8 @@ function GroupProfile() {
           </div>
         )
       }
+      {/* group context menu */}
+      { !groupParticipant && modal.groupContextMenu && <GroupContextMenu /> }
       {/* header */}
       <div className="h-16 px-2 z-10 flex gap-6 justify-between items-center">
         <div className="flex gap-4 items-center">
@@ -173,16 +198,15 @@ function GroupProfile() {
                   ))
               }
             </div>
-            <div>
-              <div className="mt-6 px-4 flex gap-4 justify-between">
-                <p className="opacity-60">{`${group.participantsId.length} participants`}</p>
-              </div>
+            <div className="pt-6">
+              <p className="px-4 opacity-60">{`${group.participantsId.length} participants`}</p>
               <div className="grid">
                 {
                   participants && participants.map((elem) => (
                     <div
                       key={elem._id}
                       className={`
+                        ${modal.groupContextMenu?.user?.userId === elem.userId ? 'bg-spill-100/60 dark:bg-spill-800/60' : ''}
                         p-4 grid grid-cols-[auto_1fr_auto] gap-4 items-center cursor-pointer
                         border-0 border-b border-solid border-spill-200 dark:border-spill-800
                         hover:bg-spill-100/60 dark:hover:bg-spill-800/60
@@ -196,6 +220,17 @@ function GroupProfile() {
                           }));
                         }
                       }}
+                      onContextMenu={(e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+
+                        handleContextMenu(e, elem);
+                      }}
+                      onTouchStart={(e) => {
+                        touchAndHoldStart(() => handleContextMenu(e, elem));
+                      }}
+                      onTouchMove={() => touchAndHoldEnd()}
+                      onTouchEnd={() => touchAndHoldEnd()}
                     >
                       <img src={elem.avatar} alt="" className="w-14 h-14 rounded-full" />
                       <span className="truncate">
@@ -218,7 +253,7 @@ function GroupProfile() {
                   group.participantsId.length > participants.length && (
                     <button
                       type="button"
-                      className="py-2 px-4 flex gap-4 hover:bg-spill-800"
+                      className="mt-2 md:mb-4 py-2 px-4 flex gap-4 hover:bg-spill-100 dark:hover:bg-spill-800"
                       onClick={() => {
                         dispatch(setPage({
                           target: 'groupParticipant',

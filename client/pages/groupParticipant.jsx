@@ -2,13 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import * as bi from 'react-icons/bi';
+import GroupContextMenu from '../components/modals/groupContextMenu';
+
+import { touchAndHoldStart, touchAndHoldEnd } from '../helpers/touchAndHold';
 import { setPage } from '../redux/features/page';
+import { setModal } from '../redux/features/modal';
 
 function GroupParticipant() {
   const dispatch = useDispatch();
-  const { user: { master }, page: { groupParticipant } } = useSelector((state) => state);
+  const { user: { master }, page: { groupParticipant }, modal } = useSelector((state) => state);
 
-  const [control, setControl] = useState({ skip: 0, limit: 40 });
+  const [control, setControl] = useState({ skip: 0, limit: 20 });
   const [participants, setParticipants] = useState(null);
 
   const handleGetParticipants = async (signal) => {
@@ -32,6 +36,25 @@ function GroupParticipant() {
     }
   };
 
+  const handleContextMenu = (e, elem) => {
+    if (elem.userId !== master._id && groupParticipant.adminId === master._id) {
+      const parent = document.querySelector('#group-participant');
+
+      const y = e.clientY > (window.innerHeight / 2) ? e.clientY - 136 : e.clientY;
+      const x = e.clientX - (window.innerWidth - parent.clientWidth);
+
+      dispatch(setModal({
+        target: 'groupContextMenu',
+        data: {
+          currentAdminId: groupParticipant.adminId,
+          user: elem,
+          x: x > parent.clientWidth / 2 ? x - 160 : x,
+          y,
+        },
+      }));
+    }
+  };
+
   useEffect(() => {
     const abortCtrl = new AbortController();
     handleGetParticipants(abortCtrl.signal);
@@ -43,12 +66,15 @@ function GroupParticipant() {
 
   return (
     <div
+      id="group-participant"
       className={`
         ${!groupParticipant && 'translate-x-full'}
         transition absolute w-full sm:w-[380px] h-full right-0 z-10 grid grid-rows-[auto_1fr] overflow-hidden
         bg-white dark:bg-spill-900
       `}
     >
+      {/* group context menu */}
+      { groupParticipant && modal.groupContextMenu && <GroupContextMenu />}
       {/* header */}
       <div className="h-16 px-2 flex gap-6 justify-between items-center">
         <div className="flex gap-4 items-center">
@@ -56,7 +82,7 @@ function GroupParticipant() {
             type="button"
             className="p-2 rounded-full hover:bg-spill-100 dark:hover:bg-spill-800"
             onClick={() => {
-              setControl({ skip: 0, limit: 40 });
+              setControl({ skip: 0, limit: 20 });
               dispatch(setPage({ target: 'groupParticipant' }));
             }}
           >
@@ -72,7 +98,8 @@ function GroupParticipant() {
             <div
               key={elem._id}
               className={`
-                p-4 grid grid-cols-[auto_1fr] gap-4 items-center cursor-pointer
+                ${modal.groupContextMenu?.user?.userId === elem.userId ? 'bg-spill-100/60 dark:bg-spill-800/60' : ''}
+                p-4 grid grid-cols-[auto_1fr_auto] gap-4 items-center cursor-pointer
                 border-0 border-b border-solid border-spill-200 dark:border-spill-800
                 hover:bg-spill-100/60 dark:hover:bg-spill-800/60
               `}
@@ -85,6 +112,17 @@ function GroupParticipant() {
                   }));
                 }
               }}
+              onContextMenu={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+
+                handleContextMenu(e, elem);
+              }}
+              onTouchStart={(e) => {
+                touchAndHoldStart(() => handleContextMenu(e, elem));
+              }}
+              onTouchMove={() => touchAndHoldEnd()}
+              onTouchEnd={() => touchAndHoldEnd()}
             >
               <img src={elem.avatar} alt="" className="w-14 h-14 rounded-full" />
               <span className="truncate">
@@ -94,6 +132,12 @@ function GroupParticipant() {
                 </h1>
                 <p className="truncate mt-0.5 opacity-60">{elem.bio}</p>
               </span>
+              { /* admin tag */ }
+              { elem.userId === groupParticipant.adminId && (
+                <span className="h-full">
+                  <p className="font-bold text-xs py-0.5 px-2 rounded-full text-white bg-sky-600">Admin</p>
+                </span>
+              ) }
             </div>
           ))
         }
@@ -101,7 +145,7 @@ function GroupParticipant() {
           participants && participants.length < groupParticipant.totalParticipants && (
             <button
               type="button"
-              className="mb-6 py-2 px-4 flex gap-4 hover:bg-spill-800"
+              className="mt-2 md:mb-4 py-2 px-4 flex gap-4 hover:bg-spill-100 dark:hover:bg-spill-800"
               onClick={() => {
                 setControl((prev) => ({
                   ...prev,
