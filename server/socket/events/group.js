@@ -179,15 +179,13 @@ module.exports = (socket) => {
         { $set: { adminId: participantId } },
       );
 
-      const name = friend.fullname.split(' ');
-
       await InboxModel.updateOne(
         { roomId: group.roomId },
         {
           $set: {
             'content.senderName': master.fullname,
             'content.from': userId,
-            'content.text': `add ${name.length > 1 ? name[0] : name} as admin`,
+            'content.text': `add ${friend.fullname.split(' ')[0]} as admin`,
             'content.time': new Date().toISOString(),
           },
         },
@@ -200,6 +198,45 @@ module.exports = (socket) => {
         ...group._doc,
         adminId: participantId,
       });
+    }
+    catch (error0) {
+      console.error(error0.message);
+    }
+  });
+
+  socket.on('group/remove-participant', async (args) => {
+    try {
+      const { groupId, userId, participantId } = args;
+
+      const master = await ProfileModel.findOne({ userId }, { fullname: 1 });
+      const friend = await ProfileModel.findOne({ userId: participantId }, { fullname: 1 });
+
+      const group = await GroupModel.findOneAndUpdate(
+        { _id: groupId },
+        { $pull: { participantsId: participantId } },
+      );
+
+      await InboxModel.updateOne(
+        { roomId: group.roomId },
+        {
+          $pull: { ownersId: participantId },
+          $set: {
+            'content.senderName': master.fullname,
+            'content.from': userId,
+            'content.text': `removed ${friend.fullname.split(' ')[0]}`,
+            'content.time': new Date().toISOString(),
+          },
+        },
+      );
+
+      const inboxes = await Inbox.find({ roomId: group.roomId });
+
+      // refresh inbox
+      socket.broadcast.to(participantId).emit('inbox/delete', [inboxes[0].roomId]);
+      io.to(inboxes[0].ownersId).emit('inbox/find', inboxes[0]);
+
+      // refresh group participants
+      io.to(group.roomId).emit('group/remove-participant', args);
     }
     catch (error0) {
       console.error(error0.message);

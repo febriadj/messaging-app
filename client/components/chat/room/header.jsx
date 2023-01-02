@@ -14,6 +14,7 @@ function Header() {
   const dispatch = useDispatch();
   const {
     room: { chat: chatRoom },
+    user: { master },
     chore: { selectedChats, refreshGroupAvatar },
     page,
   } = useSelector((state) => state);
@@ -189,31 +190,41 @@ function Header() {
               </button>
               <p className="font-bold">{selectedChats.length}</p>
             </div>
-            <div className="pr-2 flex items-center">
-              {
-                [
+            {
+              ((isGroup && chatRoom.data.group.participantsId.includes(master._id))
+              || (!isGroup && chatRoom.data.profile.active))
+              && (
+                <div className="pr-2 flex items-center">
                   {
-                    target: 'delete',
-                    icon: <bi.BiTrashAlt />,
-                    async action() {
-                      dispatch(setModal({ target: 'confirmDeleteChat' }));
-                    },
-                  },
-                ].map((elem) => (
-                  <button
-                    key={elem.target}
-                    type="button"
-                    className="p-2 rounded-full hover:bg-spill-100 dark:hover:bg-spill-800"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      elem.action();
-                    }}
-                  >
-                    <i>{elem.icon}</i>
-                  </button>
-                ))
-              }
-            </div>
+                    [
+                      {
+                        target: 'delete',
+                        icon: <bi.BiTrashAlt />,
+                        async action() {
+                          dispatch(setModal({ target: 'confirmDeleteChat' }));
+                        },
+                      },
+                    ].map((elem) => (
+                      <button
+                        key={elem.target}
+                        type="button"
+                        className="p-2 rounded-full hover:bg-spill-100 dark:hover:bg-spill-800"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          const { group } = chatRoom.data;
+
+                          if (!isGroup || (isGroup && group.participantsId.includes(master._id))) {
+                            elem.action();
+                          }
+                        }}
+                      >
+                        <i>{elem.icon}</i>
+                      </button>
+                    ))
+                  }
+                </div>
+              )
+            }
           </>
         )
       }

@@ -16,7 +16,7 @@ import { setPage } from '../../redux/features/page';
 
 function Room() {
   const dispatch = useDispatch();
-  const { room: { chat: chatRoom }, page } = useSelector((state) => state);
+  const { user: { master }, room: { chat: chatRoom }, page } = useSelector((state) => state);
 
   const [prevRoom, setPrevRoom] = useState(null);
   const [loaded, setLoaded] = useState(false);
@@ -65,11 +65,20 @@ function Room() {
     dispatch(setSelectedChats(null));
     dispatch(setPage({ target: 'friendProfile', data: false }));
     dispatch(setPage({ target: 'groupProfile', data: false }));
+    dispatch(setPage({ target: 'groupParticipant', data: false }));
+    dispatch(setPage({ target: 'addParticipant', data: false }));
 
     if (chatRoom.isOpen) {
-      socket.emit('room/open', { prevRoom, newRoom: chatRoom.data.roomId });
-      // get messages
-      await handleGetChats(signal);
+      const { roomType, group, roomId } = chatRoom.data;
+      const isGroup = roomType === 'group';
+
+      if (!isGroup || (isGroup && group.participantsId.includes(master._id))) {
+        socket.emit('room/open', { prevRoom, newRoom: roomId });
+        // get messages
+        await handleGetChats(signal);
+      } else {
+        await handleGetChats(signal);
+      }
     }
   };
 

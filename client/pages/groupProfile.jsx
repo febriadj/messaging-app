@@ -46,7 +46,11 @@ function GroupProfile() {
   };
 
   const handleContextMenu = (e, elem) => {
-    if (elem.userId !== master._id && group.adminId === master._id) {
+    const active = group.participantsId.includes(master._id);
+    const ex = elem.userId !== master._id;
+    const admin = group.adminId === master._id;
+
+    if (ex && admin && active) {
       const parent = document.querySelector('#group-profile');
 
       const y = e.clientY > (window.innerHeight / 2) ? e.clientY - 136 : e.clientY;
@@ -96,25 +100,52 @@ function GroupProfile() {
 
   useEffect(() => {
     socket.on('group/add-admin', ({ adminId }) => {
-      if (!groupParticipant) {
+      if (groupProfile && group) {
         // update group
         setGroup((prev) => ({ ...prev, adminId }));
         return;
       }
-      // update group participant
-      dispatch(setPage({
-        target: 'groupParticipant',
+
+      if (groupParticipant) {
+        // update group participant
+        dispatch(setPage({
+          target: 'groupParticipant',
+          data: {
+            ...groupParticipant,
+            adminId,
+          },
+        }));
+      }
+    });
+
+    socket.on('group/remove-participant', ({ participantId }) => {
+      const { group: chg } = chatRoom.data;
+      const participantsId = chg.participantsId.filter((el) => el !== participantId);
+
+      if (groupProfile && group) {
+        // update group
+        setGroup((prev) => ({ ...prev, participantsId }));
+        // update group participants
+        setParticipants((prev) => prev.filter((el) => el.userId !== participantId));
+      }
+
+      dispatch(setChatRoom({
+        ...chatRoom,
         data: {
-          ...groupParticipant,
-          adminId,
+          ...chatRoom.data,
+          group: {
+            ...chatRoom.data.group,
+            participantsId,
+          },
         },
       }));
     });
 
     return () => {
       socket.off('group/add-admin');
+      socket.off('group/remove-participant');
     };
-  }, [!!groupParticipant]);
+  }, [!!group]);
 
   return (
     <div
@@ -153,13 +184,13 @@ function GroupProfile() {
           </button>
           <h1 className="text-2xl font-bold">Group Info</h1>
         </div>
-        { group && group.adminId === master._id && (
+        { group && group.adminId === master._id && group.participantsId.includes(master._id) && (
           <button
             type="button"
             className="p-2 rounded-full hover:bg-spill-100 dark:hover:bg-spill-800"
             onClick={(e) => {
               e.stopPropagation();
-              // data: _id, name, and desc
+
               dispatch(setModal({
                 target: 'editGroup',
                 data: group,
@@ -294,7 +325,7 @@ function GroupProfile() {
         )
       }
       {
-        group && (
+        group && group.participantsId.includes(master._id) && (
           <button
             type="button"
             className={`

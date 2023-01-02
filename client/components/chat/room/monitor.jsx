@@ -301,6 +301,15 @@ function Monitor({
           )
         }
         {
+          isGroup && !chatRoom.data.group.participantsId.includes(master._id) && (
+            <div className="py-2 px-6 flex justify-center border-0 border-y border-solid border-rose-400 dark:border-rose-200/60 bg-rose-400/10 dark:bg-rose-200/20">
+              <div className="w-[560px]">
+                <p className="text-rose-900 dark:text-rose-100">You cannot access this group because you&#39;re not a participant of this group.</p>
+              </div>
+            </div>
+          )
+        }
+        {
           newMessage > 0 && (
             <button
               type="button"

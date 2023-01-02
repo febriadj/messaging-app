@@ -45,7 +45,13 @@ function GroupContextMenu() {
             {
               _key: 'B-03',
               html: `Remove ${menu.user.fullname.split(' ')[0]}`,
-              func: null,
+              func() {
+                socket.emit('group/remove-participant', {
+                  participantId: menu.user.userId,
+                  userId: master._id,
+                  groupId: menu.group._id,
+                });
+              },
             },
           ].map((elem) => (
             <button

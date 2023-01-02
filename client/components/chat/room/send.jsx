@@ -34,7 +34,9 @@ function Send({ setChats, setNewMessage, control }) {
 
   const handleSubmit = () => {
     if (form.text.length > 0 || form.file) {
-      if (isGroup || (!isGroup && chatRoom.data.profile.active)) {
+      const { group = null, profile = null } = chatRoom.data;
+
+      if ((isGroup && group.participantsId.includes(master._id)) || (!isGroup && profile.active)) {
         socket.emit('chat/insert', {
           ...form,
           ownersId: chatRoom.data.ownersId,
@@ -106,7 +108,12 @@ function Send({ setChats, setNewMessage, control }) {
             type="button"
             className="p-2 rounded-full hover:bg-spill-100 dark:hover:bg-spill-800"
             onClick={() => {
-              setEmojiBoard((prev) => !prev);
+              const { group, profile } = chatRoom.data;
+              const participant = group?.participantsId.includes(master._id);
+
+              if ((!isGroup && profile.active) || (isGroup && participant)) {
+                setEmojiBoard((prev) => !prev);
+              }
             }}
           >
             <i>{emojiBoard ? <bi.BiX /> : <bi.BiSmile />}</i>
@@ -116,7 +123,13 @@ function Send({ setChats, setNewMessage, control }) {
             className="p-2 rounded-full -rotate-90 hover:bg-spill-100 dark:hover:bg-spill-800"
             onClick={(e) => {
               e.stopPropagation();
-              dispatch(setModal({ target: 'attachMenu' }));
+
+              const { group, profile } = chatRoom.data;
+              const participant = group?.participantsId.includes(master._id);
+
+              if ((!isGroup && profile.active) || (isGroup && participant)) {
+                dispatch(setModal({ target: 'attachMenu' }));
+              }
             }}
           >
             <i><bi.BiPaperclip /></i>
