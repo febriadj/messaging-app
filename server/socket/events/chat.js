@@ -140,7 +140,7 @@ module.exports = (socket) => {
         await handleDeleteFiles({});
         await ChatModel.deleteMany({ roomId, _id: { $in: chatsId } });
 
-        io.to(roomId).emit('chat/delete', chatsId);
+        io.to(roomId).emit('chat/delete', { userId, chatsId });
       } else {
         await ChatModel.updateMany(
           { roomId, _id: { $in: chatsId } },
@@ -157,7 +157,7 @@ module.exports = (socket) => {
           $expr: { $gte: [{ $size: '$deletedBy' }, ownersId.length] },
         });
 
-        socket.emit('chat/delete', chatsId);
+        socket.emit('chat/delete', { userId, chatsId });
       }
     }
     catch (error0) {

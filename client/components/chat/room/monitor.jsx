@@ -53,14 +53,16 @@ function Monitor({
       });
     });
 
-    socket.on('chat/delete', (chatsId) => {
+    socket.on('chat/delete', ({ userId, chatsId }) => {
       if (chatRoom.isOpen) {
-        dispatch(setSelectedChats([]));
-        // close confirmDeleteChat modal
-        dispatch(setModal({
-          target: 'confirmDeleteChat',
-          data: false,
-        }));
+        if (userId === master._id) {
+          dispatch(setSelectedChats(null));
+          // close confirmDeleteChat modal
+          dispatch(setModal({
+            target: 'confirmDeleteChat',
+            data: false,
+          }));
+        }
 
         setTimeout(() => {
           setChats((prev) => prev.filter((elem) => !chatsId.includes(elem._id)));
