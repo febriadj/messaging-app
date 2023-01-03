@@ -205,7 +205,7 @@ function Contact() {
                   <h1 className="truncate text-lg font-bold">{elem.profile?.fullname ?? '[inactive]'}</h1>
                   {
                     !setting.sortContactByName
-                      ? <p className="truncate opacity-60 mt-0.5">{`Last seen ${moment(elem.profile.updatedAt).fromNow()}`}</p>
+                      ? <p className="truncate opacity-60 mt-0.5">{elem.profile.online ? 'online' : `Last seen ${moment(elem.profile.updatedAt).fromNow()}`}</p>
                       : <p className="truncate opacity-60 mt-0.5">{elem.profile.bio}</p>
                   }
                 </span>
