@@ -3,6 +3,7 @@ import axios from 'axios';
 import * as bi from 'react-icons/bi';
 
 function Register({ setRespond }) {
+  const [process, setProcess] = useState(false);
   const [form, setForm] = useState({
     username: '',
     email: '',
@@ -19,6 +20,7 @@ function Register({ setRespond }) {
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
+      setProcess(true);
 
       const { data } = await axios.post('/users/register', form);
 
@@ -36,11 +38,14 @@ function Register({ setRespond }) {
         localStorage.setItem('token', data.payload);
         localStorage.setItem('cache', JSON.stringify({ remember: form.username }));
 
+        setProcess(false);
+
         window.location.reload();
       }, 1000);
     }
     catch (error0) {
-      // set error response
+      setProcess(false);
+
       setRespond({
         success: false,
         message: error0.response.data.message,
@@ -110,9 +115,14 @@ function Register({ setRespond }) {
       </span>
       <button
         type="submit"
-        className="font-bold mt-6 py-2 rounded-md text-white bg-sky-600 hover:bg-sky-700"
+        className="font-bold mt-6 py-2 flex justify-center rounded-md text-white bg-sky-600 hover:bg-sky-700"
+        disabled={process}
       >
-        Sign up
+        {
+          process
+            ? <i className="animate-spin"><bi.BiLoaderAlt /></i>
+            : <p>Sign up</p>
+        }
       </button>
     </form>
   );

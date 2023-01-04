@@ -5,6 +5,7 @@ import * as bi from 'react-icons/bi';
 function Login({ setRespond }) {
   const cache = JSON.parse(localStorage.getItem('cache'));
 
+  const [process, setProcess] = useState(false);
   const [form, setForm] = useState({
     me: false,
     username: cache?.me || '',
@@ -22,6 +23,7 @@ function Login({ setRespond }) {
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
+      setProcess(true);
       const { data } = await axios.post('/users/login', form);
 
       // store jwt token on localStorage
@@ -35,9 +37,13 @@ function Login({ setRespond }) {
       setRespond({ success: true, message: data.message });
 
       // reload this page after 1s
-      setTimeout(() => window.location.reload(), 1000);
+      setTimeout(() => {
+        setProcess(false);
+        window.location.reload();
+      }, 1000);
     }
     catch (error0) {
+      setProcess(false);
       setRespond({
         success: false,
         message: error0.response.data.message,
@@ -97,9 +103,14 @@ function Login({ setRespond }) {
       {/* submit btn */}
       <button
         type="submit"
-        className="font-bold mt-6 py-2 rounded-md text-white bg-sky-600 hover:bg-sky-700"
+        className="font-bold mt-6 py-2 flex justify-center rounded-md text-white bg-sky-600 hover:bg-sky-700"
+        disabled={process}
       >
-        Sign in
+        {
+          process
+            ? <i className="animate-spin"><bi.BiLoaderAlt /></i>
+            : <p>Sign in</p>
+        }
       </button>
     </form>
   );
