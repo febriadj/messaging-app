@@ -104,6 +104,7 @@ module.exports = (socket) => {
         { roomId: group.roomId },
         {
           $set: {
+            fileId: null,
             'content.senderName': profile.fullname,
             'content.from': userId,
             'content.text': 'group edited',
@@ -159,6 +160,7 @@ module.exports = (socket) => {
           {
             $pull: { ownersId: userId },
             $set: {
+              fileId: null,
               'content.senderName': profile.fullname,
               'content.from': userId,
               'content.text': 'left the group',
@@ -202,6 +204,7 @@ module.exports = (socket) => {
         { roomId: group.roomId },
         {
           $set: {
+            fileId: null,
             'content.senderName': master.fullname,
             'content.from': userId,
             'content.text': `add ${friend.fullname.split(' ')[0]} as admin`,
@@ -240,6 +243,7 @@ module.exports = (socket) => {
         {
           $pull: { ownersId: participantId },
           $set: {
+            fileId: null,
             'content.senderName': master.fullname,
             'content.from': userId,
             'content.text': `removed ${friend.fullname.split(' ')[0]}`,
