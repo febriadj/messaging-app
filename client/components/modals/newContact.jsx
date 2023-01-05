@@ -100,41 +100,32 @@ function NewContact() {
                     placeholder: 'Username',
                     required: true,
                     minLength: 3,
-                    maxLength: 32,
-                    desc: null,
+                    maxLength: 24,
                   },
                   {
                     target: 'fullname',
-                    placeholder: 'Contact name (Optional)',
+                    placeholder: 'Contact name (optional)',
                     required: false,
                     minLength: 6,
                     maxLength: 32,
-                    desc: 'The contact name will make it easy to identify this contact.',
                   },
                 ].map((elem) => (
-                  <div key={elem.target}>
-                    <label htmlFor={elem.target} className={`${elem.target === 'newPass' && 'mt-4'} relative flex items-center`}>
-                      <input
-                        type={elem.target}
-                        name={elem.target}
-                        id={elem.target}
-                        minLength={elem.minLength}
-                        maxLength={elem.maxLength}
-                        required={elem.required}
-                        placeholder={elem.placeholder}
-                        value={form[elem.target]}
-                        className={`${form[elem.target].length > 0 ? 'peer valid:bg-spill-50 dark:valid:bg-spill-900' : ''} w-full py-2 pl-4 pr-12 border border-solid border-spill-300 dark:border-spill-500 rounded-md focus:border-black dark:focus:border-sky-400`}
-                        onChange={handleChange}
-                      />
-                      <bi.BiCheck className="absolute right-0 text-xl text-sky-600 dark:text-sky-400 hidden peer-valid:block -translate-x-4" />
-                      <bi.BiX className="absolute right-0 text-xl text-red-600 dark:text-red-400 hidden peer-invalid:block -translate-x-4" />
-                    </label>
-                    { elem.desc && (
-                      <blockquote className="mt-2 p-2 bg-spill-100 dark:bg-spill-900 border-0 border-l-2 border-solid border-spill-400 dark:border-black/40">
-                        <p className="text-sm opacity-60">{elem.desc}</p>
-                      </blockquote>
-                    ) }
-                  </div>
+                  <label key={elem.target} htmlFor={elem.target} className={`${elem.target === 'newPass' && 'mt-4'} relative flex items-center`}>
+                    <input
+                      type={elem.target}
+                      name={elem.target}
+                      id={elem.target}
+                      minLength={elem.minLength}
+                      maxLength={elem.maxLength}
+                      required={elem.required}
+                      placeholder={elem.placeholder}
+                      value={form[elem.target]}
+                      className={`${form[elem.target].length > 0 ? 'peer valid:bg-spill-50 dark:valid:bg-spill-900' : ''} w-full py-2 pl-4 pr-12 border border-solid border-spill-300 dark:border-spill-500 rounded-md focus:border-black dark:focus:border-sky-400`}
+                      onChange={handleChange}
+                    />
+                    <bi.BiCheck className="absolute right-0 text-xl text-sky-600 dark:text-sky-400 hidden peer-valid:block -translate-x-4" />
+                    <bi.BiX className="absolute right-0 text-xl text-red-600 dark:text-red-400 hidden peer-invalid:block -translate-x-4" />
+                  </label>
                 ))
               }
             </span>

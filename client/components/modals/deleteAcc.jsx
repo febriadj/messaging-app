@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as bi from 'react-icons/bi';
 import axios from 'axios';
@@ -38,13 +38,6 @@ function DeleteAccount() {
     }
   };
 
-  useEffect(() => {
-    if (!modal.deleteAcc) {
-      setRespond({ success: true, message: null });
-      setPassword('');
-    }
-  }, [modal.deleteAcc]);
-
   return (
     <div
       className={`
@@ -52,6 +45,11 @@ function DeleteAccount() {
         absolute w-full h-full flex justify-center items-center
         bg-spill-600/40 dark:bg-black/60
       `}
+      aria-hidden
+      onClick={() => {
+        setRespond({ success: true, message: null });
+        setPassword('');
+      }}
     >
       <div
         aria-hidden
@@ -92,6 +90,9 @@ function DeleteAccount() {
             className="py-2 px-4 rounded-md hover:bg-gray-100 dark:hover:bg-spill-700"
             onClick={() => {
               dispatch(setModal({ target: 'deleteAcc' }));
+
+              setRespond({ success: true, message: null });
+              setPassword('');
             }}
           >
             <p>Cancel</p>
