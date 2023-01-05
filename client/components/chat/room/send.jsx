@@ -25,9 +25,11 @@ function Send({ setChats, setNewMessage, control }) {
       [e.target.name]: e.target.value,
     }));
 
+    const { roomId, roomType } = chatRoom.data;
     // set typing status
     socket.emit('chat/typing', {
-      roomId: chatRoom.data.roomId,
+      roomType,
+      roomId,
       userId: master._id,
     });
   };

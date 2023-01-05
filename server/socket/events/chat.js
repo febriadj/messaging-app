@@ -99,18 +99,21 @@ module.exports = (socket) => {
   });
 
   let typingEnds = null;
-  socket.on('chat/typing', ({ roomId }) => {
+  socket.on('chat/typing', async ({ roomId, roomType, userId }) => {
     clearTimeout(typingEnds);
+
+    const isGroup = roomType === 'group';
+    const typer = isGroup ? await ProfileModel.findOne({ userId }, { fullname: 1 }) : null;
 
     socket.broadcast
       .to(roomId)
-      .emit('chat/typing', 'typing...');
+      .emit('chat/typing', isGroup ? `${typer.fullname} typing...` : 'typing...');
 
     typingEnds = setTimeout(() => {
       socket.broadcast
         .to(roomId)
-        .emit('chat/typing-ends', 'online');
-    }, 3000);
+        .emit('chat/typing-ends', true);
+    }, 1000);
   });
 
   // delete chats

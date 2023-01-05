@@ -20,8 +20,10 @@ function Header() {
   } = useSelector((state) => state);
 
   const isGroup = chatRoom.data.roomType === 'group';
+
   const [subhead, setSubhead] = useState('');
   const [statusTimeout, setStatusTimeout] = useState(null);
+  const [typing, setTyping] = useState(null);
 
   const handleGetParticipantsName = async (signal) => {
     try {
@@ -34,7 +36,9 @@ function Header() {
   };
 
   const handleSubhead = (signal) => {
+    setTyping(null);
     setSubhead(isGroup ? 'click here for group info' : 'click here for contact info');
+
     clearTimeout(statusTimeout);
 
     setStatusTimeout(setTimeout(() => {
@@ -96,10 +100,10 @@ function Header() {
           });
         }
       });
-
-      socket.on('chat/typing', (message) => setSubhead(message));
-      socket.on('chat/typing-ends', (message) => setSubhead(message));
     }
+
+    socket.on('chat/typing', (message) => setTyping(message));
+    socket.on('chat/typing-ends', () => setTyping(null));
 
     return () => {
       socket.off('user/connect');
@@ -158,7 +162,7 @@ function Header() {
                 />
                 <span className="overflow-hidden">
                   <p className="font-bold truncate">{isGroup ? chatRoom.data.group.name : chatRoom.data.profile.fullname}</p>
-                  <p className="text-sm opacity-60 truncate">{subhead}</p>
+                  <p className="text-sm opacity-60 truncate">{typing ?? subhead}</p>
                 </span>
               </div>
             </div>
