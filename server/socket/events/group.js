@@ -87,8 +87,9 @@ module.exports = (socket) => {
     }
   });
 
-  socket.on('group/edit', async ({ groupId, name, desc }, cb) => {
+  socket.on('group/edit', async ({ groupId, userId, form }, cb) => {
     try {
+      const { name = '', desc = '' } = form;
       const errData = {};
 
       if (name.length < 1 || desc.length > 300) {
@@ -96,9 +97,27 @@ module.exports = (socket) => {
         throw errData;
       }
 
+      const profile = await ProfileModel.findOne({ userId }, { fullname: 1 });
       const group = await GroupModel.findOneAndUpdate({ _id: groupId }, { $set: { name, desc } });
-      // refresh group name & desc in client
-      io.to(group.participantsId).emit('group/edit', { name, desc });
+
+      await InboxModel.updateOne(
+        { roomId: group.roomId },
+        {
+          $set: {
+            'content.senderName': profile.fullname,
+            'content.from': userId,
+            'content.text': 'group edited',
+            'content.time': new Date().toISOString(),
+          },
+        },
+      );
+
+      const inboxes = await Inbox.find({ roomId: group.roomId });
+
+      // update group profile
+      io.to(group.roomId).emit('group/edit', form);
+      // update inbox
+      io.to(inboxes[0].ownersId).emit('inbox/find', inboxes[0]);
 
       // success callback
       cb({ success: true, message: 'Group edited successfully' });

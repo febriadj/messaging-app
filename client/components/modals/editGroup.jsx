@@ -6,6 +6,8 @@ import socket from '../../helpers/socket';
 
 function EditGroup() {
   const dispatch = useDispatch();
+
+  const master = useSelector((state) => state.user.master);
   const modal = useSelector((state) => state.modal);
 
   const [respond, setRespond] = useState({ success: true, message: null });
@@ -34,7 +36,11 @@ function EditGroup() {
       handleCloseModal();
     }
 
-    socket.emit('group/edit', { groupId: modal.editGroup._id, ...form }, (cb) => {
+    socket.emit('group/edit', {
+      userId: master._id,
+      groupId: modal.editGroup._id,
+      form,
+    }, (cb) => {
       if (cb.success) {
         setForm({ name: '', desc: '' });
         setRespond(cb);

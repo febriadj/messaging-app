@@ -79,7 +79,9 @@ function GroupProfile() {
 
   useEffect(() => {
     socket.on('group/edit', (payload) => {
-      setGroup((prev) => ({ ...prev, ...payload }));
+      if (groupProfile) {
+        setGroup((prev) => ({ ...prev, ...payload }));
+      }
 
       dispatch(setChatRoom({
         ...chatRoom,
@@ -96,7 +98,7 @@ function GroupProfile() {
     return () => {
       socket.off('group/edit');
     };
-  }, []);
+  }, [!!groupProfile]);
 
   useEffect(() => {
     socket.on('group/add-admin', ({ adminId }) => {
