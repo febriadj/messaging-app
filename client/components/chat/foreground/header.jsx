@@ -64,7 +64,7 @@ function Header({ setSearch }) {
             name="search"
             id="search"
             className="w-full placeholder:opacity-80"
-            placeholder="Search chat or group in inbox"
+            placeholder="Search chats..."
             onChange={(e) => {
               clearTimeout(inputTimeout.current);
 
