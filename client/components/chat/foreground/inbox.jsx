@@ -46,13 +46,6 @@ function Inbox({ inboxes, setInboxes }) {
 
     socket.on('group/create', (payload) => setInboxes((prev) => [payload, ...prev]));
 
-    socket.on('group/add-participants', (payload) => {
-      setInboxes((prev) => {
-        const olds = prev.filter((elem) => elem.roomId !== payload.roomId);
-        return [payload, ...olds];
-      });
-    });
-
     socket.on('inbox/delete', (roomsId) => {
       setInboxes((prev) => prev.filter((elem) => !roomsId.includes(elem.roomId)));
     });
@@ -66,7 +59,6 @@ function Inbox({ inboxes, setInboxes }) {
 
     return () => {
       socket.off('group/create');
-      socket.off('group/add-participants');
       socket.off('group/exit');
       socket.off('inbox/read');
       socket.off('inbox/delete');

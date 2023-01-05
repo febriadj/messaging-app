@@ -59,13 +59,13 @@ module.exports = (socket) => {
     try {
       // get inviter fullname
       const inviter = await ProfileModel.findOne({ userId: args.userId }, { fullname: 1 });
-      await GroupModel.updateOne(
+      const group = await GroupModel.findOneAndUpdate(
         { _id: args.groupId },
         { $addToSet: { participantsId: { $each: args.friendsId } } },
       );
 
       await InboxModel.updateOne(
-        { roomId: args.roomId },
+        { roomId: group.roomId },
         {
           $addToSet: { ownersId: { $each: args.friendsId } },
           $set: {
@@ -78,9 +78,9 @@ module.exports = (socket) => {
         },
       );
 
-      const inboxs = await Inbox.find({ roomId: args.roomId });
+      const inboxes = await Inbox.find({ roomId: args.roomId });
 
-      io.to(inboxs[0].ownersId).emit('group/add-participants', inboxs[0]);
+      io.to(inboxes[0].ownersId).emit('inbox/find', inboxes[0]);
     }
     catch (error0) {
       console.log(error0.message);
