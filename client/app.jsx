@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
+import * as bi from 'react-icons/bi';
 import './style.css';
 import * as route from './routes';
 import { setMaster, setSetting } from './redux/features/user';
@@ -14,6 +15,7 @@ function App() {
   const { master } = useSelector((state) => state.user);
 
   const [inactive, setInactive] = useState(false);
+  const [loaded, setLoaded] = useState(false);
 
   // get access token from localStorage
   const token = localStorage.getItem('token');
@@ -34,6 +36,10 @@ function App() {
           dispatch(setMaster(data.payload));
           socket.emit('user/connect', data.payload._id);
         }
+
+        setLoaded(true);
+      } else {
+        setTimeout(() => setLoaded(true), 1000);
       }
     }
     catch (error0) {
@@ -72,16 +78,29 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Routes>
-        {
-          inactive && <Route exact path="*" element={<route.inactive />} />
-        }
-        {
-          !inactive && master
-            ? <Route exact path="*" element={master.verified ? <route.chat /> : <route.verify />} />
-            : <Route exact path="*" element={<route.auth />} />
-        }
-      </Routes>
+      {
+        loaded
+          ? (
+            <Routes>
+              {
+                inactive && <Route exact path="*" element={<route.inactive />} />
+              }
+              {
+                !inactive && master
+                  ? <Route exact path="*" element={master.verified ? <route.chat /> : <route.verify />} />
+                  : <Route exact path="*" element={<route.auth />} />
+              }
+            </Routes>
+          )
+          : (
+            <div className="absolute w-full h-full flex justify-center items-center bg-white dark:text-white/90 dark:bg-spill-900">
+              <div className="flex gap-2 items-center">
+                <i className="animate-spin"><bi.BiLoaderAlt /></i>
+                <p>Loading</p>
+              </div>
+            </div>
+          )
+      }
     </BrowserRouter>
   );
 }
