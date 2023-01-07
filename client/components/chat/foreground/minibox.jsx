@@ -13,7 +13,7 @@ function Minibox() {
       aria-hidden
       className={`
         ${modal.minibox ? 'opacity-100 z-20' : 'opacity-0 -z-50 scale-50'}
-        transition duration-75 absolute right-0 translate-y-12 -translate-x-6 shadow-xl rounded-md
+        transition duration-75 absolute right-0 w-40 translate-y-12 -translate-x-6 shadow-xl rounded-md
         bg-white dark:bg-spill-700 dark:text-white/90
       `}
       onClick={(e) => e.stopPropagation()}
@@ -27,7 +27,6 @@ function Minibox() {
               html: 'Profile',
               icon: <bi.BiUserCircle />,
             },
-            { target: 'savedMessage', html: 'Saved messages', icon: <bi.BiBookmark /> },
             { target: 'setting', html: 'Settings', icon: <bi.BiCog /> },
             { target: 'signout', html: 'Sign out', icon: <bi.BiLogOutCircle /> },
           ].map((elem) => (
