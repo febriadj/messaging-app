@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { Helmet } from 'react-helmet';
 import axios from 'axios';
 import * as bi from 'react-icons/bi';
+import config from '../../config';
 
 function Login({ setRespond }) {
   const cache = JSON.parse(localStorage.getItem('cache'));
@@ -53,6 +55,9 @@ function Login({ setRespond }) {
 
   return (
     <form method="post" className="grid gap-2" onSubmit={handleSubmit}>
+      <Helmet>
+        <title>{`Sign in - ${config.brandName}`}</title>
+      </Helmet>
       {
         [
           {

@@ -5,6 +5,7 @@ import * as md from 'react-icons/md';
 
 import { setSelectedChats } from '../../redux/features/chore';
 import socket from '../../helpers/socket';
+import config from '../../config';
 
 import * as comp from '../../components/chat/room';
 import FriendProfile from '../../pages/friendProfile';
@@ -139,7 +140,11 @@ function Room() {
           <div className="w-full h-full flex justify-center items-center">
             <div className="w-[400px] flex flex-col items-center">
               <i className="opacity-40"><md.MdDevices size={140} /></i>
-              <p className="mt-4 opacity-60 text-center">You can use Spillgram on other devices such as desktop, tablet, and mobile phone.</p>
+              <p className="mt-4 opacity-60 text-center">
+                {'You can use '}
+                {config.brandName}
+                {' on other devices such as desktop, tablet, and mobile phone.'}
+              </p>
             </div>
           </div>
         )

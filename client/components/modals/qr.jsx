@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as bi from 'react-icons/bi';
 import QRCode from 'qrcode';
 import { setModal } from '../../redux/features/modal';
+import config from '../../config';
 
 function QR() {
   const dispatch = useDispatch();
@@ -73,7 +74,7 @@ function QR() {
               <div className="group relative p-2 flex justify-center items-center bg-spill-100 dark:bg-spill-700">
                 <div id="canvas-wrap"></div>
               </div>
-              <p className="p-4 text-sm">Your QR code is private, if you share it with someone, they can scan it with their Spillgram camera to add you as a contact.</p>
+              <p className="p-4 text-sm">{`Your QR code is private, if you share it with someone, they can scan it with their ${config.brandName} camera to add you as a contact.`}</p>
             </>
           )
         }

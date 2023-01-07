@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { Helmet } from 'react-helmet';
 import axios from 'axios';
 import * as bi from 'react-icons/bi';
+import config from '../../config';
 
 function Register({ setRespond }) {
   const [process, setProcess] = useState(false);
@@ -55,6 +57,9 @@ function Register({ setRespond }) {
 
   return (
     <form method="post" className="grid gap-2" onSubmit={handleSubmit}>
+      <Helmet>
+        <title>{`Sign up - ${config.brandName}`}</title>
+      </Helmet>
       {
         [
           {
@@ -100,7 +105,7 @@ function Register({ setRespond }) {
       {/* notice of terms */}
       <span className="mt-2 text-sm">
         <p>
-          {'People who use our service may have uploaded your contact information to Spillgram. '}
+          {`People who use our service may have uploaded your contact information to ${config.brandName}. `}
           <a href="/" className="text-sky-800">Learn More</a>
         </p>
         <p className="mt-2">

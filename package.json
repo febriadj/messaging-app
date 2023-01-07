@@ -1,7 +1,7 @@
 {
-  "name": "spillgram",
+  "name": "discuzz",
   "version": "1.0.0",
-  "description": "Spillgram is a web-based real-time chat application built using mern, socket.io, and webrtc technologies",
+  "description": "Discuzz is a web-based chat app that allows you to share text messages, photos, audio, or other files with friends in real-time.",
   "main": "server",
   "engines": {
     "vscode": "1.22.0",
@@ -18,10 +18,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/febriadj/spillgram.git"
+    "url": "git+https://github.com/febriadj/discuzz.git"
   },
   "keywords": [
-    "spillgram",
+    "discuzz",
     "chat",
     "websockect",
     "social-app",
@@ -31,9 +31,9 @@
   "author": "Febriadji",
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/febriadj/spillgram/issues"
+    "url": "https://github.com/febriadj/discuzz/issues"
   },
-  "homepage": "https://github.com/febriadj/spillgram#readme",
+  "homepage": "https://github.com/febriadj/discuzz#readme",
   "devDependencies": {
     "@babel/core": "^7.19.3",
     "@babel/plugin-transform-runtime": "^7.19.1",
