@@ -240,7 +240,7 @@ function GroupProfile() {
               {
                 [
                   { label: 'Description', data: group.desc, icon: <bi.BiInfoCircle /> },
-                  { label: 'Invite Link', data: group.link.slice(group.link.indexOf('group'), group.link.length), icon: <bi.BiLinkAlt /> },
+                  { label: 'Invite Link', data: group.link, icon: <bi.BiLinkAlt /> },
                 ]
                   .map((elem) => (
                     <div key={elem.label} className="py-2 px-4 grid grid-cols-[auto_1fr_auto] gap-4 items-start border-0 border-b border-solid border-spill-100 dark:border-spill-800">

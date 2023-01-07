@@ -2,13 +2,12 @@ const isDev = process.env.NODE_ENV === 'development';
 
 module.exports = {
   isDev,
-  host: isDev ? 'http://localhost:8080' : 'https://www.spillgram.com',
-  db: {
-    uri: process.env.MONGO_URI,
-    name: 'spillgram',
-  },
   cors: {
     origin: ['http://localhost:3000'],
     method: '*',
+  },
+  db: {
+    uri: process.env.MONGO_URI,
+    name: 'spillgram',
   },
 };

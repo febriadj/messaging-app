@@ -1,5 +1,4 @@
 const { Schema, model } = require('mongoose');
-const config = require('../../config');
 const uniqueId = require('../../helpers/uniqueId');
 
 const GroupSchema = new Schema({
@@ -34,7 +33,7 @@ const GroupSchema = new Schema({
     type: Schema.Types.String,
     unique: true,
     required: true,
-    default: `${config.host}/group/+${uniqueId(16)}`,
+    default: `/group/+${uniqueId(16)}`,
   },
 }, {
   timestamps: true,

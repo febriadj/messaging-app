@@ -9,7 +9,6 @@ const ChatModel = require('../../db/models/chat');
 const Inbox = require('../../helpers/models/inbox');
 
 const uniqueId = require('../../helpers/uniqueId');
-const config = require('../../config');
 
 module.exports = (socket) => {
   socket.on('group/create', async (args, cb) => {
@@ -22,7 +21,7 @@ module.exports = (socket) => {
       const group = await new GroupModel({
         ...args,
         roomId,
-        link: `${config.host}/group/+${uniqueId(16)}`,
+        link: `/group/+${uniqueId(16)}`,
       }).save();
 
       const inbox = await new InboxModel({
