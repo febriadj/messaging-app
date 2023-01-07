@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import * as fc from 'react-icons/fc';
 import * as comp from '../components/auth';
 import config from '../config';
 
@@ -14,20 +13,9 @@ function Auth() {
         {/* body */}
         <div className="my-6 sm:p-6 rounded-md bg-white">
           {/* header */}
-          <div>
+          <div className="mb-4">
             <h1 className="text-2xl font-bold">{login ? 'Sign in' : 'Sign up'}</h1>
             { respond.message && <p className={`${!respond.success && 'text-rose-800'} text-sm mt-1`}>{respond.message}</p> }
-          </div>
-          <div className="grid gap-2 mt-4">
-            <button type="button" className="relative py-2 flex justify-center items-center rounded-md border border-solid border-gray-300 hover:bg-gray-50">
-              <fc.FcGoogle size={20} className="absolute left-0 translate-x-4" />
-              <p className="text-center">Continue with Google</p>
-            </button>
-          </div>
-          <div className="mt-2 mb-4 grid grid-cols-[1fr_auto_1fr] gap-3 items-center">
-            <span className="block w-full h-[1px] bg-gray-300"></span>
-            <p>or</p>
-            <span className="block w-full h-[1px] bg-gray-300"></span>
           </div>
           {
             login
