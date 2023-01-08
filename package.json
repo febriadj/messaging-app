@@ -9,12 +9,11 @@
     "node": "16.17.1"
   },
   "scripts": {
-    "client-dev": "webpack serve --config ./webpack.dev.js",
-    "server-dev": "nodemon server",
-    "server-start": "node server",
-    "dev": "concurrently \"npm run client-dev\" \"npm run server-dev\"",
+    "dev:client": "webpack serve --config ./webpack.dev.js",
+    "dev:server": "nodemon server",
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+    "build": "webpack --config ./webpack.prod.js",
     "start": "node server",
-    "client-build": "webpack --config ./webpack.prod.js",
     "prepare": "husky install",
     "format": "prettier --write ."
   },
