@@ -15,7 +15,8 @@
     "dev": "concurrently \"npm run client-dev\" \"npm run server-dev\"",
     "start": "node server",
     "client-build": "webpack --config ./webpack.prod.js",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "format": "prettier --write ."
   },
   "repository": {
     "type": "git",
@@ -48,8 +49,10 @@
     "css-loader": "^6.7.1",
     "eslint": "^8.25.0",
     "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^8.7.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jsx-a11y": "^6.6.1",
+    "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.31.10",
     "eslint-plugin-react-hooks": "^4.6.0",
     "file-loader": "^6.2.0",
@@ -58,6 +61,7 @@
     "nodemon": "^2.0.20",
     "postcss-cli": "^10.0.0",
     "postcss-loader": "^7.0.1",
+    "prettier": "^2.8.4",
     "style-loader": "^3.3.1",
     "webpack": "^5.74.0",
     "webpack-cli": "^4.10.0",
