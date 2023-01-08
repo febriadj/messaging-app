@@ -5,13 +5,7 @@ const response = require('../helpers/response');
 
 exports.upload = async (req, res) => {
   try {
-    const {
-      avatar,
-      crop,
-      zoom,
-      targetId = null,
-      isGroup = false,
-    } = req.body;
+    const { avatar, crop, zoom, targetId = null, isGroup = false } = req.body;
 
     const upload = await cloud.uploader.upload(avatar, {
       folder: 'avatars',
@@ -35,11 +29,14 @@ exports.upload = async (req, res) => {
     });
 
     if (isGroup) {
-      await GroupModel.updateOne({ _id: targetId }, { $set: { avatar: upload.url } });
+      await GroupModel.updateOne(
+        { _id: targetId },
+        { $set: { avatar: upload.url } }
+      );
     } else {
       await ProfileModel.updateOne(
         { userId: targetId || req.user._id },
-        { $set: { avatar: upload.url } },
+        { $set: { avatar: upload.url } }
       );
     }
 
@@ -48,8 +45,7 @@ exports.upload = async (req, res) => {
       message: 'Avatar uploaded successfully',
       payload: upload.url,
     });
-  }
-  catch (error0) {
+  } catch (error0) {
     response({
       res,
       statusCode: error0.statusCode || 500,

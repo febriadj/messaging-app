@@ -21,53 +21,54 @@ function GroupContextMenu() {
       }}
     >
       <div className="grid">
-        {
-          [
-            {
-              _key: 'B-01',
-              html: `View ${menu.user.fullname.split(' ')[0]}`,
-              func() {
-                const data = menu.user.userId;
-                dispatch(setPage({ target: 'friendProfile', data }));
-              },
+        {[
+          {
+            _key: 'B-01',
+            html: `View ${menu.user.fullname.split(' ')[0]}`,
+            func() {
+              const data = menu.user.userId;
+              dispatch(setPage({ target: 'friendProfile', data }));
             },
-            {
-              _key: 'B-02',
-              html: menu.group.adminId === menu.user.userId ? 'Dismiss as admin' : 'Set as admin',
-              func() {
-                socket.emit('group/add-admin', {
-                  participantId: menu.user.userId,
-                  userId: master._id,
-                  groupId: menu.group._id,
-                });
-              },
+          },
+          {
+            _key: 'B-02',
+            html:
+              menu.group.adminId === menu.user.userId
+                ? 'Dismiss as admin'
+                : 'Set as admin',
+            func() {
+              socket.emit('group/add-admin', {
+                participantId: menu.user.userId,
+                userId: master._id,
+                groupId: menu.group._id,
+              });
             },
-            {
-              _key: 'B-03',
-              html: `Remove ${menu.user.fullname.split(' ')[0]}`,
-              func() {
-                socket.emit('group/remove-participant', {
-                  participantId: menu.user.userId,
-                  userId: master._id,
-                  groupId: menu.group._id,
-                });
-              },
+          },
+          {
+            _key: 'B-03',
+            html: `Remove ${menu.user.fullname.split(' ')[0]}`,
+            func() {
+              socket.emit('group/remove-participant', {
+                participantId: menu.user.userId,
+                userId: master._id,
+                groupId: menu.group._id,
+              });
             },
-          ].map((elem) => (
-            <button
-              key={elem._key}
-              type="button"
-              className="py-2 px-4 overflow-hidden flex gap-4 items-center cursor-pointer hover:bg-spill-200 dark:hover:bg-spill-600"
-              onClick={() => {
-                dispatch(setModal({ target: 'groupContextMenu', data: false }));
+          },
+        ].map((elem) => (
+          <button
+            key={elem._key}
+            type="button"
+            className="py-2 px-4 overflow-hidden flex gap-4 items-center cursor-pointer hover:bg-spill-200 dark:hover:bg-spill-600"
+            onClick={() => {
+              dispatch(setModal({ target: 'groupContextMenu', data: false }));
 
-                setTimeout(() => elem.func(), 150);
-              }}
-            >
-              <p className="truncate">{elem.html}</p>
-            </button>
-          ))
-        }
+              setTimeout(() => elem.func(), 150);
+            }}
+          >
+            <p className="truncate">{elem.html}</p>
+          </button>
+        ))}
       </div>
     </div>
   );

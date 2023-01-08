@@ -44,7 +44,11 @@ exports.find = async (queries, search = '') => {
         $or: [
           {
             roomType: 'private',
-            owners: { $elemMatch: { fullname: { $regex: new RegExp(search), $options: 'i' } } },
+            owners: {
+              $elemMatch: {
+                fullname: { $regex: new RegExp(search), $options: 'i' },
+              },
+            },
           },
           {
             roomType: 'group',

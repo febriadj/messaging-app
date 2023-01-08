@@ -9,7 +9,10 @@ import AttachMenu from '../../modals/attachMenu';
 
 function Send({ setChats, setNewMessage, control }) {
   const dispatch = useDispatch();
-  const { user: { master, setting }, room: { chat: chatRoom } } = useSelector((state) => state);
+  const {
+    user: { master, setting },
+    room: { chat: chatRoom },
+  } = useSelector((state) => state);
 
   const isGroup = chatRoom.data.roomType === 'group';
 
@@ -38,7 +41,10 @@ function Send({ setChats, setNewMessage, control }) {
     if (form.text.length > 0 || form.file) {
       const { group = null, profile = null } = chatRoom.data;
 
-      if ((isGroup && group.participantsId.includes(master._id)) || (!isGroup && profile.active)) {
+      if (
+        (isGroup && group.participantsId.includes(master._id)) ||
+        (!isGroup && profile.active)
+      ) {
         socket.emit('chat/insert', {
           ...form,
           ownersId: chatRoom.data.ownersId,
@@ -83,8 +89,8 @@ function Send({ setChats, setNewMessage, control }) {
         }
 
         if (
-          (monitor.scrollHeight - monitor.clientHeight)
-          >= (monitor.scrollTop + monitor.clientHeight / 2)
+          monitor.scrollHeight - monitor.clientHeight >=
+          monitor.scrollTop + monitor.clientHeight / 2
         ) {
           setNewMessage((prev) => prev + 1);
         } else {
@@ -134,7 +140,9 @@ function Send({ setChats, setNewMessage, control }) {
               }
             }}
           >
-            <i><bi.BiPaperclip /></i>
+            <i>
+              <bi.BiPaperclip />
+            </i>
           </button>
         </span>
         <input
@@ -160,12 +168,12 @@ function Send({ setChats, setNewMessage, control }) {
             }
           }}
         >
-          <i><bi.BiSend /></i>
+          <i>
+            <bi.BiSend />
+          </i>
         </button>
       </div>
-      {
-        emojiBoard && <EmojiBoard setForm={setForm} />
-      }
+      {emojiBoard && <EmojiBoard setForm={setForm} />}
     </div>
   );
 }

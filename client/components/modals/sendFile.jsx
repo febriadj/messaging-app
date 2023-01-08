@@ -49,14 +49,18 @@ function SendFile() {
     >
       <div
         aria-hidden
-        className={`${!sendFile && 'scale-0'} transition relative w-[460px] m-6 rounded-md overflow-hidden bg-white dark:bg-spill-800`}
+        className={`${
+          !sendFile && 'scale-0'
+        } transition relative w-[460px] m-6 rounded-md overflow-hidden bg-white dark:bg-spill-800`}
         onClick={(e) => {
           e.stopPropagation();
         }}
       >
         {/* header */}
         <div className="h-14 pl-4 pr-2 flex gap-4 justify-between items-center">
-          <h1 className="text-lg font-bold">{`Send ${sendFile.type === 'image' ? 'Photo' : 'File'}`}</h1>
+          <h1 className="text-lg font-bold">{`Send ${
+            sendFile.type === 'image' ? 'Photo' : 'File'
+          }`}</h1>
           <button
             type="button"
             className="p-2 rounded-full hover:bg-spill-100 dark:hover:bg-spill-700"
@@ -67,27 +71,29 @@ function SendFile() {
               dispatch(setModal({ target: 'sendFile' }));
             }}
           >
-            <i><bi.BiX /></i>
+            <i>
+              <bi.BiX />
+            </i>
           </button>
         </div>
-        {
-          sendFile && sendFile.type === 'image' && (
-            <div className="p-2 flex justify-center items-center bg-spill-100 dark:bg-spill-950">
-              <img src={sendFile.url} alt="" className="max-h-80" />
-            </div>
-          )
-        }
-        {
-          sendFile && sendFile.type === 'all' && (
-            <div className="py-2 px-4 flex gap-4 items-center">
-              <i><bi.BiFile size={40} /></i>
-              <span className="truncate">
-                <p className="font-bold truncate">{sendFile.originalname}</p>
-                <p className="text-sm opacity-60 mt-0.5">{bytesToSize(sendFile.size)}</p>
-              </span>
-            </div>
-          )
-        }
+        {sendFile && sendFile.type === 'image' && (
+          <div className="p-2 flex justify-center items-center bg-spill-100 dark:bg-spill-950">
+            <img src={sendFile.url} alt="" className="max-h-80" />
+          </div>
+        )}
+        {sendFile && sendFile.type === 'all' && (
+          <div className="py-2 px-4 flex gap-4 items-center">
+            <i>
+              <bi.BiFile size={40} />
+            </i>
+            <span className="truncate">
+              <p className="font-bold truncate">{sendFile.originalname}</p>
+              <p className="text-sm opacity-60 mt-0.5">
+                {bytesToSize(sendFile.size)}
+              </p>
+            </span>
+          </div>
+        )}
         <form
           method="post"
           className="h-14 pl-4 pr-2 grid grid-cols-[1fr_auto] gap-4 items-center"
@@ -109,7 +115,9 @@ function SendFile() {
             type="submit"
             className="p-2 rounded-full hover:bg-spill-100 dark:hover:bg-spill-700"
           >
-            <i><bi.BiSend /></i>
+            <i>
+              <bi.BiSend />
+            </i>
           </button>
         </form>
       </div>

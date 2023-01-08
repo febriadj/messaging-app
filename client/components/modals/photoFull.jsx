@@ -18,7 +18,9 @@ function PhotoFull() {
           type="button"
           className="p-2 rounded-full hover:bg-spill-100 dark:hover:bg-spill-700"
         >
-          <i><bi.BiX /></i>
+          <i>
+            <bi.BiX />
+          </i>
         </button>
       </div>
       <div className="flex justify-center items-center">

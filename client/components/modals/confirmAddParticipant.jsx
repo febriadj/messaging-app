@@ -29,10 +29,12 @@ function ConfirmAddParticipant() {
       dispatch(setPage({ target: 'addParticipant', data: false }));
 
       setTimeout(() => {
-        dispatch(setModal({
-          target: 'confirmAddParticipants',
-          data: false,
-        }));
+        dispatch(
+          setModal({
+            target: 'confirmAddParticipants',
+            data: false,
+          })
+        );
       }, 500);
     }, 500);
   };
@@ -41,14 +43,20 @@ function ConfirmAddParticipant() {
     <div
       id="confirm-add-participant"
       className={`
-        ${modal.confirmAddParticipant ? 'delay-75 z-50' : '-z-50 opacity-0 delay-300'}
+        ${
+          modal.confirmAddParticipant
+            ? 'delay-75 z-50'
+            : '-z-50 opacity-0 delay-300'
+        }
         absolute w-full h-full flex justify-center items-center
         bg-spill-600/40 dark:bg-black/60
       `}
     >
       <div
         aria-hidden
-        className={`${!modal.confirmAddParticipant && 'scale-0'} transition w-[400px] m-6 p-4 grid rounded-md bg-white dark:bg-spill-800`}
+        className={`${
+          !modal.confirmAddParticipant && 'scale-0'
+        } transition w-[400px] m-6 p-4 grid rounded-md bg-white dark:bg-spill-800`}
         onClick={(e) => {
           e.stopPropagation();
         }}

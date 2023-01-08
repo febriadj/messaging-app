@@ -3,30 +3,36 @@ import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios';
 import { setModal } from '../../redux/features/modal';
-import { setRefreshContact, setRefreshFriendProfile } from '../../redux/features/chore';
+import {
+  setRefreshContact,
+  setRefreshFriendProfile,
+} from '../../redux/features/chore';
 
 function ConfirmDeleteContact() {
   const dispatch = useDispatch();
   // friend _id
-  const confirmDeleteContact = useSelector((state) => state.modal.confirmDeleteContact);
+  const confirmDeleteContact = useSelector(
+    (state) => state.modal.confirmDeleteContact
+  );
 
   const handleDeleteContact = async () => {
     try {
       await axios.delete(`/contacts/${confirmDeleteContact}`);
 
       // close confirmDeleteContact modal
-      dispatch(setModal({
-        target: 'confirmDeleteContact',
-        data: false,
-      }));
+      dispatch(
+        setModal({
+          target: 'confirmDeleteContact',
+          data: false,
+        })
+      );
 
       setTimeout(() => {
         // refresh contact and friend's profile page after 150ms
         dispatch(setRefreshContact(uuidv4()));
         dispatch(setRefreshFriendProfile(uuidv4()));
       }, 150);
-    }
-    catch (error0) {
+    } catch (error0) {
       console.error(error0.message);
     }
   };
@@ -41,7 +47,9 @@ function ConfirmDeleteContact() {
     >
       <div
         aria-hidden
-        className={`${!confirmDeleteContact && 'scale-0'} transition relative w-[400px] m-6 p-4 rounded-md bg-white dark:bg-spill-800`}
+        className={`${
+          !confirmDeleteContact && 'scale-0'
+        } transition relative w-[400px] m-6 p-4 rounded-md bg-white dark:bg-spill-800`}
         onClick={(e) => {
           e.stopPropagation();
         }}
@@ -53,7 +61,9 @@ function ConfirmDeleteContact() {
             type="button"
             className="py-2 px-4 rounded-md hover:bg-gray-100 dark:hover:bg-spill-700"
             onClick={() => {
-              dispatch(setModal({ target: 'confirmDeleteContact', data: false }));
+              dispatch(
+                setModal({ target: 'confirmDeleteContact', data: false })
+              );
             }}
           >
             <p>Cancel</p>

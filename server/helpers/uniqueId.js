@@ -1,7 +1,4 @@
-module.exports = (
-  length,
-  options = null,
-) => {
+module.exports = (length, options = null) => {
   let schema = '';
 
   if (options?.uppercase ?? true) schema += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';

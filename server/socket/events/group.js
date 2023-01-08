@@ -16,7 +16,10 @@ module.exports = (socket) => {
       const roomId = `group-${uuidv4()}`;
 
       // get full name of admin
-      const profile = await ProfileModel.findOne({ userId: args.adminId }, { fullname: 1 });
+      const profile = await ProfileModel.findOne(
+        { userId: args.adminId },
+        { fullname: 1 }
+      );
 
       const group = await new GroupModel({
         ...args,
@@ -44,8 +47,7 @@ module.exports = (socket) => {
         success: true,
         message: 'Group created successfully',
       });
-    }
-    catch (error0) {
+    } catch (error0) {
       // return error callback
       cb({
         success: false,
@@ -57,10 +59,13 @@ module.exports = (socket) => {
   socket.on('group/add-participants', async (args) => {
     try {
       // get inviter fullname
-      const inviter = await ProfileModel.findOne({ userId: args.userId }, { fullname: 1 });
+      const inviter = await ProfileModel.findOne(
+        { userId: args.userId },
+        { fullname: 1 }
+      );
       const group = await GroupModel.findOneAndUpdate(
         { _id: args.groupId },
-        { $addToSet: { participantsId: { $each: args.friendsId } } },
+        { $addToSet: { participantsId: { $each: args.friendsId } } }
       );
 
       await InboxModel.updateOne(
@@ -71,17 +76,18 @@ module.exports = (socket) => {
             fileId: null,
             'content.senderName': inviter.fullname,
             'content.from': args.userId,
-            'content.text': `${args.friendsId.length} ${args.friendsId.length > 1 ? 'participants' : 'participant'} added`,
+            'content.text': `${args.friendsId.length} ${
+              args.friendsId.length > 1 ? 'participants' : 'participant'
+            } added`,
             'content.time': new Date().toISOString(),
           },
-        },
+        }
       );
 
       const inboxes = await Inbox.find({ roomId: args.roomId });
 
       io.to(inboxes[0].ownersId).emit('inbox/find', inboxes[0]);
-    }
-    catch (error0) {
+    } catch (error0) {
       console.log(error0.message);
     }
   });
@@ -92,12 +98,18 @@ module.exports = (socket) => {
       const errData = {};
 
       if (name.length < 1 || desc.length > 300) {
-        errData.message = name.length < 1 ? 'Group name is required!' : 'Description too long (max. 300)';
+        errData.message =
+          name.length < 1
+            ? 'Group name is required!'
+            : 'Description too long (max. 300)';
         throw errData;
       }
 
       const profile = await ProfileModel.findOne({ userId }, { fullname: 1 });
-      const group = await GroupModel.findOneAndUpdate({ _id: groupId }, { $set: { name, desc } });
+      const group = await GroupModel.findOneAndUpdate(
+        { _id: groupId },
+        { $set: { name, desc } }
+      );
 
       await InboxModel.updateOne(
         { roomId: group.roomId },
@@ -109,7 +121,7 @@ module.exports = (socket) => {
             'content.text': 'group edited',
             'content.time': new Date().toISOString(),
           },
-        },
+        }
       );
 
       const inboxes = await Inbox.find({ roomId: group.roomId });
@@ -121,8 +133,7 @@ module.exports = (socket) => {
 
       // success callback
       cb({ success: true, message: 'Group edited successfully' });
-    }
-    catch ({ message }) {
+    } catch ({ message }) {
       // error callback
       cb({ success: false, message });
     }
@@ -132,11 +143,13 @@ module.exports = (socket) => {
     try {
       const group = await GroupModel.findOneAndUpdate(
         { _id: groupId },
-        { $pull: { participantsId: userId } },
+        { $pull: { participantsId: userId } }
       );
 
       // updated participantsId
-      const participantsId = group.participantsId.filter((elem) => elem !== userId);
+      const participantsId = group.participantsId.filter(
+        (elem) => elem !== userId
+      );
 
       // if you're the last participant in the group
       if (participantsId.length === 0) {
@@ -165,7 +178,7 @@ module.exports = (socket) => {
               'content.text': 'left the group',
               'content.time': new Date().toISOString(),
             },
-          },
+          }
         );
 
         const inboxs = await Inbox.find({ roomId: group.roomId });
@@ -180,8 +193,7 @@ module.exports = (socket) => {
       socket.emit('inbox/delete', [group.roomId]);
       // success callback
       cb({ success: true, message: 'Successfully exit the group' });
-    }
-    catch ({ message }) {
+    } catch ({ message }) {
       // error callback
       cb({ success: false, message });
     }
@@ -192,11 +204,14 @@ module.exports = (socket) => {
       const { groupId, userId, participantId } = args;
 
       const master = await ProfileModel.findOne({ userId }, { fullname: 1 });
-      const friend = await ProfileModel.findOne({ userId: participantId }, { fullname: 1 });
+      const friend = await ProfileModel.findOne(
+        { userId: participantId },
+        { fullname: 1 }
+      );
 
       const group = await GroupModel.findOneAndUpdate(
         { _id: groupId },
-        { $set: { adminId: participantId } },
+        { $set: { adminId: participantId } }
       );
 
       await InboxModel.updateOne(
@@ -209,7 +224,7 @@ module.exports = (socket) => {
             'content.text': `add ${friend.fullname.split(' ')[0]} as admin`,
             'content.time': new Date().toISOString(),
           },
-        },
+        }
       );
 
       const inboxes = await Inbox.find({ roomId: group.roomId });
@@ -219,8 +234,7 @@ module.exports = (socket) => {
         ...group._doc,
         adminId: participantId,
       });
-    }
-    catch (error0) {
+    } catch (error0) {
       console.error(error0.message);
     }
   });
@@ -230,11 +244,14 @@ module.exports = (socket) => {
       const { groupId, userId, participantId } = args;
 
       const master = await ProfileModel.findOne({ userId }, { fullname: 1 });
-      const friend = await ProfileModel.findOne({ userId: participantId }, { fullname: 1 });
+      const friend = await ProfileModel.findOne(
+        { userId: participantId },
+        { fullname: 1 }
+      );
 
       const group = await GroupModel.findOneAndUpdate(
         { _id: groupId },
-        { $pull: { participantsId: participantId } },
+        { $pull: { participantsId: participantId } }
       );
 
       await InboxModel.updateOne(
@@ -248,19 +265,20 @@ module.exports = (socket) => {
             'content.text': `removed ${friend.fullname.split(' ')[0]}`,
             'content.time': new Date().toISOString(),
           },
-        },
+        }
       );
 
       const inboxes = await Inbox.find({ roomId: group.roomId });
 
       // refresh inbox
-      socket.broadcast.to(participantId).emit('inbox/delete', [inboxes[0].roomId]);
+      socket.broadcast
+        .to(participantId)
+        .emit('inbox/delete', [inboxes[0].roomId]);
       io.to(inboxes[0].ownersId).emit('inbox/find', inboxes[0]);
 
       // refresh group participants
       io.to(group.roomId).emit('group/remove-participant', args);
-    }
-    catch (error0) {
+    } catch (error0) {
       console.error(error0.message);
     }
   });

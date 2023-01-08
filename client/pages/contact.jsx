@@ -30,8 +30,7 @@ function Contact() {
         // reset when page is closed
         setContacts(null);
       }
-    }
-    catch (error0) {
+    } catch (error0) {
       console.error(error0.message);
     }
   };
@@ -39,16 +38,19 @@ function Contact() {
   const handleSortToggle = async () => {
     try {
       setContacts(null);
-      await axios.put('/settings', { sortContactByName: !setting.sortContactByName });
-
-      dispatch(setSetting({
-        ...setting,
+      await axios.put('/settings', {
         sortContactByName: !setting.sortContactByName,
-      }));
+      });
+
+      dispatch(
+        setSetting({
+          ...setting,
+          sortContactByName: !setting.sortContactByName,
+        })
+      );
 
       await handleGetContacts();
-    }
-    catch (error0) {
+    } catch (error0) {
       console.error(error0.message);
     }
   };
@@ -100,118 +102,152 @@ function Contact() {
           <h1 className="text-2xl font-bold">Contacts</h1>
         </div>
         <div className="flex items-center">
-          {
-            page.contact && (
-              <button
-                type="button"
-                className="p-2 rounded-full hover:bg-spill-100 dark:hover:bg-spill-800"
-                onClick={handleSortToggle}
-              >
-                <i className="text-2xl">{setting && setting.sortContactByName ? <bi.BiSortDown /> : <bi.BiSortAZ />}</i>
-              </button>
-            )
-          }
+          {page.contact && (
+            <button
+              type="button"
+              className="p-2 rounded-full hover:bg-spill-100 dark:hover:bg-spill-800"
+              onClick={handleSortToggle}
+            >
+              <i className="text-2xl">
+                {setting && setting.sortContactByName ? (
+                  <bi.BiSortDown />
+                ) : (
+                  <bi.BiSortAZ />
+                )}
+              </i>
+            </button>
+          )}
         </div>
       </div>
       {/* content */}
       <div className="overflow-y-auto scrollbar-thin scrollbar-thumb-spill-200 hover:scrollbar-thumb-spill-300 dark:scrollbar-thumb-spill-700 dark:hover:scrollbar-thumb-spill-600">
         <div className="grid">
-          {
-            [
-              { target: 'selectParticipant', text: 'Create a new Group', icon: <ri.RiGroupLine /> },
-              { target: 'newcontact', text: 'New Contact', icon: <ri.RiUserAddLine /> },
-            ].map((elem) => (
-              <div
-                key={elem.target}
-                className="grid grid-cols-[auto_1fr] gap-6 p-4 items-center cursor-pointer border-0 border-b border-solid border-spill-200 dark:border-spill-800 hover:bg-spill-100/60 dark:hover:bg-spill-800/60"
-                aria-hidden
-                onClick={(e) => {
-                  e.stopPropagation();
+          {[
+            {
+              target: 'selectParticipant',
+              text: 'Create a new Group',
+              icon: <ri.RiGroupLine />,
+            },
+            {
+              target: 'newcontact',
+              text: 'New Contact',
+              icon: <ri.RiUserAddLine />,
+            },
+          ].map((elem) => (
+            <div
+              key={elem.target}
+              className="grid grid-cols-[auto_1fr] gap-6 p-4 items-center cursor-pointer border-0 border-b border-solid border-spill-200 dark:border-spill-800 hover:bg-spill-100/60 dark:hover:bg-spill-800/60"
+              aria-hidden
+              onClick={(e) => {
+                e.stopPropagation();
 
-                  if (elem.target === 'newcontact') {
-                    dispatch(setModal({ target: elem.target, data: { username: '' } }));
-                  } else {
-                    dispatch(setPage({ target: elem.target }));
-                  }
-                }}
-              >
-                <i>{elem.icon}</i>
-                <p className="font-bold">{elem.text}</p>
-              </div>
-            ))
-          }
+                if (elem.target === 'newcontact') {
+                  dispatch(
+                    setModal({ target: elem.target, data: { username: '' } })
+                  );
+                } else {
+                  dispatch(setPage({ target: elem.target }));
+                }
+              }}
+            >
+              <i>{elem.icon}</i>
+              <p className="font-bold">{elem.text}</p>
+            </div>
+          ))}
         </div>
         <div className="pb-16 md:pb-0 grid">
           <div className="py-2 px-4 text-sm bg-spill-100/60 dark:bg-black/20">
-            {
-              contacts
-                ? (
-                  <div className="pr-2 opacity-80 flex justify-between">
-                    <p>{setting?.sortContactByName ? 'Sorted by name' : 'Sorted by last seen time' }</p>
-                    <p className="font-bold">{contacts.length}</p>
-                  </div>
-                )
-                : <p className="opacity-80">Loading...</p>
-            }
+            {contacts ? (
+              <div className="pr-2 opacity-80 flex justify-between">
+                <p>
+                  {setting?.sortContactByName
+                    ? 'Sorted by name'
+                    : 'Sorted by last seen time'}
+                </p>
+                <p className="font-bold">{contacts.length}</p>
+              </div>
+            ) : (
+              <p className="opacity-80">Loading...</p>
+            )}
           </div>
-          {
-            contacts && contacts.map((elem, i, arr) => (
+          {contacts &&
+            contacts.map((elem, i, arr) => (
               <div
                 key={elem._id}
                 aria-hidden
-                className={`${chatRoom.data?.roomId === elem.roomId && 'bg-spill-100/60 dark:bg-spill-800/60'} grid grid-cols-[auto_auto_1fr] gap-4 p-4 items-center cursor-pointer border-0 border-b border-solid border-spill-200 dark:border-spill-800 hover:bg-spill-100/60 dark:hover:bg-spill-800/60`}
+                className={`${
+                  chatRoom.data?.roomId === elem.roomId &&
+                  'bg-spill-100/60 dark:bg-spill-800/60'
+                } grid grid-cols-[auto_auto_1fr] gap-4 p-4 items-center cursor-pointer border-0 border-b border-solid border-spill-200 dark:border-spill-800 hover:bg-spill-100/60 dark:hover:bg-spill-800/60`}
                 onClick={(e) => {
                   e.stopPropagation();
 
-                  dispatch(setChatRoom({
-                    isOpen: true,
-                    refreshId: elem.roomId,
-                    data: {
-                      ownersId: [elem.userId, elem.friendId],
-                      roomId: elem.roomId,
-                      roomType: 'private',
-                      profile: !elem.profile
-                        ? {
-                          avatar: 'default-avatar.png',
-                          fullname: '[inactive]',
-                          updatedAt: new Date().toISOString(),
-                          active: false,
-                        }
-                        : {
-                          ...elem.profile,
-                          active: true,
-                        },
-                    },
-                  }));
+                  dispatch(
+                    setChatRoom({
+                      isOpen: true,
+                      refreshId: elem.roomId,
+                      data: {
+                        ownersId: [elem.userId, elem.friendId],
+                        roomId: elem.roomId,
+                        roomType: 'private',
+                        profile: !elem.profile
+                          ? {
+                              avatar: 'default-avatar.png',
+                              fullname: '[inactive]',
+                              updatedAt: new Date().toISOString(),
+                              active: false,
+                            }
+                          : {
+                              ...elem.profile,
+                              active: true,
+                            },
+                      },
+                    })
+                  );
                 }}
               >
-                {
-                  setting && setting.sortContactByName && (
-                    <span className="flex justify-center">
-                      {
-                        charTag(elem.profile.fullname, arr[i - 1]?.profile.fullname)
-                          ? <h1 className="font-bold text-lg">{charTag(elem.profile.fullname, arr[i - 1]?.profile.fullname) ?? ''}</h1>
-                          : <h1 className="invisible">$</h1>
-                      }
-                    </span>
-                  )
-                }
+                {setting && setting.sortContactByName && (
+                  <span className="flex justify-center">
+                    {charTag(
+                      elem.profile.fullname,
+                      arr[i - 1]?.profile.fullname
+                    ) ? (
+                      <h1 className="font-bold text-lg">
+                        {charTag(
+                          elem.profile.fullname,
+                          arr[i - 1]?.profile.fullname
+                        ) ?? ''}
+                      </h1>
+                    ) : (
+                      <h1 className="invisible">$</h1>
+                    )}
+                  </span>
+                )}
                 <img
                   src={elem.profile?.avatar}
                   alt=""
                   className="w-14 h-14 rounded-full"
                 />
                 <span className="overflow-hidden">
-                  <h1 className="truncate text-lg font-bold">{elem.profile?.fullname ?? '[inactive]'}</h1>
-                  {
-                    !setting.sortContactByName
-                      ? <p className="truncate opacity-60 mt-0.5">{elem.profile.online ? 'online' : `Last seen ${moment(elem.profile.updatedAt).fromNow()}`}</p>
-                      : <p className="truncate opacity-60 mt-0.5">{elem.profile.bio}</p>
-                  }
+                  <h1 className="truncate text-lg font-bold">
+                    {elem.profile?.fullname ?? '[inactive]'}
+                  </h1>
+                  {!setting.sortContactByName ? (
+                    <p className="truncate opacity-60 mt-0.5">
+                      {elem.profile.online
+                        ? 'online'
+                        : `Last seen ${moment(
+                            elem.profile.updatedAt
+                          ).fromNow()}`}
+                    </p>
+                  ) : (
+                    <p className="truncate opacity-60 mt-0.5">
+                      {elem.profile.bio}
+                    </p>
+                  )}
                 </span>
               </div>
-            ))
-          }
+            ))}
         </div>
       </div>
     </div>

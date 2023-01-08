@@ -6,8 +6,7 @@ export const getSetting = async (queries) => {
 
     document.body.classList[data.payload.dark ? 'add' : 'remove']('dark');
     return data.payload;
-  }
-  catch (error0) {
+  } catch (error0) {
     console.error(error0.message);
 
     return null;

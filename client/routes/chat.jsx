@@ -23,11 +23,7 @@ function Chat() {
 
     window.history.pushState(null, '', window.location.href);
     window.addEventListener('popstate', () => {
-      window.history.pushState(
-        null,
-        '',
-        window.location.href,
-      );
+      window.history.pushState(null, '', window.location.href);
     });
   }, []);
 
@@ -40,7 +36,9 @@ function Chat() {
         dispatch(setModal({ target: '*' }));
       }}
     >
-      <Helmet><title>{`@${master.username} - ${config.brandName}`}</title></Helmet>
+      <Helmet>
+        <title>{`@${master.username} - ${config.brandName}`}</title>
+      </Helmet>
 
       <modal.signout />
       <modal.changePass />
@@ -50,7 +48,7 @@ function Chat() {
       <modal.confirmNewGroup />
       <modal.avatarUpload />
       <modal.webcam />
-      { imageCropper && <modal.imageCropper /> }
+      {imageCropper && <modal.imageCropper />}
       <modal.photoFull />
       <modal.confirmDeleteChat />
       <modal.sendFile />

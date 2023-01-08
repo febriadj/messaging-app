@@ -38,14 +38,16 @@ function Register({ setRespond }) {
       setTimeout(() => {
         // set localStorage
         localStorage.setItem('token', data.payload);
-        localStorage.setItem('cache', JSON.stringify({ remember: form.username }));
+        localStorage.setItem(
+          'cache',
+          JSON.stringify({ remember: form.username })
+        );
 
         setProcess(false);
 
         window.location.reload();
       }, 1000);
-    }
-    catch (error0) {
+    } catch (error0) {
       setProcess(false);
 
       setRespond({
@@ -60,61 +62,73 @@ function Register({ setRespond }) {
       <Helmet>
         <title>{`Sign up - ${config.brandName}`}</title>
       </Helmet>
-      {
-        [
-          {
-            target: 'username',
-            type: 'text',
-            placeholder: 'Username',
-            icon: <bi.BiAt size={20} />,
-            pattern: '[a-z0-9_-]{3,24}',
-          },
-          {
-            target: 'email',
-            type: 'email',
-            placeholder: 'Email address',
-            icon: <bi.BiEnvelope size={20} />,
-            pattern: null,
-          },
-          {
-            target: 'password',
-            type: 'password',
-            placeholder: 'Password',
-            icon: <bi.BiLockOpenAlt size={20} />,
-            pattern: null,
-          },
-        ].map((elem) => (
-          <label key={elem.target} htmlFor="username" className="relative flex items-center">
-            <i className="absolute translate-x-4">{elem.icon}</i>
-            <input
-              type={elem.type}
-              name={elem.target}
-              id={elem.target}
-              placeholder={elem.placeholder}
-              className={`${form[elem.target].length > 0 ? 'peer valid:bg-gray-50' : ''} w-full py-2 px-12 border border-solid border-gray-300 rounded-md focus:border-gray-900`}
-              pattern={elem.pattern}
-              value={form[elem.target]}
-              onChange={handleChange}
-              required
-            />
-            <bi.BiCheck className="absolute right-0 text-xl text-sky-600 hidden peer-valid:block -translate-x-4" />
-            <bi.BiX className="absolute right-0 text-xl text-rose-600 hidden peer-invalid:block -translate-x-4" />
-          </label>
-        ))
-      }
+      {[
+        {
+          target: 'username',
+          type: 'text',
+          placeholder: 'Username',
+          icon: <bi.BiAt size={20} />,
+          pattern: '[a-z0-9_-]{3,24}',
+        },
+        {
+          target: 'email',
+          type: 'email',
+          placeholder: 'Email address',
+          icon: <bi.BiEnvelope size={20} />,
+          pattern: null,
+        },
+        {
+          target: 'password',
+          type: 'password',
+          placeholder: 'Password',
+          icon: <bi.BiLockOpenAlt size={20} />,
+          pattern: null,
+        },
+      ].map((elem) => (
+        <label
+          key={elem.target}
+          htmlFor="username"
+          className="relative flex items-center"
+        >
+          <i className="absolute translate-x-4">{elem.icon}</i>
+          <input
+            type={elem.type}
+            name={elem.target}
+            id={elem.target}
+            placeholder={elem.placeholder}
+            className={`${
+              form[elem.target].length > 0 ? 'peer valid:bg-gray-50' : ''
+            } w-full py-2 px-12 border border-solid border-gray-300 rounded-md focus:border-gray-900`}
+            pattern={elem.pattern}
+            value={form[elem.target]}
+            onChange={handleChange}
+            required
+          />
+          <bi.BiCheck className="absolute right-0 text-xl text-sky-600 hidden peer-valid:block -translate-x-4" />
+          <bi.BiX className="absolute right-0 text-xl text-rose-600 hidden peer-invalid:block -translate-x-4" />
+        </label>
+      ))}
       {/* notice of terms */}
       <span className="mt-2 text-sm">
         <p>
           {`People who use our service may have uploaded your contact information to ${config.brandName}. `}
-          <a href="/" className="text-sky-800">Learn More</a>
+          <a href="/" className="text-sky-800">
+            Learn More
+          </a>
         </p>
         <p className="mt-2">
           {'By signing up, you agree to our '}
-          <a href="/" className="text-sky-800">Terms</a>
+          <a href="/" className="text-sky-800">
+            Terms
+          </a>
           {', '}
-          <a href="/" className="text-sky-800">Privacy Policy</a>
+          <a href="/" className="text-sky-800">
+            Privacy Policy
+          </a>
           {' and '}
-          <a href="/" className="text-sky-800">Cookies Policy</a>
+          <a href="/" className="text-sky-800">
+            Cookies Policy
+          </a>
           {'. '}
         </p>
       </span>
@@ -123,11 +137,13 @@ function Register({ setRespond }) {
         className="font-bold mt-6 py-2 flex justify-center rounded-md text-white bg-sky-600 hover:bg-sky-700"
         disabled={process}
       >
-        {
-          process
-            ? <i className="animate-spin"><bi.BiLoaderAlt /></i>
-            : <p>Sign up</p>
-        }
+        {process ? (
+          <i className="animate-spin">
+            <bi.BiLoaderAlt />
+          </i>
+        ) : (
+          <p>Sign up</p>
+        )}
       </button>
     </form>
   );

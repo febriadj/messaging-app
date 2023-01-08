@@ -7,9 +7,16 @@ function OpenContact() {
   const dispatch = useDispatch();
   const page = useSelector((state) => state.page);
 
-  const somePageIsOpened = Object
-    .entries(page)
-    .filter((e) => !['friendProfile', 'groupProfile', 'groupParticipant', 'addParticipant'].includes(e[0]))
+  const somePageIsOpened = Object.entries(page)
+    .filter(
+      (e) =>
+        ![
+          'friendProfile',
+          'groupProfile',
+          'groupParticipant',
+          'addParticipant',
+        ].includes(e[0])
+    )
     .some((elem) => !!elem[1]);
 
   return (
@@ -25,7 +32,9 @@ function OpenContact() {
         dispatch(setPage({ target: 'contact' }));
       }}
     >
-      <i><ri.RiMessage3Fill size={28} /></i>
+      <i>
+        <ri.RiMessage3Fill size={28} />
+      </i>
     </button>
   );
 }

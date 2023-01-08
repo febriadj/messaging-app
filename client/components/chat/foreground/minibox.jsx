@@ -19,40 +19,38 @@ function Minibox() {
       onClick={(e) => e.stopPropagation()}
     >
       <div className="py-2 grid">
-        {
-          [
-            {
-              target: 'profile',
-              data: user.master._id,
-              html: 'Profile',
-              icon: <bi.BiUserCircle />,
-            },
-            { target: 'setting', html: 'Settings', icon: <bi.BiCog /> },
-            { target: 'signout', html: 'Sign out', icon: <bi.BiLogOutCircle /> },
-          ].map((elem) => (
-            <button
-              type="button"
-              key={elem.target}
-              className="py-2 px-4 flex gap-4 items-center hover:bg-spill-100 dark:hover:bg-spill-600"
-              onClick={() => {
-                // close minibox
-                dispatch(setModal({ target: 'minibox' }));
+        {[
+          {
+            target: 'profile',
+            data: user.master._id,
+            html: 'Profile',
+            icon: <bi.BiUserCircle />,
+          },
+          { target: 'setting', html: 'Settings', icon: <bi.BiCog /> },
+          { target: 'signout', html: 'Sign out', icon: <bi.BiLogOutCircle /> },
+        ].map((elem) => (
+          <button
+            type="button"
+            key={elem.target}
+            className="py-2 px-4 flex gap-4 items-center hover:bg-spill-100 dark:hover:bg-spill-600"
+            onClick={() => {
+              // close minibox
+              dispatch(setModal({ target: 'minibox' }));
 
-                dispatch(
-                  elem.target === 'signout'
-                    ? setModal({ target: elem.target })
-                    : setPage({
+              dispatch(
+                elem.target === 'signout'
+                  ? setModal({ target: elem.target })
+                  : setPage({
                       target: elem.target,
                       data: elem.data,
-                    }),
-                );
-              }}
-            >
-              <i className="opacity-80">{elem.icon}</i>
-              <p>{elem.html}</p>
-            </button>
-          ))
-        }
+                    })
+              );
+            }}
+          >
+            <i className="opacity-80">{elem.icon}</i>
+            <p>{elem.html}</p>
+          </button>
+        ))}
       </div>
     </div>
   );

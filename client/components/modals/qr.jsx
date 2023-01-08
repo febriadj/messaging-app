@@ -7,7 +7,10 @@ import config from '../../config';
 
 function QR() {
   const dispatch = useDispatch();
-  const { user: { master }, modal: { qr } } = useSelector((state) => state);
+  const {
+    user: { master },
+    modal: { qr },
+  } = useSelector((state) => state);
 
   const generateQRCode = async () => {
     if (qr) {
@@ -44,40 +47,46 @@ function QR() {
     >
       <div
         aria-hidden
-        className={`${!qr && 'scale-0'} transition w-[460px] m-6 grid rounded-md bg-white dark:bg-spill-800`}
+        className={`${
+          !qr && 'scale-0'
+        } transition w-[460px] m-6 grid rounded-md bg-white dark:bg-spill-800`}
         onClick={(e) => {
           e.stopPropagation();
         }}
       >
-        {
-          qr && (
-            <>
-              <div className="h-16 pl-4 pr-2 grid grid-cols-[1fr_auto] gap-4 items-center">
-                <div className="flex gap-4 items-center overflow-hidden">
-                  <img src={qr.avatar} alt="" className="w-10 h-10 rounded-full" />
-                  <span className="truncate">
-                    <p className="truncate font-bold">{qr.fullname}</p>
-                    <p className="truncate text-sm opacity-80">{qr.bio}</p>
-                  </span>
-                </div>
-                <button
-                  type="button"
-                  className="p-2 rounded-full hover:bg-spill-100 dark:hover:bg-spill-700"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    dispatch(setModal({ target: 'qr' }));
-                  }}
-                >
-                  <i><bi.BiX /></i>
-                </button>
+        {qr && (
+          <>
+            <div className="h-16 pl-4 pr-2 grid grid-cols-[1fr_auto] gap-4 items-center">
+              <div className="flex gap-4 items-center overflow-hidden">
+                <img
+                  src={qr.avatar}
+                  alt=""
+                  className="w-10 h-10 rounded-full"
+                />
+                <span className="truncate">
+                  <p className="truncate font-bold">{qr.fullname}</p>
+                  <p className="truncate text-sm opacity-80">{qr.bio}</p>
+                </span>
               </div>
-              <div className="group relative p-2 flex justify-center items-center bg-spill-100 dark:bg-spill-700">
-                <div id="canvas-wrap"></div>
-              </div>
-              <p className="p-4 text-sm">{`Your QR code is private, if you share it with someone, they can scan it with their ${config.brandName} camera to add you as a contact.`}</p>
-            </>
-          )
-        }
+              <button
+                type="button"
+                className="p-2 rounded-full hover:bg-spill-100 dark:hover:bg-spill-700"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  dispatch(setModal({ target: 'qr' }));
+                }}
+              >
+                <i>
+                  <bi.BiX />
+                </i>
+              </button>
+            </div>
+            <div className="group relative p-2 flex justify-center items-center bg-spill-100 dark:bg-spill-700">
+              <div id="canvas-wrap"></div>
+            </div>
+            <p className="p-4 text-sm">{`Your QR code is private, if you share it with someone, they can scan it with their ${config.brandName} camera to add you as a contact.`}</p>
+          </>
+        )}
       </div>
     </div>
   );

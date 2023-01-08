@@ -16,10 +16,12 @@ function ForeGround() {
     try {
       setInboxes(null);
 
-      const { data } = await axios.get('/inboxes', { params: { search }, signal });
+      const { data } = await axios.get('/inboxes', {
+        params: { search },
+        signal,
+      });
       setInboxes(data.payload);
-    }
-    catch (error0) {
+    } catch (error0) {
       console.error(error0.response.data.message);
     }
   };
@@ -34,13 +36,19 @@ function ForeGround() {
   }, [refreshInbox, search]);
 
   return (
-    <div className={`${chatRoom.isOpen && '-translate-x-full md:translate-x-0'} transition w-full h-full relative z-10 grid grid-rows-[auto_1fr] overflow-hidden`}>
+    <div
+      className={`${
+        chatRoom.isOpen && '-translate-x-full md:translate-x-0'
+      } transition w-full h-full relative z-10 grid grid-rows-[auto_1fr] overflow-hidden`}
+    >
       {
         // loading animation
         !inboxes && (
           <div className="absolute w-full h-full z-0 flex justify-center items-center bg-white dark:bg-spill-900">
             <span className="flex gap-2 items-center">
-              <i className="animate-spin"><bi.BiLoaderAlt size={18} /></i>
+              <i className="animate-spin">
+                <bi.BiLoaderAlt size={18} />
+              </i>
               <p>Loading</p>
             </span>
           </div>

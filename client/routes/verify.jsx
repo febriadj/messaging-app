@@ -39,8 +39,7 @@ function Verify() {
       setTimeout(() => {
         window.location.reload();
       }, 500);
-    }
-    catch (error0) {
+    } catch (error0) {
       setRespond({ success: false });
     }
   };
@@ -48,7 +47,9 @@ function Verify() {
   return (
     <div className="absolute w-full h-full flex justify-center overflow-auto bg-white sm:bg-spill-100">
       <div className="p-6 w-[460px] h-full sm:h-auto">
-        <h1 className="font-bold text-2xl font-display sm:text-center">{config.brandName}</h1>
+        <h1 className="font-bold text-2xl font-display sm:text-center">
+          {config.brandName}
+        </h1>
         {/* body */}
         <div className="my-6 sm:p-6 rounded-md bg-white">
           <div>
@@ -61,45 +62,45 @@ function Verify() {
           {/* form */}
           <form method="post" className="grid" onSubmit={handleSubmit}>
             <div className="mt-4 flex gap-4 justify-center">
-              {
-                [...Object.keys(otp)].map((elem, i) => (
-                  <input
-                    type="text"
-                    key={elem}
-                    name={elem}
-                    className={`${respond.success ? 'border-black' : 'border-rose-600'} w-full p-2 font-bold text-2xl text-center border-0 border-b border-solid`}
-                    maxLength="1"
-                    required
-                    value={otp[i]}
-                    onKeyDown={(e) => {
-                      const del = e.key === 'Backspace' || e.key === 'Delete';
-                      const previous = e.target.previousSibling;
+              {[...Object.keys(otp)].map((elem, i) => (
+                <input
+                  type="text"
+                  key={elem}
+                  name={elem}
+                  className={`${
+                    respond.success ? 'border-black' : 'border-rose-600'
+                  } w-full p-2 font-bold text-2xl text-center border-0 border-b border-solid`}
+                  maxLength="1"
+                  required
+                  value={otp[i]}
+                  onKeyDown={(e) => {
+                    const del = e.key === 'Backspace' || e.key === 'Delete';
+                    const previous = e.target.previousSibling;
 
-                      // numbers only
-                      if (!'0123456789'.includes(e.key)) {
-                        // ignore the next event
-                        e.preventDefault();
-                      }
+                    // numbers only
+                    if (!'0123456789'.includes(e.key)) {
+                      // ignore the next event
+                      e.preventDefault();
+                    }
 
-                      // if the backspace and delete keys are clicked
-                      if (del) {
-                        setOtp((prev) => ({ ...prev, [elem]: '' }));
-                        if (previous) previous.focus();
+                    // if the backspace and delete keys are clicked
+                    if (del) {
+                      setOtp((prev) => ({ ...prev, [elem]: '' }));
+                      if (previous) previous.focus();
 
-                        // ignore the next event
-                        e.preventDefault();
-                      }
-                    }}
-                    onChange={(e) => {
-                      setRespond({ success: true });
-                      setOtp((prev) => ({ ...prev, [elem]: e.target.value }));
+                      // ignore the next event
+                      e.preventDefault();
+                    }
+                  }}
+                  onChange={(e) => {
+                    setRespond({ success: true });
+                    setOtp((prev) => ({ ...prev, [elem]: e.target.value }));
 
-                      const next = e.target.nextSibling;
-                      if (next) next.focus();
-                    }}
-                  />
-                ))
-              }
+                    const next = e.target.nextSibling;
+                    if (next) next.focus();
+                  }}
+                />
+              ))}
             </div>
             <button
               type="submit"
@@ -124,7 +125,9 @@ function Verify() {
               window.location.reload();
             }}
           >
-            <i><bi.BiArrowBack size={18} /></i>
+            <i>
+              <bi.BiArrowBack size={18} />
+            </i>
             <p>Back</p>
           </button>
         </div>

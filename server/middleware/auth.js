@@ -8,8 +8,7 @@ module.exports = (req, res, next) => {
 
     req.user = jwt.verify(token, 'shhhhh');
     next();
-  }
-  catch (error0) {
+  } catch (error0) {
     response({
       res,
       statusCode: 401,

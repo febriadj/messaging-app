@@ -15,12 +15,17 @@ body {
 }
 
 input:-webkit-autofill {
-  transition: "color 9999s ease-out, background-color 9999s ease-out";
+  transition: 'color 9999s ease-out, background-color 9999s ease-out';
   transition-delay: 9999s;
 }
 
-svg { font-size: x-large; }
-input, textarea { background: transparent; }
+svg {
+  font-size: x-large;
+}
+input,
+textarea {
+  background: transparent;
+}
 
 a {
   text-decoration: underline;

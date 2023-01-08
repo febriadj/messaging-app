@@ -128,74 +128,84 @@ function Setting() {
         <h1 className="text-2xl font-bold">Settings</h1>
       </div>
       <div className="pb-16 md:pb-0 grid gap-6 overflow-y-auto scrollbar-thin scrollbar-thumb-spill-200 hover:scrollbar-thumb-spill-300 dark:scrollbar-thumb-spill-700 dark:hover:scrollbar-thumb-spill-600">
-        {
-          setting && structure.map((struct) => (
+        {setting &&
+          structure.map((struct) => (
             <div key={struct.section} className="grid">
               <h1 className="font-bold ml-4">{struct.section}</h1>
-              {
-                struct.child.map((child) => (
-                  <div
-                    key={child.target}
-                    aria-hidden
-                    className="p-4 grid grid-cols-[auto_1fr_auto] items-start gap-6 cursor-pointer border-0 border-b border-solid border-spill-200 dark:border-spill-800 hover:bg-spill-100/60 dark:hover:bg-spill-800/60"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      dispatch(setModal({ target: child.target }));
-                    }}
-                  >
-                    <i>{child.icon}</i>
-                    <span>
-                      <p>{child.title}</p>
-                      { child.desc && <p className="mt-1 text-sm opacity-60">{child.desc}</p> }
-                    </span>
-                    <span className="grid grid-cols-[auto_auto] gap-2 items-center">
-                      <i id="spinner" className="animate-spin invisible"><bi.BiLoaderAlt size={18} /></i>
-                      {
-                        child.toggle && (
-                          <button
-                            type="button"
-                            className={`
-                              ${setting[child.target] ? 'bg-sky-200 dark:bg-sky-400' : 'bg-spill-200 dark:bg-spill-700'}
+              {struct.child.map((child) => (
+                <div
+                  key={child.target}
+                  aria-hidden
+                  className="p-4 grid grid-cols-[auto_1fr_auto] items-start gap-6 cursor-pointer border-0 border-b border-solid border-spill-200 dark:border-spill-800 hover:bg-spill-100/60 dark:hover:bg-spill-800/60"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    dispatch(setModal({ target: child.target }));
+                  }}
+                >
+                  <i>{child.icon}</i>
+                  <span>
+                    <p>{child.title}</p>
+                    {child.desc && (
+                      <p className="mt-1 text-sm opacity-60">{child.desc}</p>
+                    )}
+                  </span>
+                  <span className="grid grid-cols-[auto_auto] gap-2 items-center">
+                    <i id="spinner" className="animate-spin invisible">
+                      <bi.BiLoaderAlt size={18} />
+                    </i>
+                    {child.toggle && (
+                      <button
+                        type="button"
+                        className={`
+                              ${
+                                setting[child.target]
+                                  ? 'bg-sky-200 dark:bg-sky-400'
+                                  : 'bg-spill-200 dark:bg-spill-700'
+                              }
                               flex relative p-1 w-10 rounded-full
                             `}
-                            onClick={async (e) => {
-                              try {
-                                const spinner = e.target.parentElement.querySelector('#spinner');
-                                spinner.classList.remove('invisible');
+                        onClick={async (e) => {
+                          try {
+                            const spinner =
+                              e.target.parentElement.querySelector('#spinner');
+                            spinner.classList.remove('invisible');
 
-                                const update = { [child.target]: !setting[child.target] };
+                            const update = {
+                              [child.target]: !setting[child.target],
+                            };
 
-                                dispatch(setSetting({ ...setting, ...update }));
+                            dispatch(setSetting({ ...setting, ...update }));
 
-                                await axios.put('/settings', update);
+                            await axios.put('/settings', update);
 
-                                const refresh = await getSetting();
-                                dispatch(setSetting(refresh ?? { ...setting, ...update }));
+                            const refresh = await getSetting();
+                            dispatch(
+                              setSetting(refresh ?? { ...setting, ...update })
+                            );
 
-                                spinner.classList.add('invisible');
-                              }
-                              catch (error0) {
-                                console.log(error0.message);
-                              }
-                            }}
-                          >
-                            <span
-                              className={`
-                                ${setting[child.target] ? 'bg-sky-600 dark:bg-sky-900 translate-x-4' : 'bg-spill-600 dark:bg-spill-300'}
+                            spinner.classList.add('invisible');
+                          } catch (error0) {
+                            console.log(error0.message);
+                          }
+                        }}
+                      >
+                        <span
+                          className={`
+                                ${
+                                  setting[child.target]
+                                    ? 'bg-sky-600 dark:bg-sky-900 translate-x-4'
+                                    : 'bg-spill-600 dark:bg-spill-300'
+                                }
                                 transition block w-4 h-4 rounded-full pointer-events-none
                               `}
-                            >
-                            </span>
-                          </button>
-                        )
-                      }
-                    </span>
-                  </div>
-                ))
-              }
+                        ></span>
+                      </button>
+                    )}
+                  </span>
+                </div>
+              ))}
             </div>
-          ))
-        }
+          ))}
       </div>
     </div>
   );

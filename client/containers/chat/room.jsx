@@ -17,7 +17,11 @@ import { setPage } from '../../redux/features/page';
 
 function Room() {
   const dispatch = useDispatch();
-  const { user: { master }, room: { chat: chatRoom }, page } = useSelector((state) => state);
+  const {
+    user: { master },
+    room: { chat: chatRoom },
+    page,
+  } = useSelector((state) => state);
 
   const [prevRoom, setPrevRoom] = useState(null);
   const [loaded, setLoaded] = useState(false);
@@ -53,8 +57,7 @@ function Room() {
       }
 
       setLoaded(true);
-    }
-    catch (error0) {
+    } catch (error0) {
       console.error(error0.response.data.message);
     }
   };
@@ -108,47 +111,50 @@ function Room() {
         bg-spill-100 dark:bg-spill-950
       `}
     >
-      {
-        chatRoom.data && (
-          <>
-            <div className={`${(page.groupProfile || page.friendProfile) && '-translate-x-full sm:translate-x-0 xl:mr-[380px]'} transition-all w-full h-full grid grid-rows-[auto_1fr_auto] overflow-hidden`}>
-              <comp.header />
-              <comp.monitor
-                newMessage={newMessage}
-                setNewMessage={setNewMessage}
-                chats={chats}
-                setChats={setChats}
-                control={control}
-                setControl={setControl}
-                loaded={loaded}
-              />
-              <comp.send
-                setChats={setChats}
-                setNewMessage={setNewMessage}
-                control={control}
-              />
-            </div>
-            <GroupProfile />
-            <FriendProfile />
-            <GroupParticipant />
-            <AddParticipant />
-          </>
-        )
-      }
-      {
-        !chatRoom.data && (
-          <div className="w-full h-full flex justify-center items-center">
-            <div className="w-[400px] flex flex-col items-center">
-              <i className="opacity-40"><md.MdDevices size={140} /></i>
-              <p className="mt-4 opacity-60 text-center">
-                {'You can use '}
-                {config.brandName}
-                {' on other devices such as desktop, tablet, and mobile phone.'}
-              </p>
-            </div>
+      {chatRoom.data && (
+        <>
+          <div
+            className={`${
+              (page.groupProfile || page.friendProfile) &&
+              '-translate-x-full sm:translate-x-0 xl:mr-[380px]'
+            } transition-all w-full h-full grid grid-rows-[auto_1fr_auto] overflow-hidden`}
+          >
+            <comp.header />
+            <comp.monitor
+              newMessage={newMessage}
+              setNewMessage={setNewMessage}
+              chats={chats}
+              setChats={setChats}
+              control={control}
+              setControl={setControl}
+              loaded={loaded}
+            />
+            <comp.send
+              setChats={setChats}
+              setNewMessage={setNewMessage}
+              control={control}
+            />
           </div>
-        )
-      }
+          <GroupProfile />
+          <FriendProfile />
+          <GroupParticipant />
+          <AddParticipant />
+        </>
+      )}
+      {!chatRoom.data && (
+        <div className="w-full h-full flex justify-center items-center">
+          <div className="w-[400px] flex flex-col items-center">
+            <i className="opacity-40">
+              <md.MdDevices size={140} />
+            </i>
+            <p className="mt-4 opacity-60 text-center">
+              {'You can use '}
+              {config.brandName}
+              {' on other devices such as desktop, tablet, and mobile phone.'}
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

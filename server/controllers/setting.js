@@ -8,8 +8,7 @@ exports.find = async (req, res) => {
       res,
       payload: setting,
     });
-  }
-  catch (error0) {
+  } catch (error0) {
     response({
       res,
       statusCode: error0.statusCode || 500,
@@ -23,7 +22,7 @@ exports.update = async (req, res) => {
   try {
     const setting = await SettingModel.updateOne(
       { userId: req.user._id },
-      { ...req.body },
+      { ...req.body }
     );
 
     response({
@@ -31,8 +30,7 @@ exports.update = async (req, res) => {
       message: 'Successfully updated account settings',
       payload: setting,
     });
-  }
-  catch (error0) {
+  } catch (error0) {
     response({
       res,
       statusCode: error0.statusCode || 500,

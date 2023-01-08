@@ -10,7 +10,11 @@ import { setModal } from '../redux/features/modal';
 
 function GroupParticipant() {
   const dispatch = useDispatch();
-  const { user: { master }, page: { groupParticipant }, modal } = useSelector((state) => state);
+  const {
+    user: { master },
+    page: { groupParticipant },
+    modal,
+  } = useSelector((state) => state);
 
   const [control, setControl] = useState({ skip: 0, limit: 20 });
   const [participants, setParticipants] = useState(null);
@@ -19,7 +23,10 @@ function GroupParticipant() {
     try {
       if (groupParticipant) {
         // get participants with pagination control
-        const { data } = await axios.get(`/groups/${groupParticipant._id}/participants`, { params: control, signal });
+        const { data } = await axios.get(
+          `/groups/${groupParticipant._id}/participants`,
+          { params: control, signal }
+        );
 
         setParticipants((prev) => {
           // merge new participants data
@@ -30,8 +37,7 @@ function GroupParticipant() {
         // reset participants element
         setTimeout(() => setParticipants(null), 150);
       }
-    }
-    catch (error0) {
+    } catch (error0) {
       console.error(error0.message);
     }
   };
@@ -40,18 +46,21 @@ function GroupParticipant() {
     if (elem.userId !== master._id && groupParticipant.adminId === master._id) {
       const parent = document.querySelector('#group-participant');
 
-      const y = e.clientY > (window.innerHeight / 2) ? e.clientY - 136 : e.clientY;
+      const y =
+        e.clientY > window.innerHeight / 2 ? e.clientY - 136 : e.clientY;
       const x = e.clientX - (window.innerWidth - parent.clientWidth);
 
-      dispatch(setModal({
-        target: 'groupContextMenu',
-        data: {
-          group: groupParticipant,
-          user: elem,
-          x: x > parent.clientWidth / 2 ? x - 160 : x,
-          y,
-        },
-      }));
+      dispatch(
+        setModal({
+          target: 'groupContextMenu',
+          data: {
+            group: groupParticipant,
+            user: elem,
+            x: x > parent.clientWidth / 2 ? x - 160 : x,
+            y,
+          },
+        })
+      );
     }
   };
 
@@ -74,7 +83,7 @@ function GroupParticipant() {
       `}
     >
       {/* group context menu */}
-      { groupParticipant && modal.groupContextMenu && <GroupContextMenu />}
+      {groupParticipant && modal.groupContextMenu && <GroupContextMenu />}
       {/* header */}
       <div className="h-16 px-2 flex gap-6 justify-between items-center">
         <div className="flex gap-4 items-center">
@@ -93,12 +102,16 @@ function GroupParticipant() {
         </div>
       </div>
       <div className="pb-16 md:pb-0 flex flex-col overflow-y-auto scrollbar-thin scrollbar-thumb-spill-200 hover:scrollbar-thumb-spill-300 dark:scrollbar-thumb-spill-700 dark:hover:scrollbar-thumb-spill-600">
-        {
-          participants && participants.map((elem) => (
+        {participants &&
+          participants.map((elem) => (
             <div
               key={elem._id}
               className={`
-                ${modal.groupContextMenu?.user?.userId === elem.userId ? 'bg-spill-100/60 dark:bg-spill-800/60' : ''}
+                ${
+                  modal.groupContextMenu?.user?.userId === elem.userId
+                    ? 'bg-spill-100/60 dark:bg-spill-800/60'
+                    : ''
+                }
                 p-4 grid grid-cols-[auto_1fr_auto] gap-4 items-center cursor-pointer
                 border-0 border-b border-solid border-spill-200 dark:border-spill-800
                 hover:bg-spill-100/60 dark:hover:bg-spill-800/60
@@ -106,10 +119,12 @@ function GroupParticipant() {
               aria-hidden
               onClick={() => {
                 if (master._id !== elem.userId) {
-                  dispatch(setPage({
-                    target: 'friendProfile',
-                    data: elem.userId,
-                  }));
+                  dispatch(
+                    setPage({
+                      target: 'friendProfile',
+                      data: elem.userId,
+                    })
+                  );
                 }
               }}
               onContextMenu={(e) => {
@@ -124,28 +139,33 @@ function GroupParticipant() {
               onTouchMove={() => touchAndHoldEnd()}
               onTouchEnd={() => touchAndHoldEnd()}
             >
-              <img src={elem.avatar} alt="" className="w-14 h-14 rounded-full" />
+              <img
+                src={elem.avatar}
+                alt=""
+                className="w-14 h-14 rounded-full"
+              />
               <span className="truncate">
                 <h1 className="truncate text-lg font-bold">
                   {elem.fullname}
-                  <sup className="ml-1 opacity-60">{master._id === elem.userId && '~You'}</sup>
+                  <sup className="ml-1 opacity-60">
+                    {master._id === elem.userId && '~You'}
+                  </sup>
                 </h1>
                 <p className="truncate mt-0.5 opacity-60">{elem.bio}</p>
               </span>
-              { /* admin tag */ }
-              { elem.userId === groupParticipant.adminId && (
+              {/* admin tag */}
+              {elem.userId === groupParticipant.adminId && (
                 <span className="h-full">
-                  <p className="font-bold text-xs py-0.5 px-2 rounded-full text-white bg-sky-600">Admin</p>
+                  <p className="font-bold text-xs py-0.5 px-2 rounded-full text-white bg-sky-600">
+                    Admin
+                  </p>
                 </span>
-              ) }
+              )}
             </div>
-          ))
-        }
-        {
-          groupParticipant
-          && participants
-          && participants.length < groupParticipant.participantsId.length
-          && (
+          ))}
+        {groupParticipant &&
+          participants &&
+          participants.length < groupParticipant.participantsId.length && (
             <button
               type="button"
               className="mt-2 md:mb-4 py-2 px-4 flex gap-4 hover:bg-spill-100 dark:hover:bg-spill-800"
@@ -156,11 +176,14 @@ function GroupParticipant() {
                 }));
               }}
             >
-              <i><bi.BiChevronDown /></i>
-              <p>{`${groupParticipant.participantsId.length - participants.length} more`}</p>
+              <i>
+                <bi.BiChevronDown />
+              </i>
+              <p>{`${
+                groupParticipant.participantsId.length - participants.length
+              } more`}</p>
             </button>
-          )
-        }
+          )}
       </div>
     </div>
   );

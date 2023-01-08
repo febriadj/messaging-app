@@ -19,7 +19,9 @@ function RecordVoice() {
     };
 
     recorder.onstop = () => {
-      const audio = document.querySelector('#record-voice').querySelector('audio');
+      const audio = document
+        .querySelector('#record-voice')
+        .querySelector('audio');
       const blob = new Blob(chunks, { type: 'audio/ogg;' });
       const url = URL.createObjectURL(blob);
       audio.src = url;
@@ -39,7 +41,9 @@ function RecordVoice() {
     >
       <div
         aria-hidden
-        className={`${!modal.recordVoice && 'scale-0'} transition w-[400px] m-6 p-4 rounded-md bg-white dark:bg-spill-800`}
+        className={`${
+          !modal.recordVoice && 'scale-0'
+        } transition w-[400px] m-6 p-4 rounded-md bg-white dark:bg-spill-800`}
         onClick={(e) => {
           e.stopPropagation();
         }}
@@ -52,7 +56,9 @@ function RecordVoice() {
             className="p-6 rounded-full bg-sky-600"
             onClick={handleStartRecord}
           >
-            <i><ri.RiMic2Fill /></i>
+            <i>
+              <ri.RiMic2Fill />
+            </i>
           </button>
         </div>
       </div>

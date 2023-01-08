@@ -11,22 +11,28 @@ function ConfirmExitGroup() {
   const confirmExitGroup = useSelector((state) => state.modal.confirmExitGroup);
 
   const handleExitGroup = () => {
-    socket.emit('group/exit', {
-      groupId: confirmExitGroup.groupId,
-      userId: master._id,
-    }, () => {
-      // close confirmExitGroup modal
-      dispatch(setModal({ target: 'confirmExitGroup', data: false }));
+    socket.emit(
+      'group/exit',
+      {
+        groupId: confirmExitGroup.groupId,
+        userId: master._id,
+      },
+      () => {
+        // close confirmExitGroup modal
+        dispatch(setModal({ target: 'confirmExitGroup', data: false }));
 
-      setTimeout(() => {
-        // close room after 150ms
-        dispatch(setChatRoom({
-          isOpen: false,
-          refreshId: null,
-          data: null,
-        }));
-      }, 150);
-    });
+        setTimeout(() => {
+          // close room after 150ms
+          dispatch(
+            setChatRoom({
+              isOpen: false,
+              refreshId: null,
+              data: null,
+            })
+          );
+        }, 150);
+      }
+    );
   };
 
   return (
@@ -39,7 +45,9 @@ function ConfirmExitGroup() {
     >
       <div
         aria-hidden
-        className={`${!confirmExitGroup && 'scale-0'} transition relative w-[400px] m-6 p-4 rounded-md bg-white dark:bg-spill-800`}
+        className={`${
+          !confirmExitGroup && 'scale-0'
+        } transition relative w-[400px] m-6 p-4 rounded-md bg-white dark:bg-spill-800`}
         onClick={(e) => {
           e.stopPropagation();
         }}
@@ -51,29 +59,28 @@ function ConfirmExitGroup() {
           {' group?'}
         </p>
         <span className="mt-4 flex gap-2 justify-end">
-          {
-            [
-              {
-                label: 'Cancel',
-                style: 'hover:bg-gray-100 dark:hover:bg-spill-700',
-                action: () => dispatch(setModal({ target: 'confirmExitGroup', data: false })),
-              },
-              {
-                label: 'Exit group',
-                style: 'font-bold text-white bg-rose-600 hover:bg-rose-700',
-                action: () => handleExitGroup(),
-              },
-            ].map((elem) => (
-              <button
-                key={elem.label}
-                type="button"
-                className={`${elem.style} py-2 px-4 rounded-md`}
-                onClick={() => elem.action()}
-              >
-                <p>{elem.label}</p>
-              </button>
-            ))
-          }
+          {[
+            {
+              label: 'Cancel',
+              style: 'hover:bg-gray-100 dark:hover:bg-spill-700',
+              action: () =>
+                dispatch(setModal({ target: 'confirmExitGroup', data: false })),
+            },
+            {
+              label: 'Exit group',
+              style: 'font-bold text-white bg-rose-600 hover:bg-rose-700',
+              action: () => handleExitGroup(),
+            },
+          ].map((elem) => (
+            <button
+              key={elem.label}
+              type="button"
+              className={`${elem.style} py-2 px-4 rounded-md`}
+              onClick={() => elem.action()}
+            >
+              <p>{elem.label}</p>
+            </button>
+          ))}
         </span>
       </div>
     </div>

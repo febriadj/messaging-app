@@ -27,25 +27,31 @@ function InboxMenu() {
             e.stopPropagation();
 
             if (!isGroup) {
-              dispatch(setModal({
-                target: 'confirmDeleteChatAndInbox',
-                data: {
-                  inboxId: menu.inbox._id,
-                  roomId: menu.inbox.roomId,
-                },
-              }));
+              dispatch(
+                setModal({
+                  target: 'confirmDeleteChatAndInbox',
+                  data: {
+                    inboxId: menu.inbox._id,
+                    roomId: menu.inbox.roomId,
+                  },
+                })
+              );
             } else {
-              dispatch(setModal({
-                target: 'confirmExitGroup',
-                data: {
-                  groupId: menu.inbox.group._id,
-                  name: menu.inbox.group.name,
-                },
-              }));
+              dispatch(
+                setModal({
+                  target: 'confirmExitGroup',
+                  data: {
+                    groupId: menu.inbox.group._id,
+                    name: menu.inbox.group.name,
+                  },
+                })
+              );
             }
           }}
         >
-          <i className="opacity-80">{isGroup ? <bi.BiExit /> : <bi.BiTrashAlt />}</i>
+          <i className="opacity-80">
+            {isGroup ? <bi.BiExit /> : <bi.BiTrashAlt />}
+          </i>
           <p>{isGroup ? 'Exit group' : 'Delete'}</p>
         </button>
       </div>

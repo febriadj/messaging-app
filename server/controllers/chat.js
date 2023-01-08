@@ -18,8 +18,7 @@ exports.findByRoomId = async (req, res) => {
       message: `${chats.length} chats found`,
       payload: chats,
     });
-  }
-  catch (error0) {
+  } catch (error0) {
     response({
       res,
       statusCode: error0.statusCode || 500,
@@ -36,7 +35,7 @@ exports.deleteByRoomId = async (req, res) => {
     // push userId into deletedBy field
     const inbox = await InboxModel.findOneAndUpdate(
       { roomId },
-      { $addToSet: { deletedBy: req.user._id } },
+      { $addToSet: { deletedBy: req.user._id } }
     );
 
     if (inbox.deletedBy.length + 1 >= inbox.ownersId.length) {
@@ -45,18 +44,23 @@ exports.deleteByRoomId = async (req, res) => {
     } else {
       await ChatModel.updateMany(
         { roomId },
-        { $addToSet: { deletedBy: req.user._id } },
+        { $addToSet: { deletedBy: req.user._id } }
       );
     }
 
-    const x = await ChatModel.deleteMany({ roomId, deletedBy: { $size: inbox.ownersId.length } });
+    const x = await ChatModel.deleteMany({
+      roomId,
+      deletedBy: { $size: inbox.ownersId.length },
+    });
     const chats = await ChatModel.find(
       { roomId, deletedBy: { $size: inbox.ownersId.length } },
-      { fileId: 1 },
+      { fileId: 1 }
     );
 
     if (x.deletedCount > 0) {
-      const filesId = chats.filter((elem) => !!elem.fileId).map((elem) => elem.fileId);
+      const filesId = chats
+        .filter((elem) => !!elem.fileId)
+        .map((elem) => elem.fileId);
 
       if (filesId.length > 0) {
         await FileModel.deleteMany({ roomId, fileId: filesId });
@@ -71,8 +75,7 @@ exports.deleteByRoomId = async (req, res) => {
       res,
       message: 'Chat deleted successfully',
     });
-  }
-  catch (error0) {
+  } catch (error0) {
     response({
       res,
       statusCode: error0.statusCode || 500,

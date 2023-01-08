@@ -18,41 +18,39 @@ function Header({ setSearch }) {
         {/* brand name */}
         <h1 className="text-2xl font-bold font-display">{config.brandName}</h1>
         <div className="flex">
-          {
-            [
-              {
-                target: 'refresh-inbox',
-                icon: <bi.BiRotateRight />,
-                action() {
-                  dispatch(setRefreshInbox(uuidv4()));
-                },
+          {[
+            {
+              target: 'refresh-inbox',
+              icon: <bi.BiRotateRight />,
+              action() {
+                dispatch(setRefreshInbox(uuidv4()));
               },
-              {
-                target: 'contact',
-                icon: <bi.BiMessageSquareDots />,
-                action() {
-                  dispatch(setPage({ target: 'contact' }));
-                },
+            },
+            {
+              target: 'contact',
+              icon: <bi.BiMessageSquareDots />,
+              action() {
+                dispatch(setPage({ target: 'contact' }));
               },
-              {
-                target: 'minibox',
-                icon: <bi.BiDotsVerticalRounded />,
-                action(e) {
-                  e.stopPropagation();
-                  dispatch(setModal({ target: 'minibox' }));
-                },
+            },
+            {
+              target: 'minibox',
+              icon: <bi.BiDotsVerticalRounded />,
+              action(e) {
+                e.stopPropagation();
+                dispatch(setModal({ target: 'minibox' }));
               },
-            ].map((elem) => (
-              <button
-                type="button"
-                key={elem.target}
-                className="p-2 rounded-full hover:bg-spill-100 dark:hover:bg-spill-800"
-                onClick={elem.action}
-              >
-                {elem.icon}
-              </button>
-            ))
-          }
+            },
+          ].map((elem) => (
+            <button
+              type="button"
+              key={elem.target}
+              className="p-2 rounded-full hover:bg-spill-100 dark:hover:bg-spill-800"
+              onClick={elem.action}
+            >
+              {elem.icon}
+            </button>
+          ))}
         </div>
       </div>
       {/* search bar */}

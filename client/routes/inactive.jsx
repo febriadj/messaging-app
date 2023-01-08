@@ -7,7 +7,11 @@ function Inactive() {
     <div className="absolute w-full h-full flex justify-center items-center bg-spill-100 dark:text-white dark:bg-spill 900">
       <Helmet>
         <title>{`${config.brandName} [inactive]`}</title>
-        <link rel="shortcut icon" href="assets/images/error.ico" type="image/x-icon" />
+        <link
+          rel="shortcut icon"
+          href="assets/images/error.ico"
+          type="image/x-icon"
+        />
       </Helmet>
       <div className="m-6 p-4 w-[460px] rounded-md bg-white dark:bg-spill-800">
         <h1 className="text-2xl font-bold">Error!</h1>

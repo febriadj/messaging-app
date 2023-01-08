@@ -14,7 +14,10 @@ function WebCam() {
       const wrap = document.querySelector('#webcam #video-wrap');
 
       if (modal.webcam) {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: false, video: true });
+        const stream = await navigator.mediaDevices.getUserMedia({
+          audio: false,
+          video: true,
+        });
         const track = stream.getVideoTracks()[0];
 
         setVideoStreamTrack(track);
@@ -32,8 +35,7 @@ function WebCam() {
         // stop track
         videoStreamTrack.stop();
       }
-    }
-    catch (error0) {
+    } catch (error0) {
       console.error(error0.message);
     }
   };
@@ -52,10 +54,12 @@ function WebCam() {
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
     const src = canvas.toDataURL();
-    dispatch(setModal({
-      target: 'imageCropper',
-      data: { src, back: 'avatarUpload' },
-    }));
+    dispatch(
+      setModal({
+        target: 'imageCropper',
+        data: { src, back: 'avatarUpload' },
+      })
+    );
   };
 
   useEffect(() => {
@@ -78,7 +82,9 @@ function WebCam() {
     >
       <div
         aria-hidden
-        className={`${!modal.webcam && 'scale-0'} transition relative w-[460px] m-6 rounded-md overflow-hidden bg-white dark:bg-spill-800`}
+        className={`${
+          !modal.webcam && 'scale-0'
+        } transition relative w-[460px] m-6 rounded-md overflow-hidden bg-white dark:bg-spill-800`}
         onClick={(e) => {
           e.stopPropagation();
         }}
@@ -90,7 +96,9 @@ function WebCam() {
             className="w-16 h-16 rounded-full shadow-xl flex justify-center items-center bg-sky-600 hover:brightness-110"
             onClick={handleSubmit}
           >
-            <i><md.MdPhotoCamera size={28} /></i>
+            <i>
+              <md.MdPhotoCamera size={28} />
+            </i>
           </button>
         </div>
       </div>

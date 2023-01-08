@@ -5,7 +5,10 @@ import * as bi from 'react-icons/bi';
 import Cropper from 'react-easy-crop';
 
 import { setModal } from '../../redux/features/modal';
-import { setRefreshAvatar, setRefreshGroupAvatar } from '../../redux/features/chore';
+import {
+  setRefreshAvatar,
+  setRefreshGroupAvatar,
+} from '../../redux/features/chore';
 
 function ImageCropper() {
   const dispatch = useDispatch();
@@ -40,8 +43,7 @@ function ImageCropper() {
       } else {
         dispatch(setRefreshAvatar(data.payload));
       }
-    }
-    catch (error0) {
+    } catch (error0) {
       setUploading(false);
     }
   };
@@ -63,7 +65,9 @@ function ImageCropper() {
         }}
       >
         <div className="h-14 pl-4 pr-2 flex gap-4 justify-between items-center">
-          <p className="font-bold text-lg truncate">Crop your new profile photo</p>
+          <p className="font-bold text-lg truncate">
+            Crop your new profile photo
+          </p>
           <button
             type="button"
             className="p-2 rounded-full hover:bg-spill-100 dark:hover:bg-spill-700"
@@ -71,7 +75,9 @@ function ImageCropper() {
               dispatch(setModal({ target: modal.imageCropper.back }));
             }}
           >
-            <i><bi.BiX /></i>
+            <i>
+              <bi.BiX />
+            </i>
           </button>
         </div>
         <div className="relative w-full h-60 bg-spill-100 dark:bg-spill-950">
@@ -87,7 +93,9 @@ function ImageCropper() {
         </div>
         <div className="p-4 grid gap-4">
           <span className="grid grid-cols-[auto_1fr_auto] gap-4 items-center">
-            <i><bi.BiMinus size={20} /></i>
+            <i>
+              <bi.BiMinus size={20} />
+            </i>
             <input
               type="range"
               name="zoom"
@@ -101,14 +109,16 @@ function ImageCropper() {
                 setZoom(e.target.value);
               }}
             />
-            <i><bi.BiPlus size={20} /></i>
+            <i>
+              <bi.BiPlus size={20} />
+            </i>
           </span>
           <button
             type="button"
             className="w-full py-2 px-4 rounded-md font-bold text-white bg-sky-600 hover:bg-sky-700"
             onClick={handleUpload}
           >
-            { uploading ? 'Uploading...' : 'Set new profile photo' }
+            {uploading ? 'Uploading...' : 'Set new profile photo'}
           </button>
         </div>
       </div>

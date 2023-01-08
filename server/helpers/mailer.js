@@ -1,13 +1,7 @@
 const nodemailer = require('nodemailer');
 const config = require('../config');
 
-module.exports = async ({
-  to,
-  fullname,
-  subject,
-  html,
-  otp,
-}) => {
+module.exports = async ({ to, fullname, subject, html, otp }) => {
   let options = {};
 
   if (config.isDev) {

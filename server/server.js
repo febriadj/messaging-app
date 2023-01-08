@@ -16,11 +16,13 @@ const server = http.createServer(app);
 // middleware
 app.use(cors(config.cors));
 app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({
-  limit: '10mb',
-  parameterLimit: 100000,
-  extended: false,
-}));
+app.use(
+  express.urlencoded({
+    limit: '10mb',
+    parameterLimit: 100000,
+    extended: false,
+  })
+);
 
 cloudinary();
 db();

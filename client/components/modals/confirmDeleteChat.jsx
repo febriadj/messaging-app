@@ -40,14 +40,19 @@ function ConfirmDeleteChat() {
     >
       <div
         aria-hidden
-        className={`${!confirmBox && 'scale-0'} transition relative w-[400px] m-6 p-4 rounded-md bg-white dark:bg-spill-800`}
+        className={`${
+          !confirmBox && 'scale-0'
+        } transition relative w-[400px] m-6 p-4 rounded-md bg-white dark:bg-spill-800`}
         onClick={(e) => {
           e.stopPropagation();
         }}
       >
         <h1 className="text-2xl font-bold mb-1">Delete Message</h1>
         <p>Are you sure you want to delete this message?</p>
-        <label htmlFor="deleteForEveryone" className="my-4 flex gap-2 items-center cursor-pointer">
+        <label
+          htmlFor="deleteForEveryone"
+          className="my-4 flex gap-2 items-center cursor-pointer"
+        >
           <input
             type="checkbox"
             name="deleteForEveryone"
@@ -58,34 +63,32 @@ function ConfirmDeleteChat() {
           <p>Delete for everyone</p>
         </label>
         <span className="flex gap-2 justify-end">
-          {
-            [
-              {
-                label: 'Cancel',
-                style: 'hover:bg-gray-100 dark:hover:bg-spill-700',
-                action: () => {
-                  dispatch(setModal({ target: 'confirmDeleteChat' }));
-                  setTimeout(() => {
-                    setDeleteForEveryone(false);
-                  }, 150);
-                },
+          {[
+            {
+              label: 'Cancel',
+              style: 'hover:bg-gray-100 dark:hover:bg-spill-700',
+              action: () => {
+                dispatch(setModal({ target: 'confirmDeleteChat' }));
+                setTimeout(() => {
+                  setDeleteForEveryone(false);
+                }, 150);
               },
-              {
-                label: 'Delete',
-                style: 'font-bold text-white bg-rose-600 hover:bg-rose-700',
-                action: () => handleDeleteChats(),
-              },
-            ].map((elem) => (
-              <button
-                key={elem.label}
-                type="button"
-                className={`${elem.style} py-2 px-4 rounded-md`}
-                onClick={() => elem.action()}
-              >
-                <p>{elem.label}</p>
-              </button>
-            ))
-          }
+            },
+            {
+              label: 'Delete',
+              style: 'font-bold text-white bg-rose-600 hover:bg-rose-700',
+              action: () => handleDeleteChats(),
+            },
+          ].map((elem) => (
+            <button
+              key={elem.label}
+              type="button"
+              className={`${elem.style} py-2 px-4 rounded-md`}
+              onClick={() => elem.action()}
+            >
+              <p>{elem.label}</p>
+            </button>
+          ))}
         </span>
       </div>
     </div>

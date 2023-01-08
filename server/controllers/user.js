@@ -36,7 +36,10 @@ exports.register = async (req, res) => {
 
     // generate access token
     const token = jwt.sign({ _id: userId }, 'shhhhh');
-    const template = fs.readFileSync(path.resolve(__dirname, '../helpers/templates/otp.html'), 'utf8');
+    const template = fs.readFileSync(
+      path.resolve(__dirname, '../helpers/templates/otp.html'),
+      'utf8'
+    );
 
     // send the OTP/verification code to user's email
     await mailer({
@@ -53,8 +56,7 @@ exports.register = async (req, res) => {
       message: 'Successfully created a new account',
       payload: token,
     });
-  }
-  catch (error0) {
+  } catch (error0) {
     response({
       res,
       statusCode: error0.statusCode || 500,
@@ -72,7 +74,7 @@ exports.verify = async (req, res) => {
     // if the user is found, update the verified and OTP fields
     const user = await UserModel.findOneAndUpdate(
       { _id: userId, otp },
-      { $set: { verified: true, otp: null } },
+      { $set: { verified: true, otp: null } }
     );
 
     // if the user not found
@@ -90,8 +92,7 @@ exports.verify = async (req, res) => {
       message: 'Successfully verified an account',
       payload: user,
     });
-  }
-  catch (error0) {
+  } catch (error0) {
     response({
       res,
       statusCode: error0.statusCode || 500,
@@ -132,8 +133,7 @@ exports.login = async (req, res) => {
       message: 'Successfully logged in',
       payload: token, // -> send token to store in localStorage
     });
-  }
-  catch (error0) {
+  } catch (error0) {
     response({
       res,
       statusCode: error0.statusCode || 500,
@@ -146,13 +146,15 @@ exports.login = async (req, res) => {
 exports.find = async (req, res) => {
   try {
     // find user & exclude password
-    const user = await UserModel.findOne({ _id: req.user._id }, { password: 0 });
+    const user = await UserModel.findOne(
+      { _id: req.user._id },
+      { password: 0 }
+    );
     response({
       res,
       payload: user,
     });
-  }
-  catch (error0) {
+  } catch (error0) {
     response({
       res,
       statusCode: error0.statusCode || 500,
@@ -183,15 +185,17 @@ exports.delete = async (req, res) => {
     await SettingModel.deleteOne({ userId });
     await ContactModel.deleteMany({ userId });
 
-    await GroupModel.updateMany({ participantsId: userId }, { $pull: { participantsId: userId } });
+    await GroupModel.updateMany(
+      { participantsId: userId },
+      { $pull: { participantsId: userId } }
+    );
 
     response({
       res,
       message: 'Account deleted successfully',
       payload: user,
     });
-  }
-  catch (error0) {
+  } catch (error0) {
     response({
       res,
       statusCode: error0.statusCode || 500,
@@ -219,7 +223,7 @@ exports.changePass = async (req, res) => {
 
     if (newPass !== confirmNewPass) {
       errData.statusCode = 400;
-      errData.message = 'New password doesn\'t match';
+      errData.message = "New password doesn't match";
 
       throw errData;
     }
@@ -227,7 +231,7 @@ exports.changePass = async (req, res) => {
     // change password
     await UserModel.updateOne(
       { _id: userId },
-      { $set: { password: encrypt(newPass) } },
+      { $set: { password: encrypt(newPass) } }
     );
 
     // exclude password field when sending user data to client
@@ -237,8 +241,7 @@ exports.changePass = async (req, res) => {
       message: 'Password changed successfully',
       payload: user,
     });
-  }
-  catch (error0) {
+  } catch (error0) {
     response({
       res,
       statusCode: error0.statusCode || 500,

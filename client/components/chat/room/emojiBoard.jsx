@@ -19,8 +19,9 @@ function EmojiBoard({ setForm }) {
           gridTemplateColumns: 'repeat(auto-fit, minmax(36px, 1fr))',
         }}
       >
-        {
-          emojis.filter((elem) => elem.category === category).map((elem) => (
+        {emojis
+          .filter((elem) => elem.category === category)
+          .map((elem) => (
             <button
               key={elem.emoji}
               type="button"
@@ -40,36 +41,36 @@ function EmojiBoard({ setForm }) {
             >
               {elem.emoji}
             </button>
-          ))
-        }
+          ))}
       </div>
       <div className="flex justify-center">
         <div className="px-4 h-12 max-w-[460px] w-full grid grid-cols-[1fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr_auto] items-center">
-          {
-            [
-              { category: 'Smileys & Emotion', icon: <bi.BiSmile /> },
-              { category: 'People & Body', icon: <bi.BiWalk /> },
-              { category: 'Animals & Nature', icon: <bi.BiBug /> },
-              { category: 'Food & Drink', icon: <bi.BiCoffee /> },
-              { category: 'Travel & Places', icon: <bi.BiCar /> },
-              { category: 'Activities', icon: <bi.BiFootball /> },
-              { category: 'Objects', icon: <bi.BiBulb /> },
-              { category: 'Symbols', icon: <bi.BiShapeSquare /> },
-              { category: 'Flags', icon: <bi.BiFlag /> },
-            ].map((elem) => (
-              <span key={elem.category} className="flex">
-                <button
-                  type="button"
-                  className={`${elem.category === category && 'opacity-100 text-sky-600 dark:text-sky-400'} opacity-60 hover:opacity-100`}
-                  onClick={() => {
-                    setCategory(elem.category);
-                  }}
-                >
-                  <i>{elem.icon}</i>
-                </button>
-              </span>
-            ))
-          }
+          {[
+            { category: 'Smileys & Emotion', icon: <bi.BiSmile /> },
+            { category: 'People & Body', icon: <bi.BiWalk /> },
+            { category: 'Animals & Nature', icon: <bi.BiBug /> },
+            { category: 'Food & Drink', icon: <bi.BiCoffee /> },
+            { category: 'Travel & Places', icon: <bi.BiCar /> },
+            { category: 'Activities', icon: <bi.BiFootball /> },
+            { category: 'Objects', icon: <bi.BiBulb /> },
+            { category: 'Symbols', icon: <bi.BiShapeSquare /> },
+            { category: 'Flags', icon: <bi.BiFlag /> },
+          ].map((elem) => (
+            <span key={elem.category} className="flex">
+              <button
+                type="button"
+                className={`${
+                  elem.category === category &&
+                  'opacity-100 text-sky-600 dark:text-sky-400'
+                } opacity-60 hover:opacity-100`}
+                onClick={() => {
+                  setCategory(elem.category);
+                }}
+              >
+                <i>{elem.icon}</i>
+              </button>
+            </span>
+          ))}
         </div>
       </div>
     </div>

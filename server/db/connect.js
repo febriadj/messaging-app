@@ -7,8 +7,7 @@ module.exports = async () => {
     await connect(uri);
 
     console.log('database connected');
-  }
-  catch (error0) {
+  } catch (error0) {
     console.log(error0.message);
   }
 };

@@ -10,8 +10,7 @@ exports.findById = async (req, res) => {
       res,
       payload: group,
     });
-  }
-  catch (error0) {
+  } catch (error0) {
     response({
       res,
       statusCode: error0.statusCode || 500,
@@ -31,7 +30,7 @@ exports.participantsName = async (req, res) => {
     // find participants
     const participants = await ProfileModel.find(
       { userId: { $in: group.participantsId } },
-      { _id: 0, fullname: 1 },
+      { _id: 0, fullname: 1 }
     )
       .sort({ updatedAt: -1 })
       .limit(limit);
@@ -42,8 +41,7 @@ exports.participantsName = async (req, res) => {
       res,
       payload: names,
     });
-  }
-  catch (error0) {
+  } catch (error0) {
     response({
       res,
       statusCode: error0.statusCode || 500,
@@ -70,8 +68,7 @@ exports.participants = async (req, res) => {
       res,
       payload: participants,
     });
-  }
-  catch (error0) {
+  } catch (error0) {
     response({
       res,
       statusCode: error0.statusCode || 500,

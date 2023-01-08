@@ -18,7 +18,8 @@ module.exports = (socket) => {
 
       if (args.file) {
         const arrOriname = args.file.originalname.split('.');
-        const format = arrOriname.length === 1 ? 'txt' : arrOriname.reverse()[0];
+        const format =
+          arrOriname.length === 1 ? 'txt' : arrOriname.reverse()[0];
 
         const upload = await cloud.uploader.upload(args.file.url, {
           folder: 'chat',
@@ -41,7 +42,7 @@ module.exports = (socket) => {
       const chat = await new ChatModel({ ...args, fileId }).save();
       const profile = await ProfileModel.findOne(
         { userId: args.userId },
-        { userId: 1, avatar: 1, fullname: 1 },
+        { userId: 1, avatar: 1, fullname: 1 }
       );
 
       // create a new inbox if it doesn't exist and update it if exists
@@ -57,12 +58,15 @@ module.exports = (socket) => {
             content: {
               from: args.userId,
               senderName: profile.fullname,
-              text: chat.text || chat.text.length > 0 ? chat.text : file.originalname,
+              text:
+                chat.text || chat.text.length > 0
+                  ? chat.text
+                  : file.originalname,
               time: chat.createdAt,
             },
           },
         },
-        { new: true, upsert: true },
+        { new: true, upsert: true }
       );
 
       const inboxes = await Inbox.find({ ownersId: { $all: args.ownersId } });
@@ -70,8 +74,7 @@ module.exports = (socket) => {
       io.to(args.roomId).emit('chat/insert', { ...chat._doc, profile, file });
       // send the latest inbox data to be merge with old inbox data
       io.to(args.ownersId).emit('inbox/find', inboxes[0]);
-    }
-    catch (error0) {
+    } catch (error0) {
       console.log(error0.message);
     }
   });
@@ -81,19 +84,18 @@ module.exports = (socket) => {
     try {
       await InboxModel.updateOne(
         { roomId: args.roomId, ownersId: { $all: args.ownersId } },
-        { $set: { unreadMessage: 0 } },
+        { $set: { unreadMessage: 0 } }
       );
       await ChatModel.updateMany(
         { roomId: args.roomId, readed: false },
-        { $set: { readed: true } },
+        { $set: { readed: true } }
       );
 
       const inboxes = await Inbox.find({ ownersId: { $all: args.ownersId } });
 
       io.to(args.ownersId).emit('inbox/read', inboxes[0]);
       io.to(args.roomId).emit('chat/read', true);
-    }
-    catch (error0) {
+    } catch (error0) {
       console.log(error0.message);
     }
   });
@@ -103,68 +105,80 @@ module.exports = (socket) => {
     clearTimeout(typingEnds);
 
     const isGroup = roomType === 'group';
-    const typer = isGroup ? await ProfileModel.findOne({ userId }, { fullname: 1 }) : null;
+    const typer = isGroup
+      ? await ProfileModel.findOne({ userId }, { fullname: 1 })
+      : null;
 
     socket.broadcast
       .to(roomId)
-      .emit('chat/typing', isGroup ? `${typer.fullname} typing...` : 'typing...');
+      .emit(
+        'chat/typing',
+        isGroup ? `${typer.fullname} typing...` : 'typing...'
+      );
 
     typingEnds = setTimeout(() => {
-      socket.broadcast
-        .to(roomId)
-        .emit('chat/typing-ends', true);
+      socket.broadcast.to(roomId).emit('chat/typing-ends', true);
     }, 1000);
   });
 
   // delete chats
-  socket.on('chat/delete', async ({
-    userId, chatsId, roomId, deleteForEveryone,
-  }) => {
-    try {
-      // delete attached files
-      const handleDeleteFiles = async (query = {}) => {
-        const chats = await ChatModel.find(
-          { _id: { $in: chatsId }, roomId, ...query },
-          { fileId: 1 },
-        );
+  socket.on(
+    'chat/delete',
+    async ({ userId, chatsId, roomId, deleteForEveryone }) => {
+      try {
+        // delete attached files
+        const handleDeleteFiles = async (query = {}) => {
+          const chats = await ChatModel.find(
+            { _id: { $in: chatsId }, roomId, ...query },
+            { fileId: 1 }
+          );
 
-        const filesId = chats.filter((elem) => !!elem.fileId).map((elem) => elem.fileId);
+          const filesId = chats
+            .filter((elem) => !!elem.fileId)
+            .map((elem) => elem.fileId);
 
-        if (filesId.length > 0) {
-          await FileModel.deleteMany({ roomId, fileId: filesId });
+          if (filesId.length > 0) {
+            await FileModel.deleteMany({ roomId, fileId: filesId });
 
-          await cloud.api.delete_resources(filesId, { resource_type: 'image' });
-          await cloud.api.delete_resources(filesId, { resource_type: 'video' });
-          await cloud.api.delete_resources(filesId, { resource_type: 'raw' });
+            await cloud.api.delete_resources(filesId, {
+              resource_type: 'image',
+            });
+            await cloud.api.delete_resources(filesId, {
+              resource_type: 'video',
+            });
+            await cloud.api.delete_resources(filesId, { resource_type: 'raw' });
+          }
+        };
+
+        if (deleteForEveryone) {
+          await handleDeleteFiles({});
+          await ChatModel.deleteMany({ roomId, _id: { $in: chatsId } });
+
+          io.to(roomId).emit('chat/delete', { userId, chatsId });
+        } else {
+          await ChatModel.updateMany(
+            { roomId, _id: { $in: chatsId } },
+            { $push: { deletedBy: userId } }
+          );
+
+          // delete permanently if this message has been
+          // deleted by all room participants
+          const { ownersId } = await InboxModel.findOne(
+            { roomId },
+            { _id: 0, ownersId: 1 }
+          );
+
+          await handleDeleteFiles({ deletedBy: { $size: ownersId.length } });
+          await ChatModel.deleteMany({
+            roomId,
+            $expr: { $gte: [{ $size: '$deletedBy' }, ownersId.length] },
+          });
+
+          socket.emit('chat/delete', { userId, chatsId });
         }
-      };
-
-      if (deleteForEveryone) {
-        await handleDeleteFiles({});
-        await ChatModel.deleteMany({ roomId, _id: { $in: chatsId } });
-
-        io.to(roomId).emit('chat/delete', { userId, chatsId });
-      } else {
-        await ChatModel.updateMany(
-          { roomId, _id: { $in: chatsId } },
-          { $push: { deletedBy: userId } },
-        );
-
-        // delete permanently if this message has been
-        // deleted by all room participants
-        const { ownersId } = await InboxModel.findOne({ roomId }, { _id: 0, ownersId: 1 });
-
-        await handleDeleteFiles({ deletedBy: { $size: ownersId.length } });
-        await ChatModel.deleteMany({
-          roomId,
-          $expr: { $gte: [{ $size: '$deletedBy' }, ownersId.length] },
-        });
-
-        socket.emit('chat/delete', { userId, chatsId });
+      } catch (error0) {
+        console.error(error0.message);
       }
     }
-    catch (error0) {
-      console.error(error0.message);
-    }
-  });
+  );
 };

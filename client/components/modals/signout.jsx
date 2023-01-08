@@ -16,7 +16,9 @@ function Logout() {
     >
       <div
         aria-hidden
-        className={`${!modal.signout && 'scale-0'} transition w-[400px] m-6 p-4 rounded-md bg-white dark:bg-spill-800`}
+        className={`${
+          !modal.signout && 'scale-0'
+        } transition w-[400px] m-6 p-4 rounded-md bg-white dark:bg-spill-800`}
         onClick={(e) => {
           e.stopPropagation();
         }}

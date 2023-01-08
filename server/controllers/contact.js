@@ -15,11 +15,16 @@ exports.insert = async (req, res) => {
     // if the friend profile not found or
     // if the contact has been saved
     if (
-      !friend
-      || await ContactModel.findOne({ userId: req.user._id, friendId: friend.userId })
+      !friend ||
+      (await ContactModel.findOne({
+        userId: req.user._id,
+        friendId: friend.userId,
+      }))
     ) {
       errData.statusCode = 401;
-      errData.message = !friend ? 'User not found' : 'You have saved this contact';
+      errData.message = !friend
+        ? 'User not found'
+        : 'You have saved this contact';
 
       throw errData;
     }
@@ -45,8 +50,7 @@ exports.insert = async (req, res) => {
       message: 'Successfully added contact',
       payload: contact,
     });
-  }
-  catch (error0) {
+  } catch (error0) {
     response({
       res,
       statusCode: error0.statusCode || 500,
@@ -58,7 +62,10 @@ exports.insert = async (req, res) => {
 
 exports.find = async (req, res) => {
   try {
-    const setting = await SettingModel.findOne({ userId: req.user._id }, { sortContactByName: 1 });
+    const setting = await SettingModel.findOne(
+      { userId: req.user._id },
+      { sortContactByName: 1 }
+    );
 
     const contacts = await ContactModel.aggregate([
       { $match: { userId: req.user._id } },
@@ -71,15 +78,18 @@ exports.find = async (req, res) => {
         },
       },
       { $unwind: '$profile' },
-      { $sort: setting.sortContactByName ? { 'profile.fullname': 1 } : { 'profile.updatedAt': -1 } },
+      {
+        $sort: setting.sortContactByName
+          ? { 'profile.fullname': 1 }
+          : { 'profile.updatedAt': -1 },
+      },
     ]).collation({ locale: 'en' });
 
     response({
       res,
       payload: contacts,
     });
-  }
-  catch (error0) {
+  } catch (error0) {
     response({
       res,
       statusCode: error0.statusCode || 500,
@@ -98,8 +108,7 @@ exports.deleteByFriendId = async (req, res) => {
       res,
       message: 'Contact deleted successfully',
     });
-  }
-  catch (error0) {
+  } catch (error0) {
     response({
       res,
       statusCode: error0.statusCode || 500,

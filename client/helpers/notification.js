@@ -8,7 +8,10 @@ export default async ({ title, body, icon }) => {
       throw errData;
     }
 
-    if (document.visibilityState === 'hidden' && Notification.permission === 'granted') {
+    if (
+      document.visibilityState === 'hidden' &&
+      Notification.permission === 'granted'
+    ) {
       const notif = new Notification(title, { body, icon });
 
       notif.onerror = (error1) => {
@@ -18,8 +21,7 @@ export default async ({ title, body, icon }) => {
       // ask the user for permission
       await Notification.requestPermission();
     }
-  }
-  catch (error0) {
+  } catch (error0) {
     console.error(error0.message);
   }
 };

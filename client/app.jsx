@@ -41,8 +41,7 @@ function App() {
       } else {
         setTimeout(() => setLoaded(true), 1000);
       }
-    }
-    catch (error0) {
+    } catch (error0) {
       console.error(error0.message);
     }
   };
@@ -50,7 +49,9 @@ function App() {
   useEffect(() => {
     const abortCtrl = new AbortController();
     // set default base url
-    axios.defaults.baseURL = config.isDev ? 'http://localhost:8080/api' : '/api';
+    axios.defaults.baseURL = config.isDev
+      ? 'http://localhost:8080/api'
+      : '/api';
     handleGetMaster(abortCtrl.signal);
 
     socket.on('user/inactivate', () => {
@@ -68,39 +69,36 @@ function App() {
     document.onvisibilitychange = (e) => {
       if (master) {
         const active = e.target.visibilityState === 'visible';
-        socket.emit(
-          active ? 'user/connect' : 'user/disconnect',
-          master._id,
-        );
+        socket.emit(active ? 'user/connect' : 'user/disconnect', master._id);
       }
     };
   }, [!!master]);
 
   return (
     <BrowserRouter>
-      {
-        loaded
-          ? (
-            <Routes>
-              {
-                inactive && <Route exact path="*" element={<route.inactive />} />
-              }
-              {
-                !inactive && master
-                  ? <Route exact path="*" element={master.verified ? <route.chat /> : <route.verify />} />
-                  : <Route exact path="*" element={<route.auth />} />
-              }
-            </Routes>
-          )
-          : (
-            <div className="absolute w-full h-full flex justify-center items-center bg-white dark:text-white/90 dark:bg-spill-900">
-              <div className="flex gap-2 items-center">
-                <i className="animate-spin"><bi.BiLoaderAlt /></i>
-                <p>Loading</p>
-              </div>
-            </div>
-          )
-      }
+      {loaded ? (
+        <Routes>
+          {inactive && <Route exact path="*" element={<route.inactive />} />}
+          {!inactive && master ? (
+            <Route
+              exact
+              path="*"
+              element={master.verified ? <route.chat /> : <route.verify />}
+            />
+          ) : (
+            <Route exact path="*" element={<route.auth />} />
+          )}
+        </Routes>
+      ) : (
+        <div className="absolute w-full h-full flex justify-center items-center bg-white dark:text-white/90 dark:bg-spill-900">
+          <div className="flex gap-2 items-center">
+            <i className="animate-spin">
+              <bi.BiLoaderAlt />
+            </i>
+            <p>Loading</p>
+          </div>
+        </div>
+      )}
     </BrowserRouter>
   );
 }
