@@ -173,8 +173,11 @@ function Header() {
               <img
                 src={
                   isGroup
-                    ? refreshGroupAvatar || chatRoom.data.group.avatar
-                    : chatRoom.data.profile.avatar
+                    ? refreshGroupAvatar ||
+                      chatRoom.data.group.avatar ||
+                      'assets/images/default-group-avatar.png'
+                    : chatRoom.data.profile.avatar ||
+                      'assets/images/default-avatar.png'
                 }
                 alt=""
                 className="w-10 h-10 rounded-full"

@@ -241,7 +241,12 @@ function GroupProfile() {
 
                 if (group.adminId !== master._id) {
                   dispatch(
-                    setModal({ target: 'photoFull', data: group.avatar })
+                    setModal({
+                      target: 'photoFull',
+                      data:
+                        group.avatar ||
+                        'assets/images/default-group-avatar.png',
+                    })
                   );
                 } else {
                   dispatch(
@@ -264,7 +269,11 @@ function GroupProfile() {
                 )}
               </span>
               <img
-                src={refreshGroupAvatar || group.avatar}
+                src={
+                  refreshGroupAvatar ||
+                  group.avatar ||
+                  'assets/images/default-group-avatar.png'
+                }
                 alt=""
                 className="w-full h-full"
               />
@@ -342,7 +351,7 @@ function GroupProfile() {
                     onTouchEnd={() => touchAndHoldEnd()}
                   >
                     <img
-                      src={elem.avatar}
+                      src={elem.avatar || 'assets/images/default-avatar.png'}
                       alt=""
                       className="w-14 h-14 rounded-full"
                     />

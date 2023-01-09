@@ -182,7 +182,11 @@ function Profile() {
                 </i>
               </span>
               <img
-                src={refreshAvatar || profile.avatar}
+                src={
+                  refreshAvatar ||
+                  profile.avatar ||
+                  'assets/images/default-avatar.png'
+                }
                 alt=""
                 className="w-full h-full"
               />

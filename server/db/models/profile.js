@@ -28,8 +28,7 @@ const ProfileSchema = new Schema(
     },
     avatar: {
       type: Schema.Types.String,
-      required: true,
-      default: process.env.DEFAULT_AVATAR,
+      default: null,
     },
     bio: {
       type: Schema.Types.String,

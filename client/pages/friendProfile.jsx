@@ -104,14 +104,17 @@ function FriendProfile() {
         <div className="pb-16 overflow-y-auto scrollbar-thin scrollbar-thumb-spill-200 hover:scrollbar-thumb-spill-300 dark:scrollbar-thumb-spill-700 dark:hover:scrollbar-thumb-spill-600">
           <div className="p-4 flex flex-col items-center">
             <img
-              src={profile.avatar}
+              src={profile.avatar || 'assets/images/default-avatar.png'}
               alt=""
               className="w-28 h-28 rounded-full cursor-pointer hover:brightness-75"
               aria-hidden
               onClick={(e) => {
                 e.stopPropagation();
                 dispatch(
-                  setModal({ target: 'photoFull', data: profile.avatar })
+                  setModal({
+                    target: 'photoFull',
+                    data: profile.avatar || 'assets/images/default-avatar.png',
+                  })
                 );
               }}
             />

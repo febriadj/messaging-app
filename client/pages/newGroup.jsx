@@ -103,7 +103,9 @@ function NewGroup() {
                   className="flex-none flex flex-col items-center"
                 >
                   <img
-                    src={elem.profile.avatar}
+                    src={
+                      elem.profile.avatar || 'assets/images/default-avatar.png'
+                    }
                     alt=""
                     className="w-14 h-14 rounded-full"
                   />
@@ -179,7 +181,9 @@ function NewGroup() {
             >
               <span className="relative">
                 <img
-                  src={elem.profile.avatar}
+                  src={
+                    elem.profile.avatar || 'assets/images/default-avatar.png'
+                  }
                   alt=""
                   className="w-14 h-14 rounded-full"
                 />

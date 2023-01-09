@@ -189,7 +189,8 @@ function Inbox({ inboxes, setInboxes }) {
                   elem.roomType === 'private'
                     ? elem.owners.find((x) => x.userId !== master._id)
                         ?.avatar || 'assets/images/default-avatar.png'
-                    : elem.group.avatar
+                    : elem.group.avatar ||
+                      'assets/images/default-group-avatar.png'
                 }
                 alt=""
                 className="w-14 h-14 rounded-full"

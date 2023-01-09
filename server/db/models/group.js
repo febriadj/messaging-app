@@ -27,8 +27,7 @@ const GroupSchema = new Schema(
     },
     avatar: {
       type: Schema.Types.String,
-      required: true,
-      default: process.env.DEFAULT_GROUP_AVATAR,
+      default: null,
     },
     link: {
       type: Schema.Types.String,
