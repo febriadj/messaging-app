@@ -1,5 +1,7 @@
 # LeChat
 
+![cover](/docs/img/cover.jpg)
+
 LeChat is a web-based instant messaging app that allows you to quickly send and receive text messages, emojis, photos, and audio with other LeChat users. LeChat uses its own socket server and works independently, professionally built using **MongoDB, Express, React, Node, and Socket IO**. Suitable for those of you who are interested in learning the workflow of messaging apps.
 
 ## Table of Contents
