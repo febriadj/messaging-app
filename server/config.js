@@ -4,10 +4,9 @@ module.exports = {
   isDev,
   cors: {
     origin: ['http://localhost:3000'],
-    method: '*',
   },
   db: {
     uri: process.env.MONGO_URI,
-    name: 'discuzz',
+    name: 'lechat',
   },
 };

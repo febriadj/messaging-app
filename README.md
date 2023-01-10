@@ -1,6 +1,6 @@
-# Discuzz
+# LeChat
 
-Discuzz is a web-based instant messaging app that allows you to quickly send and receive text messages, emojis, photos, and audio with other Discuzz users. Discuzz uses its own socket server and works independently, professionally built using **MongoDB, Express, React, Node, and Socket IO**. Suitable for those of you who are interested in learning the workflow of messaging apps.
+LeChat is a web-based instant messaging app that allows you to quickly send and receive text messages, emojis, photos, and audio with other LeChat users. LeChat uses its own socket server and works independently, professionally built using **MongoDB, Express, React, Node, and Socket IO**. Suitable for those of you who are interested in learning the workflow of messaging apps.
 
 ## Table of Contents
 
@@ -38,7 +38,7 @@ NODE_ENV = development
 
 ### Connect to MongoDB
 
-By default, Discuzz will use your local MongoDB server and the `discuzz` database will be created automatically when the app is run in development mode. In production mode, you should use a cloud database like [MongoDB Atlas](https://www.mongodb.com/atlas/database).
+By default, LeChat will use your local MongoDB server and the `lechat` database will be created automatically when the app is run in development mode. In production mode, you should use a cloud database like [MongoDB Atlas](https://www.mongodb.com/atlas/database).
 
 ```
 MONGO_URI = mongodb+srv://{username}:{password}@node.deu00vc.mongodb.net/{dbname}?retryWrites=true&w=majority

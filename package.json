@@ -1,8 +1,9 @@
 {
-  "name": "discuzz",
+  "name": "lechat",
   "version": "1.0.0",
-  "description": "Discuzz is a web-based chat app that allows you to share text messages, photos, audio, or other files with friends in real-time.",
-  "main": "server",
+  "description": "LeChat is an instant messaging app that allows you to quickly share text messages, emojis, photos, or files with other LeChat users",
+  "main": "server/index.js",
+  "private": true,
   "engines": {
     "vscode": "1.22.0",
     "npm": "8.19.2",
@@ -19,22 +20,21 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/febriadj/discuzz.git"
+    "url": "git+https://github.com/febriadj/lechat.git"
   },
   "keywords": [
-    "discuzz",
-    "chat",
-    "websockect",
-    "social-app",
-    "webrtc",
-    "socket.io"
+    "lechat",
+    "mern",
+    "social-media",
+    "socket.io",
+    "websocket"
   ],
   "author": "Febriadji",
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/febriadj/discuzz/issues"
+    "url": "https://github.com/febriadj/lechat/issues"
   },
-  "homepage": "https://github.com/febriadj/discuzz#readme",
+  "homepage": "https://github.com/febriadj/lechat#readme",
   "devDependencies": {
     "@babel/core": "^7.19.3",
     "@babel/plugin-transform-runtime": "^7.19.1",
