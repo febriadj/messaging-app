@@ -13,12 +13,13 @@
   "plugins": ["react", "prettier"],
   "rules": {
     "prettier/prettier": "error",
-    "no-console": "off",
+    "linebreak-style": ["error", "unix"],
     "no-underscore-dangle": "off",
-    "react/self-closing-comp": "off",
-    "react/prop-types": "off",
+    "no-console": "off",
     "import/no-unresolved": "off",
     "import/extensions": "off",
-    "import/prefer-default-export": "off"
+    "import/prefer-default-export": "off",
+    "react/self-closing-comp": "off",
+    "react/prop-types": "off"
   }
 }
