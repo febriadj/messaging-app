@@ -11,6 +11,7 @@ Discuzz is a web-based instant messaging app that allows you to quickly send and
   - [Cloudinary](#cloudinary)
   - [Nodemailer](#nodemailer)
   - [Fake SMTP Server](#fake-smtp-server)
+- [License](#license)
 - [Support](#support)
 
 ## Requirements
@@ -89,6 +90,10 @@ TEST_EMAIL_PASS =
 TEST_EMAIL_HOST = smtp.mailtrap.io
 TEST_EMAIL_PORT = 2525
 ```
+
+## License
+
+Distributed under the [GPL-3.0 License](/LICENSE).
 
 ## Support
 
