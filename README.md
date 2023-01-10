@@ -4,7 +4,6 @@ Discuzz is a web-based instant messaging app that allows you to quickly send and
 
 ## Table of Contents
 
-- [Requirements](#requirements)
 - [Getting Started](#getting-started)
 - [Environment Variables](#environment-variables)
   - [Connect to MongoDB](#connect-to-mongodb)
@@ -12,14 +11,6 @@ Discuzz is a web-based instant messaging app that allows you to quickly send and
   - [Nodemailer](#nodemailer)
   - [Fake SMTP Server](#fake-smtp-server)
 - [License](#license)
-- [Support](#support)
-
-## Requirements
-
-- **Node.js:** v16.17.1
-- **NPM:** v8.19.2
-- **MongoDB Server:** v3.6.8
-- [Cloudinary Account](https://cloudinary.com/)
 
 ## Getting Started
 
@@ -94,9 +85,3 @@ TEST_EMAIL_PORT = 2525
 ## License
 
 Distributed under the [GPL-3.0 License](/LICENSE).
-
-## Support
-
-If you're having problems getting this working, feel free to contact us via email (help.discuzz@gmail.com)
-
-Discuzz Docs: https://discuzz-docs.vercel.app/
