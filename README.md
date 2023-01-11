@@ -5,6 +5,7 @@ LeChat is a web-based instant messaging app that allows you to quickly send and 
 ## Table of Contents
 
 - [Getting Started](#getting-started)
+- [Preview](#preview)
 - [Environment Variables](#environment-variables)
   - [Connect to MongoDB](#connect-to-mongodb)
   - [Cloudinary](#cloudinary)
@@ -14,19 +15,30 @@ LeChat is a web-based instant messaging app that allows you to quickly send and 
 
 ## Getting Started
 
-**Step 1:** Rename `.env.example` file to `.env` and complete the required [environment variables](#environment-variables)
+**Step 1:** Fork and clone this repository.
 
-**Step 2:** Install dependencies.
+```bash
+git clone https://github.com/{username}/lechat.git
+```
+
+**Step 2:** Rename `.env.example` file to `.env` and complete the required [environment variables](#environment-variables).
+
+**Step 3:** Install dependencies.
 
 ```bash
 npm install
 ```
 
-**Step 3:** Run the app in development mode.
+**Step 4:** Run the app in development mode.
 
 ```bash
 npm run dev
 ```
+
+## Preview
+
+![cover](/docs/img/light-desktop.png)
+![cover](/docs/img/dark-desktop.png)
 
 ## Environment Variables
 
