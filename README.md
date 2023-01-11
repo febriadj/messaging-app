@@ -1,11 +1,13 @@
 # LeChat
 
-LeChat is a web-based instant messaging app that allows you to quickly send and receive text messages, emojis, photos, and audio with other LeChat users. LeChat uses its own socket server and works independently, professionally built using **MongoDB, Express, React, Node, and Socket IO**. Suitable for those of you who are interested in learning the workflow of messaging apps.
+LeChat is a web-based instant messaging app that allows you to quickly send and receive text messages, emojis, photos, or files with other LeChat users. LeChat uses its own socket server and works independently, professionally built using **MongoDB, Express, React, Node, and Socket IO**. Suitable for those of you who are interested in learning the workflow of messaging apps.
 
 ## Table of Contents
 
 - [Getting Started](#getting-started)
 - [Preview](#preview)
+- [Requirements](#requirements)
+- [Features](#features)
 - [Environment Variables](#environment-variables)
   - [Connect to MongoDB](#connect-to-mongodb)
   - [Cloudinary](#cloudinary)
@@ -39,6 +41,29 @@ npm run dev
 
 ![cover](/docs/img/light-desktop.png)
 ![cover](/docs/img/dark-desktop.png)
+
+## Requirements
+
+- **Node.js:** _latest_
+- **NPM**: _latest_
+- **MongoDB**: _^6.0.4_
+- [Cloudinary account](https://cloudinary.com): _third-party for media cloud_
+
+## Features
+
+- User authentication
+- Sharing text messages, emojis, photos, or files
+- Online/offline, last seen time, blue tick, and typing indicators
+- Photo capture
+- Browser notification
+- Peer-to-peer and group chat
+- User profile
+- Contact
+- Account settings
+- Dark mode
+- Change account password
+- Delete account
+- ...
 
 ## Environment Variables
 
